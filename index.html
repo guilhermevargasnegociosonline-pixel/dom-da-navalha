@@ -3,176 +3,440 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<meta name="theme-color" content="#000000">
-<title>Dom da Navalha — Agendar</title>
+<meta name="theme-color" content="#0A0A0A">
+<title>Dom da Navalha — Agendamento</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 :root{
-  --black:#000000;--black2:#0D0D0D;--black3:#161616;--black4:#1F1F1F;
-  --white:#FFFFFF;--white2:#F5F5F5;--white3:#C8C8C8;--gray:#6B6B6B;--line:#2A2A2A;
-  --gold:#C9A84C;--gold2:#E8C97A;--gdim:rgba(201,168,76,.12);--gbr:rgba(201,168,76,.3);
-  --grn:#2ecc71;--grn-bg:rgba(46,204,113,.1);--grn-br:rgba(46,204,113,.25);
-  --red:#e74c3c;--red-bg:rgba(231,76,60,.1);--red-br:rgba(231,76,60,.25);
-  --max:480px;
+  --bg:#0A0A0A;
+  --bg2:#111111;
+  --bg3:#1A1A1A;
+  --bg4:#242424;
+  --gold:#B8922A;
+  --gold2:#D4A843;
+  --gold3:#E8C97A;
+  --gold-dim:rgba(184,146,42,.1);
+  --gold-br:rgba(184,146,42,.25);
+  --white:#FFFFFF;
+  --white2:#E8E8E8;
+  --white3:#AAAAAA;
+  --gray:#666666;
+  --line:#2A2A2A;
+  --grn:#22C55E;
+  --grn-dim:rgba(34,197,94,.1);
+  --grn-br:rgba(34,197,94,.2);
+  --red:#EF4444;
+  --red-dim:rgba(239,68,68,.08);
+  --red-br:rgba(239,68,68,.2);
+  --max:460px;
 }
-html,body{background:var(--black);color:var(--white);font-family:'DM Sans',system-ui,sans-serif;font-size:14px;min-height:100vh;overflow-x:hidden}
+html,body{background:var(--bg);color:var(--white);font-family:'DM Sans',system-ui,sans-serif;font-size:14px;min-height:100vh;overflow-x:hidden}
 *::-webkit-scrollbar{display:none}*{scrollbar-width:none}
-.app{max-width:var(--max);margin:0 auto;min-height:100vh;background:var(--black)}
+.app{max-width:var(--max);margin:0 auto;min-height:100vh;background:var(--bg);position:relative}
 
 /* VIEWS */
 .view{display:none;min-height:100vh;flex-direction:column}
-.view.on{display:flex;animation:fadeUp .28s ease both}
-@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.view.on{display:flex;animation:fadeUp .3s ease both}
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
 
 /* TOPBAR */
-.topbar{display:flex;align-items:center;padding:14px 18px 12px;gap:10px;flex-shrink:0;background:var(--black)}
-.tb-back{width:38px;height:38px;border-radius:50%;background:var(--black3);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;font-size:18px;color:var(--white3)}
-.tb-title{font-size:14px;font-weight:500;color:var(--white);flex:1}
-.tb-logo{height:30px;width:30px;border-radius:7px;object-fit:cover;flex-shrink:0;border:1.5px solid white}
+.topbar{display:flex;align-items:center;padding:16px 20px 14px;gap:12px;flex-shrink:0;background:var(--bg)}
+.back{width:40px;height:40px;border-radius:50%;background:var(--bg3);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:18px;color:var(--white3);flex-shrink:0}
+.tb-title{font-size:14px;font-weight:400;color:var(--white);flex:1;letter-spacing:.02em}
+.tb-logo{width:32px;height:32px;border-radius:8px;object-fit:cover;flex-shrink:0;border:1.5px solid var(--white)}
 
-/* STEPS */
-.steps{display:flex;align-items:center;padding:0 18px 14px;gap:5px;flex-shrink:0}
-.step{height:3px;border-radius:2px;flex:1;background:var(--line);transition:background .3s}
-.step.done{background:var(--gold)}
-.step.active{background:var(--gold);opacity:.5}
+/* STEPS BAR */
+.stepbar{display:flex;padding:0 20px 16px;gap:4px;flex-shrink:0}
+.sb{height:2px;flex:1;border-radius:1px;background:var(--line);transition:background .4s}
+.sb.done{background:var(--gold2)}
+.sb.cur{background:var(--gold3);opacity:.6}
 
 /* SCROLL */
 .scroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch}
 
-/* FIXED BOTTOM */
-.bottom{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:var(--max);padding:12px 18px 34px;background:linear-gradient(to top,var(--black) 72%,transparent);z-index:50;pointer-events:none}
-.bottom .btn,.bottom a{pointer-events:all}
+/* FIXED BOTTOM CTA */
+.cta-wrap{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:var(--max);padding:14px 20px 36px;background:linear-gradient(to top,var(--bg) 68%,transparent);z-index:60;pointer-events:none}
+.cta-wrap>*{pointer-events:all}
 
 /* BUTTONS */
-.btn{width:100%;padding:16px;border:none;border-radius:14px;background:var(--gold);color:var(--black);font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;letter-spacing:.05em;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .2s;-webkit-appearance:none;text-decoration:none}
-.btn:active{transform:scale(.97);opacity:.9}
-.btn.outline{background:transparent;border:1.5px solid var(--line);color:var(--white3)}
-.btn.outline:active{background:var(--black3)}
-.btn-pulse{animation:pulse 2.5s ease infinite}
-@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(201,168,76,.4)}50%{box-shadow:0 0 0 8px rgba(201,168,76,0)}}
+.btn{width:100%;padding:17px 24px;border:none;border-radius:12px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500;letter-spacing:.06em;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:9px;transition:all .22s;-webkit-appearance:none;text-decoration:none;text-transform:uppercase}
+.btn-gold{background:var(--gold2);color:var(--bg)}
+.btn-gold:active{background:var(--gold3);transform:scale(.97)}
+.btn-ghost{background:transparent;border:1px solid var(--line);color:var(--white3)}
+.btn-ghost:active{background:var(--bg3);transform:scale(.97)}
 
-/* ═══ LANDING ═══ */
-.hero{position:relative;overflow:hidden;border-radius:0 0 26px 26px}
-.hero-img{width:100%;height:72vw;max-height:370px;object-fit:cover;object-position:center 12%;display:block}
-.hero-grad{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.2) 0%,rgba(0,0,0,.88) 100%)}
-.hero-body{position:absolute;bottom:0;left:0;right:0;padding:22px 20px 26px}
-.hero-logo-wrap{display:inline-flex;align-items:center;justify-content:center;width:64px;height:64px;border-radius:14px;border:2px solid white;background:rgba(0,0,0,.4);margin-bottom:12px;overflow:hidden}
-.hero-logo{width:100%;height:100%;object-fit:contain;padding:4px}
-.hero-eyebrow{font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin-bottom:5px}
-.hero-name{font-family:'Playfair Display',serif;font-size:36px;font-weight:900;color:var(--white);line-height:1;margin-bottom:7px}
-.hero-addr{font-size:12px;color:rgba(255,255,255,.55);margin-bottom:12px}
-.hero-chips{display:flex;flex-wrap:wrap;gap:6px}
-.chip{background:rgba(201,168,76,.14);border:1px solid rgba(201,168,76,.3);border-radius:20px;padding:5px 12px;font-size:11px;color:var(--gold)}
-.land-btns{padding:20px 18px 110px}
+/* ═══════════════════════════════════
+   LANDING
+═══════════════════════════════════ */
+.land-hero{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  padding:60px 32px 48px;
+  min-height:56vw;
+  max-height:320px;
+  background:var(--bg);
+  border-bottom:1px solid var(--line);
+  position:relative;
+  overflow:hidden;
+}
+.land-hero::before{
+  content:'';
+  position:absolute;
+  inset:0;
+  background:radial-gradient(ellipse 80% 60% at 50% 0%,rgba(184,146,42,.06) 0%,transparent 70%);
+}
+.land-logo-ring{
+  width:88px;
+  height:88px;
+  border-radius:20px;
+  border:1.5px solid var(--white);
+  background:var(--bg2);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  overflow:hidden;
+  margin-bottom:22px;
+  position:relative;
+  box-shadow:0 0 0 6px rgba(255,255,255,.04), 0 20px 50px rgba(0,0,0,.5);
+}
+.land-logo-img{
+  width:78px;
+  height:78px;
+  object-fit:contain;
+  padding:4px;
+}
+.land-eyebrow{
+  font-size:9px;
+  letter-spacing:.28em;
+  text-transform:uppercase;
+  color:var(--gold2);
+  margin-bottom:10px;
+  text-align:center;
+}
+.land-name{
+  font-family:'Cormorant Garamond',serif;
+  font-size:36px;
+  font-weight:600;
+  color:var(--white);
+  text-align:center;
+  line-height:1;
+  letter-spacing:.02em;
+  margin-bottom:8px;
+}
+.land-addr{
+  font-size:12px;
+  color:var(--gray);
+  text-align:center;
+  letter-spacing:.02em;
+}
+.land-chips{
+  display:flex;
+  gap:6px;
+  margin-top:16px;
+  flex-wrap:wrap;
+  justify-content:center;
+}
+.chip{
+  background:var(--gold-dim);
+  border:1px solid var(--gold-br);
+  border-radius:4px;
+  padding:5px 11px;
+  font-size:10px;
+  color:var(--gold2);
+  letter-spacing:.06em;
+  text-transform:uppercase;
+}
+.land-btns{padding:24px 20px 110px;display:flex;flex-direction:column;gap:10px}
+.land-info{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  background:var(--bg2);
+  border:1px solid var(--line);
+  border-radius:12px;
+  padding:14px 16px;
+}
+.land-info-dot{
+  width:7px;height:7px;border-radius:50%;flex-shrink:0;
+  box-shadow:0 0 8px currentColor;
+}
+.land-info-body{flex:1;min-width:0}
+.land-info-title{font-size:13px;font-weight:500;color:var(--white);margin-bottom:1px}
+.land-info-sub{font-size:11px;color:var(--gray)}
+.land-info-cta{font-size:11px;color:var(--gold2);font-weight:500;flex-shrink:0;letter-spacing:.03em}
+.stars{display:flex;gap:2px;margin-bottom:2px}
+.star{color:var(--gold2);font-size:12px}
 
-/* ═══ BARBEIRO ═══ */
-.bcard{background:var(--black3);border:1px solid var(--line);border-radius:20px;overflow:hidden;margin:16px 18px}
-.bcard-photo-wrap{width:100%;background:var(--black4)}
-.bcard-photo{width:100%;max-height:420px;object-fit:contain;object-position:center top;display:block}
-.bcard-body{padding:18px}
-.bcard-name{font-family:'Playfair Display',serif;font-size:22px;font-weight:700;color:var(--white);margin-bottom:2px}
-.bcard-role{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);margin-bottom:14px}
-.bcard-bio{font-size:13px;color:var(--gray);line-height:1.75;margin-bottom:14px}
+/* ═══════════════════════════════════
+   BARBER CARD
+═══════════════════════════════════ */
+.bcard{margin:16px 20px 0;border-radius:18px;overflow:hidden;background:var(--bg2);border:1px solid var(--line)}
+.bcard-photo{
+  width:100%;
+  height:72vw;
+  max-height:340px;
+  object-fit:cover;
+  object-position:center 8%;
+  display:block;
+}
+.bcard-body{padding:20px}
+.bcard-name{
+  font-family:'Cormorant Garamond',serif;
+  font-size:26px;
+  font-weight:600;
+  color:var(--white);
+  letter-spacing:.02em;
+  margin-bottom:3px;
+}
+.bcard-role{font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold2);margin-bottom:14px}
+.bcard-bio{font-size:13px;color:var(--gray);line-height:1.8;margin-bottom:16px;font-weight:300}
 .bcard-tags{display:flex;flex-wrap:wrap;gap:5px}
-.btag{background:var(--black4);border:1px solid var(--line);border-radius:20px;font-size:11px;color:var(--white3);padding:4px 12px}
+.btag{background:var(--bg3);border:1px solid var(--line);border-radius:4px;font-size:10px;color:var(--white3);padding:4px 11px;letter-spacing:.04em;text-transform:uppercase}
+.port-wrap{padding:20px 20px 0}
+.port-eyebrow{font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold2);margin-bottom:12px}
+.port-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.port-item{
+  border-radius:10px;overflow:hidden;
+  aspect-ratio:3/4;cursor:pointer;position:relative;
+  background:var(--bg3);
+}
+.port-item img{
+  width:100%;height:100%;object-fit:cover;
+  object-position:center top;display:block;
+  transition:transform .4s ease;
+}
+.port-item:active img{transform:scale(1.05)}
+.port-overlay{
+  position:absolute;inset:0;
+  background:linear-gradient(to top,rgba(10,10,10,.8) 0%,transparent 50%);
+  display:flex;align-items:flex-end;padding:10px 12px;
+}
+.port-lbl{font-size:10px;color:var(--white);letter-spacing:.06em;text-transform:uppercase;font-weight:500}
+.barber-scroll-pad{height:110px}
 
-/* PORTFOLIO */
-.port-sec{padding:0 18px 14px}
-.port-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.port-item{border-radius:12px;overflow:hidden;aspect-ratio:3/4;cursor:pointer;position:relative}
-.port-item img{width:100%;height:100%;object-fit:cover;object-position:center top;display:block;transition:transform .35s}
-.port-item:active img{transform:scale(1.04)}
-.port-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.75) 0%,transparent 60%);display:flex;align-items:flex-end;padding:10px}
-.port-lbl{font-size:11px;font-weight:500;color:var(--white)}
+/* ═══════════════════════════════════
+   SERVIÇOS
+═══════════════════════════════════ */
+.svc-pad{padding:0 20px 110px}
+.svc-item{
+  background:var(--bg2);
+  border:1px solid var(--line);
+  border-radius:12px;
+  padding:18px;
+  display:flex;
+  align-items:center;
+  gap:14px;
+  margin-bottom:8px;
+  cursor:pointer;
+  transition:all .2s;
+  position:relative;
+  overflow:hidden;
+}
+.svc-item::before{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(135deg,var(--gold-dim),transparent 60%);
+  opacity:0;transition:opacity .2s;
+}
+.svc-item.sel::before{opacity:1}
+.svc-item.sel{border-color:var(--gold2)}
+.svc-left{flex:1;min-width:0;position:relative}
+.svc-name{font-size:14px;font-weight:500;color:var(--white);margin-bottom:3px;letter-spacing:.01em}
+.svc-dur{font-size:11px;color:var(--gray);letter-spacing:.04em}
+.svc-price{
+  font-family:'Cormorant Garamond',serif;
+  font-size:22px;font-weight:600;
+  color:var(--gold2);flex-shrink:0;position:relative;
+}
+.svc-chk{
+  width:22px;height:22px;border-radius:50%;
+  border:1.5px solid var(--line);flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  transition:all .2s;position:relative;
+}
+.svc-item.sel .svc-chk{background:var(--gold2);border-color:var(--gold2)}
+.svc-item.sel .svc-chk::after{content:"✓";font-size:11px;color:var(--bg);font-weight:700}
 
-/* SERVICES */
-.svc-scroll{padding:0 18px 110px}
-.svc-item{background:var(--black3);border:1.5px solid var(--line);border-radius:14px;padding:16px;display:flex;align-items:center;gap:12px;margin-bottom:8px;cursor:pointer;transition:all .2s}
-.svc-item.sel{border-color:var(--gold);background:rgba(201,168,76,.06)}
-.svc-info{flex:1;min-width:0}
-.svc-name{font-size:14px;font-weight:500;color:var(--white);margin-bottom:2px}
-.svc-dur{font-size:12px;color:var(--gray)}
-.svc-price{font-family:'Playfair Display',serif;font-size:20px;font-weight:700;color:var(--gold);flex-shrink:0}
-.svc-chk{width:22px;height:22px;border-radius:50%;border:1.5px solid var(--line);flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .2s}
-.svc-item.sel .svc-chk{background:var(--gold);border-color:var(--gold)}
-.svc-item.sel .svc-chk::after{content:"✓";font-size:12px;color:var(--black);font-weight:700}
-
-/* CALENDAR */
-.dt-wrap{padding:0 18px 110px}
-.cal-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
-.cal-m{font-family:'Playfair Display',serif;font-size:18px;color:var(--white)}
-.cal-nav{width:38px;height:38px;border-radius:50%;background:var(--black3);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px;color:var(--white3)}
-.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;text-align:center;margin-bottom:22px}
-.cal-dow{font-size:9px;letter-spacing:.07em;text-transform:uppercase;color:var(--gray);padding:3px 0 9px}
-.cday{aspect-ratio:1;display:flex;align-items:center;justify-content:center;border-radius:10px;font-size:13px;cursor:pointer;transition:all .18s;color:var(--white3)}
-.cday:active:not(.past):not(.empty){background:var(--black3)}
-.cday.today{color:var(--gold);font-weight:700}
-.cday.sel{background:var(--gold);color:var(--black);font-weight:700;border-radius:50%}
+/* ═══════════════════════════════════
+   DATA & HORA
+═══════════════════════════════════ */
+.dt-pad{padding:0 20px 110px}
+.cal-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.cal-m{
+  font-family:'Cormorant Garamond',serif;
+  font-size:20px;font-weight:600;color:var(--white);letter-spacing:.02em;
+}
+.cal-nav{
+  width:38px;height:38px;border-radius:50%;
+  background:var(--bg2);border:1px solid var(--line);
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;font-size:16px;color:var(--white3);
+}
+.cal-grid{
+  display:grid;grid-template-columns:repeat(7,1fr);
+  gap:3px;text-align:center;margin-bottom:24px;
+}
+.cal-dow{font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:var(--gray);padding:3px 0 10px}
+.cday{
+  aspect-ratio:1;display:flex;align-items:center;justify-content:center;
+  border-radius:8px;font-size:13px;cursor:pointer;
+  transition:all .18s;color:var(--white3);
+}
+.cday:active:not(.past):not(.empty){background:var(--bg3)}
+.cday.today{color:var(--gold2);font-weight:600}
+.cday.sel{background:var(--gold2);color:var(--bg);font-weight:700;border-radius:50%}
 .cday.past{color:var(--line);cursor:default}
-.t-section{margin-bottom:16px}
-.t-lbl{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--gray);margin-bottom:8px}
-.t-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
-.tslot{background:var(--black3);border:1.5px solid var(--line);border-radius:10px;padding:11px 4px;text-align:center;font-size:13px;cursor:pointer;color:var(--white3);transition:all .18s}
-.tslot.sel{background:var(--gold);border-color:var(--gold);color:var(--black);font-weight:600}
+.slot-sec{margin-bottom:18px}
+.slot-lbl{font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--gray);margin-bottom:9px}
+.slot-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.slot{
+  background:var(--bg2);border:1px solid var(--line);
+  border-radius:9px;padding:12px 4px;text-align:center;
+  font-size:13px;cursor:pointer;color:var(--white3);
+  transition:all .18s;
+}
+.slot.sel{background:var(--gold2);border-color:var(--gold2);color:var(--bg);font-weight:600}
+.slot:active:not(.sel){background:var(--bg3)}
 
-/* DATA FORM */
-.form-wrap{padding:0 18px 110px}
-.sec-lbl{font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:10px;margin-top:20px}
-.field{background:var(--black3);border:1.5px solid var(--line);border-radius:12px;padding:14px 16px;display:flex;align-items:center;gap:10px;margin-bottom:10px;transition:border .2s}
-.field:focus-within{border-color:rgba(201,168,76,.5)}
+/* ═══════════════════════════════════
+   DADOS
+═══════════════════════════════════ */
+.form-pad{padding:0 20px 110px}
+.sec-lbl{font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold2);margin-bottom:10px;margin-top:22px}
+.field{
+  background:var(--bg2);border:1px solid var(--line);
+  border-radius:11px;padding:15px 16px;
+  display:flex;align-items:center;gap:11px;
+  margin-bottom:9px;transition:border .2s;
+}
+.field:focus-within{border-color:var(--gold-br)}
 .field-ico{font-size:16px;flex-shrink:0;color:var(--gray)}
-.field input{background:none;border:none;outline:none;font-family:'DM Sans',sans-serif;font-size:14px;color:var(--white);flex:1;-webkit-appearance:none}
+.field input{
+  background:none;border:none;outline:none;
+  font-family:'DM Sans',sans-serif;font-size:14px;
+  color:var(--white);flex:1;-webkit-appearance:none;
+}
 .field input::placeholder{color:var(--gray)}
-.field-clear{cursor:pointer;color:var(--gray);font-size:20px;line-height:1;display:none;padding:2px}
-.found{background:var(--grn-bg);border:1px solid var(--grn-br);border-radius:10px;padding:11px 14px;margin-bottom:10px;font-size:13px;color:var(--grn);display:none}
-.sum-card{background:var(--black3);border:1px solid var(--line);border-radius:16px;padding:16px;margin-bottom:14px}
-.sum-row{display:flex;justify-content:space-between;align-items:flex-start;padding:8px 0;border-bottom:1px solid var(--line);font-size:13px;gap:8px}
-.sum-row:last-child{border:none;padding-top:12px}
-.sum-lbl{color:var(--gray);flex-shrink:0}
-.sum-val{color:var(--white);font-weight:500;text-align:right}
-.sum-big{font-family:'Playfair Display',serif;font-size:24px;color:var(--gold);font-weight:700}
+.field-x{cursor:pointer;color:var(--gray);font-size:20px;line-height:1;display:none}
+.found-box{
+  background:var(--grn-dim);border:1px solid var(--grn-br);
+  border-radius:9px;padding:12px 14px;margin-bottom:9px;
+  font-size:13px;color:var(--grn);display:none;
+}
+.sum-card{
+  background:var(--bg2);border:1px solid var(--line);
+  border-radius:14px;padding:18px;margin-bottom:14px;
+}
+.sum-row{
+  display:flex;justify-content:space-between;align-items:flex-start;
+  padding:9px 0;border-bottom:1px solid var(--line);
+  font-size:13px;gap:10px;
+}
+.sum-row:last-child{border:none;padding-top:14px}
+.sum-lbl{color:var(--gray);flex-shrink:0;letter-spacing:.02em}
+.sum-val{color:var(--white);font-weight:500;text-align:right;line-height:1.4}
+.sum-price{
+  font-family:'Cormorant Garamond',serif;
+  font-size:26px;font-weight:600;color:var(--gold2);
+}
 
-/* CHECKOUT */
-.co-wrap{padding:0 18px 110px}
-.policy{background:var(--red-bg);border:1px solid var(--red-br);border-radius:12px;padding:14px 16px;margin-bottom:14px}
-.policy-t{font-size:11px;font-weight:600;color:var(--red);text-transform:uppercase;letter-spacing:.05em;margin-bottom:5px}
-.policy-b{font-size:13px;color:var(--red);line-height:1.65}
-.charge{background:var(--gdim);border:1px solid var(--gbr);border-radius:16px;padding:16px;margin-bottom:16px}
-.charge-row{display:flex;justify-content:space-between;font-size:13px;margin-bottom:6px;align-items:center}
-.charge-div{border:none;border-top:1px solid rgba(201,168,76,.2);margin:10px 0}
-.charge-lbl{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--gray)}
-.charge-val{font-family:'Playfair Display',serif;font-size:28px;color:var(--gold);font-weight:700}
-.pay-opts{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px}
-.pay-opt{background:var(--black3);border:2px solid var(--line);border-radius:14px;padding:16px 12px;text-align:center;cursor:pointer;transition:all .2s}
-.pay-opt.sel{border-color:var(--gold);background:rgba(201,168,76,.07)}
-.pay-ico{font-size:24px;margin-bottom:6px}
-.pay-name{font-size:13px;font-weight:500;color:var(--white)}
-.pay-sub{font-size:11px;color:var(--gray);margin-top:2px}
-.pix-box{background:var(--black3);border:1px solid var(--line);border-radius:14px;padding:18px;text-align:center;margin-bottom:14px}
-.pix-key{font-size:18px;font-weight:600;color:var(--white);margin:7px 0}
-.pix-link{font-size:13px;color:var(--gold);text-decoration:none;display:inline-block;margin-top:4px}
-.check-row{display:flex;align-items:flex-start;gap:11px;background:var(--black3);border:1px solid var(--line);border-radius:12px;padding:14px;margin-bottom:14px}
-.check-row input{width:20px;height:20px;accent-color:var(--gold);flex-shrink:0;margin-top:1px;cursor:pointer}
-.check-row label{font-size:12px;color:var(--gray);line-height:1.65;cursor:pointer}
+/* ═══════════════════════════════════
+   CHECKOUT
+═══════════════════════════════════ */
+.co-pad{padding:0 20px 110px}
+.policy-box{
+  background:var(--red-dim);border:1px solid var(--red-br);
+  border-radius:12px;padding:15px 16px;margin-bottom:14px;
+}
+.policy-title{font-size:10px;font-weight:600;color:var(--red);text-transform:uppercase;letter-spacing:.08em;margin-bottom:5px}
+.policy-body{font-size:13px;color:var(--red);line-height:1.7;font-weight:300}
+.charge-card{
+  background:var(--gold-dim);border:1px solid var(--gold-br);
+  border-radius:14px;padding:18px;margin-bottom:16px;
+}
+.charge-row{display:flex;justify-content:space-between;font-size:13px;margin-bottom:7px;align-items:center;color:var(--white3)}
+.charge-divider{border:none;border-top:1px solid var(--gold-br);margin:12px 0}
+.charge-lbl{font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--gray)}
+.charge-total{
+  font-family:'Cormorant Garamond',serif;
+  font-size:32px;font-weight:600;color:var(--gold2);
+}
+.pay-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px}
+.pay-opt{
+  background:var(--bg2);border:1.5px solid var(--line);
+  border-radius:13px;padding:17px 12px;text-align:center;
+  cursor:pointer;transition:all .2s;
+}
+.pay-opt.sel{border-color:var(--gold2);background:var(--gold-dim)}
+.pay-ico{font-size:26px;margin-bottom:7px}
+.pay-name{font-size:13px;font-weight:500;color:var(--white);letter-spacing:.02em}
+.pay-sub{font-size:11px;color:var(--gray);margin-top:3px}
+.pix-card{
+  background:var(--bg2);border:1px solid var(--line);
+  border-radius:13px;padding:20px;text-align:center;margin-bottom:14px;
+}
+.pix-key{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:600;color:var(--white);margin:8px 0}
+.pix-wa{font-size:13px;color:var(--gold2);text-decoration:none;letter-spacing:.02em}
+.agree-row{
+  display:flex;align-items:flex-start;gap:12px;
+  background:var(--bg2);border:1px solid var(--line);
+  border-radius:11px;padding:15px;margin-bottom:14px;
+}
+.agree-row input{width:20px;height:20px;accent-color:var(--gold2);flex-shrink:0;margin-top:1px;cursor:pointer}
+.agree-row label{font-size:12px;color:var(--gray);line-height:1.7;cursor:pointer;font-weight:300}
 
-/* SUCCESS */
-.ok-wrap{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:32px 24px}
-.ok-icon{width:68px;height:68px;background:var(--gdim);border:2px solid var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;margin-bottom:18px;font-size:28px}
-.ok-eyebrow{font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;text-align:center}
-.ok-title{font-family:'Playfair Display',serif;font-size:32px;color:var(--white);text-align:center;margin-bottom:10px}
-.ok-sub{font-size:14px;color:var(--gray);text-align:center;line-height:1.75;margin-bottom:26px}
+/* ═══════════════════════════════════
+   SUCESSO
+═══════════════════════════════════ */
+.ok-wrap{
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  min-height:100vh;padding:40px 24px;
+}
+.ok-ring{
+  width:72px;height:72px;border-radius:50%;
+  background:var(--gold-dim);border:1.5px solid var(--gold2);
+  display:flex;align-items:center;justify-content:center;
+  margin-bottom:20px;font-size:28px;
+  box-shadow:0 0 30px rgba(184,146,42,.15);
+}
+.ok-eyebrow{font-size:9px;letter-spacing:.28em;text-transform:uppercase;color:var(--gold2);margin-bottom:10px;text-align:center}
+.ok-title{font-family:'Cormorant Garamond',serif;font-size:34px;font-weight:600;color:var(--white);text-align:center;margin-bottom:10px}
+.ok-sub{font-size:14px;color:var(--gray);text-align:center;line-height:1.8;margin-bottom:28px;font-weight:300}
 
-/* LIGHTBOX */
-.lbox{position:fixed;inset:0;background:rgba(0,0,0,.95);z-index:200;display:none;align-items:center;justify-content:center;padding:20px}
+/* ═══════════════════════════════════
+   LIGHTBOX
+═══════════════════════════════════ */
+.lbox{
+  position:fixed;inset:0;background:rgba(0,0,0,.96);
+  z-index:200;display:none;align-items:center;
+  justify-content:center;padding:24px;
+}
 .lbox.on{display:flex}
-.lbox img{max-width:100%;max-height:90vh;border-radius:14px;object-fit:contain}
-.lbox-x{position:absolute;top:16px;right:16px;width:38px;height:38px;background:var(--black3);border:1px solid var(--line);border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:18px;color:var(--white)}
+.lbox img{max-width:100%;max-height:88vh;border-radius:14px;object-fit:contain}
+.lbox-x{
+  position:absolute;top:18px;right:18px;
+  width:38px;height:38px;background:var(--bg3);
+  border:1px solid var(--line);border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;font-size:18px;color:var(--white3);
+}
 
 /* WA FLOAT */
-.wa{position:fixed;bottom:96px;right:18px;width:52px;height:52px;background:#25D366;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 22px rgba(37,211,102,.45);z-index:40;font-size:26px;text-decoration:none}
+.wa-btn{
+  position:fixed;bottom:100px;right:18px;
+  width:52px;height:52px;background:#22C55E;
+  border-radius:50%;display:flex;align-items:center;
+  justify-content:center;z-index:40;font-size:26px;
+  text-decoration:none;
+  box-shadow:0 4px 20px rgba(34,197,94,.35);
+  transition:transform .2s;
+}
+.wa-btn:active{transform:scale(.93)}
 </style>
 </head>
 <body>
@@ -181,69 +445,67 @@ html,body{background:var(--black);color:var(--white);font-family:'DM Sans',syste
 <!-- LIGHTBOX -->
 <div class="lbox" id="lbox" onclick="closeLbox()">
   <div class="lbox-x">×</div>
-  <img id="lbox-img" src="" alt="Portfólio Dom da Navalha"/>
+  <img id="lbox-img" src="" alt="Dom da Navalha — Portfólio"/>
 </div>
 
-<!-- ══ V0: LANDING ══ -->
-<div class="view on" id="v-land">
-  <div class="hero">
-    <img src="johnny.jpg" class="hero-img" alt="Johnny Andrade — Dom da Navalha"/>
-    <div class="hero-grad"></div>
-    <div class="hero-body">
-      <div class="hero-logo-wrap">
-        <img src="logo.jpg" class="hero-logo" alt="Dom da Navalha"/>
-      </div>
-      <div class="hero-eyebrow">Agendamento online</div>
-      <div class="hero-name">Dom da<br>Navalha</div>
-      <div class="hero-addr">Rua Dr. Benedito Arruda Vianna, 97 · São Paulo</div>
-      <div class="hero-chips">
-        <span class="chip">10+ anos</span>
-        <span class="chip">Master Barber</span>
-        <span class="chip">Reserva em 2 min</span>
-      </div>
+<!-- ════════════════════
+  V0: LANDING
+════════════════════ -->
+<div class="view on" id="v0">
+  <div class="land-hero">
+    <div class="land-logo-ring">
+      <img src="logo.jpg" class="land-logo-img" alt="Dom da Navalha"/>
+    </div>
+    <div class="land-eyebrow">Agendamento online</div>
+    <div class="land-name">Dom da Navalha</div>
+    <div class="land-addr">Rua Dr. Benedito Arruda Vianna, 97 · São Paulo</div>
+    <div class="land-chips">
+      <span class="chip">10+ anos</span>
+      <span class="chip">Master Barber</span>
+      <span class="chip">Reserva em 2 min</span>
     </div>
   </div>
   <div class="land-btns">
-    <button class="btn btn-pulse" onclick="goTo('v-barber')" style="margin-bottom:10px">✦ &nbsp;Agendar agora</button>
+    <button class="btn btn-gold" onclick="goTo('v1')">✦ &nbsp;Agendar agora</button>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
-      <a href="https://wa.me/5511999999999" target="_blank" class="btn outline" style="font-size:13px">💬 WhatsApp</a>
-      <a href="https://instagram.com/domDaNavalha" target="_blank" class="btn outline" style="font-size:13px">📸 Instagram</a>
+      <a href="https://wa.me/5511999999999" target="_blank" class="btn btn-ghost" style="font-size:12px">💬 WhatsApp</a>
+      <a href="https://instagram.com/domDaNavalha" target="_blank" class="btn btn-ghost" style="font-size:12px">📸 Instagram</a>
     </div>
-    <!-- PROX HORARIO -->
-    <div style="margin-top:16px;background:var(--black3);border:1px solid var(--line);border-radius:12px;padding:13px 16px;display:flex;align-items:center;gap:10px">
-      <div style="width:8px;height:8px;border-radius:50%;background:var(--grn);flex-shrink:0;box-shadow:0 0 6px rgba(46,204,113,.6)"></div>
-      <div>
-        <div style="font-size:12px;font-weight:500;color:var(--white)">Próximo horário disponível</div>
-        <div style="font-size:11px;color:var(--gray);margin-top:1px">Hoje às 14:00 com Johnny Andrade</div>
+    <div class="land-info">
+      <div class="land-info-dot" style="background:var(--grn);color:var(--grn)"></div>
+      <div class="land-info-body">
+        <div class="land-info-title">Próximo horário disponível</div>
+        <div class="land-info-sub">Hoje às 14:00 com Johnny Andrade</div>
       </div>
-      <div style="margin-left:auto;font-size:11px;color:var(--gold);font-weight:500">Ver agenda →</div>
+      <div class="land-info-cta">Ver →</div>
     </div>
-    <!-- AVALIAÇÃO -->
-    <div style="margin-top:12px;background:var(--black3);border:1px solid var(--line);border-radius:12px;padding:13px 16px;display:flex;align-items:center;gap:10px">
-      <div style="font-size:18px">⭐</div>
-      <div>
-        <div style="font-size:13px;font-weight:500;color:var(--white)">4.9 · 127 avaliações</div>
-        <div style="font-size:11px;color:var(--gray);margin-top:1px">"Melhor barbearia da região"</div>
+    <div class="land-info">
+      <div style="font-size:11px">
+        <div class="stars">
+          <span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span>
+        </div>
+      </div>
+      <div class="land-info-body">
+        <div class="land-info-title">4.9 · 127 avaliações</div>
+        <div class="land-info-sub">"Melhor barbearia da região"</div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- ══ V1: BARBEIRO ══ -->
-<div class="view" id="v-barber">
+<!-- ════════════════════
+  V1: BARBEIRO
+════════════════════ -->
+<div class="view" id="v1">
   <div class="topbar">
-    <div class="tb-back" onclick="goTo('v-land')">←</div>
+    <div class="back" onclick="goTo('v0')">←</div>
     <div class="tb-title">Seu barbeiro</div>
     <img src="logo.jpg" class="tb-logo" alt="logo"/>
   </div>
-  <div class="steps">
-    <div class="step active"></div><div class="step"></div><div class="step"></div><div class="step"></div><div class="step"></div>
-  </div>
-  <div class="scroll" style="padding-bottom:110px">
+  <div class="stepbar"><div class="sb cur"></div><div class="sb"></div><div class="sb"></div><div class="sb"></div><div class="sb"></div></div>
+  <div class="scroll">
     <div class="bcard">
-      <div class="bcard-photo-wrap">
-        <img src="johnny.jpg" class="bcard-photo" alt="Johnny Andrade"/>
-      </div>
+      <img src="johnny.jpg" class="bcard-photo" alt="Johnny Andrade"/>
       <div class="bcard-body">
         <div class="bcard-name">Johnny Andrade</div>
         <div class="bcard-role">Master Barber · Fundador · 10 anos</div>
@@ -255,204 +517,215 @@ html,body{background:var(--black);color:var(--white);font-family:'DM Sans',syste
         </div>
       </div>
     </div>
-    <div class="port-sec">
-      <div style="font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:12px">Portfólio recente</div>
+    <div class="port-wrap">
+      <div class="port-eyebrow">Portfólio recente</div>
       <div class="port-grid">
         <div class="port-item" onclick="openLbox('corte1.jpg')">
-          <img src="corte1.jpg" alt="Clássico fade"/>
+          <img src="corte1.jpg" alt="Clássico Fade"/>
           <div class="port-overlay"><div class="port-lbl">Clássico Fade</div></div>
         </div>
         <div class="port-item" onclick="openLbox('corte2.jpg')">
-          <img src="corte2.jpg" alt="Skin fade + risco"/>
-          <div class="port-overlay"><div class="port-lbl">Skin Fade + Risco</div></div>
+          <img src="corte2.jpg" alt="Skin Fade + Risco"/>
+          <div class="port-overlay"><div class="port-lbl">Skin Fade</div></div>
         </div>
         <div class="port-item" onclick="openLbox('corte3.jpg')">
           <img src="corte3.jpg" alt="Pompadour"/>
           <div class="port-overlay"><div class="port-lbl">Pompadour</div></div>
         </div>
         <div class="port-item" onclick="openLbox('corte4.jpg')">
-          <img src="corte4.jpg" alt="Buzz fade"/>
+          <img src="corte4.jpg" alt="Buzz Fade"/>
           <div class="port-overlay"><div class="port-lbl">Buzz Fade</div></div>
         </div>
       </div>
     </div>
+    <div class="barber-scroll-pad"></div>
   </div>
-  <div class="bottom">
-    <button class="btn" onclick="goTo('v-service')">Agendar com Johnny →</button>
+  <div class="cta-wrap">
+    <button class="btn btn-gold" onclick="goTo('v2')">Agendar com Johnny →</button>
   </div>
 </div>
 
-<!-- ══ V2: SERVIÇO ══ -->
-<div class="view" id="v-service">
+<!-- ════════════════════
+  V2: SERVIÇO
+════════════════════ -->
+<div class="view" id="v2">
   <div class="topbar">
-    <div class="tb-back" onclick="goTo('v-barber')">←</div>
+    <div class="back" onclick="goTo('v1')">←</div>
     <div class="tb-title">Escolha o serviço</div>
     <img src="logo.jpg" class="tb-logo" alt="logo"/>
   </div>
-  <div class="steps">
-    <div class="step done"></div><div class="step active"></div><div class="step"></div><div class="step"></div><div class="step"></div>
+  <div class="stepbar"><div class="sb done"></div><div class="sb cur"></div><div class="sb"></div><div class="sb"></div><div class="sb"></div></div>
+  <div class="scroll">
+    <div class="svc-pad" id="svc-list" style="padding-top:4px"></div>
   </div>
-  <div class="svc-scroll" id="svc-list"></div>
 </div>
 
-<!-- ══ V3: DATA & HORA ══ -->
-<div class="view" id="v-datetime">
+<!-- ════════════════════
+  V3: DATA & HORA
+════════════════════ -->
+<div class="view" id="v3">
   <div class="topbar">
-    <div class="tb-back" onclick="goTo('v-service')">←</div>
+    <div class="back" onclick="goTo('v2')">←</div>
     <div class="tb-title">Data & horário</div>
     <img src="logo.jpg" class="tb-logo" alt="logo"/>
   </div>
-  <div class="steps">
-    <div class="step done"></div><div class="step done"></div><div class="step active"></div><div class="step"></div><div class="step"></div>
-  </div>
-  <div class="dt-wrap">
-    <div class="cal-hdr">
-      <div class="cal-nav" onclick="calNav(-1)">‹</div>
-      <div class="cal-m" id="cal-m">Junho 2026</div>
-      <div class="cal-nav" onclick="calNav(1)">›</div>
+  <div class="stepbar"><div class="sb done"></div><div class="sb done"></div><div class="sb cur"></div><div class="sb"></div><div class="sb"></div></div>
+  <div class="scroll">
+    <div class="dt-pad">
+      <div class="cal-hdr">
+        <div class="cal-nav" onclick="calNav(-1)">‹</div>
+        <div class="cal-m" id="cal-m">Junho 2026</div>
+        <div class="cal-nav" onclick="calNav(1)">›</div>
+      </div>
+      <div class="cal-grid" id="cal-grid"></div>
+      <div id="slots"></div>
     </div>
-    <div class="cal-grid" id="cal-grid"></div>
-    <div id="time-slots"></div>
   </div>
-  <div class="bottom">
-    <button class="btn" onclick="nextDT()">Continuar →</button>
+  <div class="cta-wrap">
+    <button class="btn btn-gold" onclick="nextDT()">Continuar →</button>
   </div>
 </div>
 
-<!-- ══ V4: DADOS ══ -->
-<div class="view" id="v-data">
+<!-- ════════════════════
+  V4: DADOS
+════════════════════ -->
+<div class="view" id="v4">
   <div class="topbar">
-    <div class="tb-back" onclick="goTo('v-datetime')">←</div>
+    <div class="back" onclick="goTo('v3')">←</div>
     <div class="tb-title">Seus dados</div>
     <img src="logo.jpg" class="tb-logo" alt="logo"/>
   </div>
-  <div class="steps">
-    <div class="step done"></div><div class="step done"></div><div class="step done"></div><div class="step active"></div><div class="step"></div>
+  <div class="stepbar"><div class="sb done"></div><div class="sb done"></div><div class="sb done"></div><div class="sb cur"></div><div class="sb"></div></div>
+  <div class="scroll">
+    <div class="form-pad">
+      <div class="sec-lbl" style="margin-top:4px">Identificação</div>
+      <div class="field">
+        <span class="field-ico">📱</span>
+        <input type="tel" id="i-tel" placeholder="(11) 99999-9999" oninput="handleTel(this)" maxlength="15" inputmode="numeric" autocomplete="tel"/>
+        <span class="field-x" id="tel-x" onclick="clearForm()">×</span>
+      </div>
+      <div class="found-box" id="found">✓ Bem-vindo de volta! Dados preenchidos.</div>
+      <div class="field">
+        <span class="field-ico">👤</span>
+        <input type="text" id="i-nome" placeholder="Seu nome completo" autocomplete="name"/>
+      </div>
+      <div class="field">
+        <span class="field-ico">✉️</span>
+        <input type="email" id="i-email" placeholder="seu@email.com" inputmode="email" autocomplete="email"/>
+      </div>
+      <div class="sec-lbl">Resumo</div>
+      <div class="sum-card">
+        <div class="sum-row"><span class="sum-lbl">Barbeiro</span><span class="sum-val">Johnny Andrade</span></div>
+        <div class="sum-row"><span class="sum-lbl">Serviço</span><span class="sum-val" id="r-svc">—</span></div>
+        <div class="sum-row"><span class="sum-lbl">Data & hora</span><span class="sum-val" id="r-dt">—</span></div>
+        <div class="sum-row"><span class="sum-lbl">Total</span><span class="sum-price" id="r-price">—</span></div>
+      </div>
+    </div>
   </div>
-  <div class="form-wrap">
-    <div class="sec-lbl" style="margin-top:4px">Identificação</div>
-    <div class="field">
-      <span class="field-ico">📱</span>
-      <input type="tel" id="inp-tel" placeholder="(11) 99999-9999" oninput="handleTel(this)" maxlength="15" inputmode="numeric" autocomplete="tel"/>
-      <span class="field-clear" id="tel-clear" onclick="clearData()">×</span>
-    </div>
-    <div class="found" id="found">✓ Bem-vindo de volta! Seus dados foram preenchidos automaticamente.</div>
-    <div class="field">
-      <span class="field-ico">👤</span>
-      <input type="text" id="inp-nome" placeholder="Seu nome completo" autocomplete="name"/>
-    </div>
-    <div class="field">
-      <span class="field-ico">✉️</span>
-      <input type="email" id="inp-email" placeholder="seu@email.com" inputmode="email" autocomplete="email"/>
-    </div>
-    <div class="sec-lbl">Resumo</div>
-    <div class="sum-card">
-      <div class="sum-row"><span class="sum-lbl">Barbeiro</span><span class="sum-val">Johnny Andrade</span></div>
-      <div class="sum-row"><span class="sum-lbl">Serviço</span><span class="sum-val" id="s-svc">—</span></div>
-      <div class="sum-row"><span class="sum-lbl">Data & hora</span><span class="sum-val" id="s-dt">—</span></div>
-      <div class="sum-row"><span class="sum-lbl">Total</span><span class="sum-big" id="s-total">—</span></div>
-    </div>
-  </div>
-  <div class="bottom">
-    <button class="btn" onclick="nextData()">Ir para pagamento →</button>
+  <div class="cta-wrap">
+    <button class="btn btn-gold" onclick="nextData()">Ir para pagamento →</button>
   </div>
 </div>
 
-<!-- ══ V5: CHECKOUT ══ -->
-<div class="view" id="v-checkout">
+<!-- ════════════════════
+  V5: CHECKOUT
+════════════════════ -->
+<div class="view" id="v5">
   <div class="topbar">
-    <div class="tb-back" onclick="goTo('v-data')">←</div>
+    <div class="back" onclick="goTo('v4')">←</div>
     <div class="tb-title">Confirmar reserva</div>
     <img src="logo.jpg" class="tb-logo" alt="logo"/>
   </div>
-  <div class="steps">
-    <div class="step done"></div><div class="step done"></div><div class="step done"></div><div class="step done"></div><div class="step active"></div>
-  </div>
-  <div class="co-wrap">
-    <div class="policy">
-      <div class="policy-t">⚠ Política de cancelamento</div>
-      <div class="policy-b">O sinal <strong>não é reembolsável</strong> sem aviso prévio de 24h. Com aviso, o valor é aproveitado no reagendamento. <strong>Não compareceu sem avisar = perda do valor.</strong></div>
-    </div>
-    <div class="charge">
-      <div class="charge-row"><span style="color:var(--white3)">Valor total</span><span style="color:var(--white);font-weight:500" id="c-total">—</span></div>
-      <div class="charge-row"><span style="color:var(--white3)">Sinal de reserva (30%)</span><span style="color:var(--gold);font-weight:500" id="c-sinal">—</span></div>
-      <div class="charge-row"><span style="color:var(--white3)">Restante no balcão</span><span style="color:var(--white3)" id="c-resto">—</span></div>
-      <hr class="charge-div"/>
-      <div style="display:flex;justify-content:space-between;align-items:baseline">
-        <span class="charge-lbl">Cobrar agora</span>
-        <span class="charge-val" id="c-now">—</span>
+  <div class="stepbar"><div class="sb done"></div><div class="sb done"></div><div class="sb done"></div><div class="sb done"></div><div class="sb cur"></div></div>
+  <div class="scroll">
+    <div class="co-pad">
+      <div class="policy-box">
+        <div class="policy-title">⚠ Política de cancelamento</div>
+        <div class="policy-body">O sinal <strong>não é reembolsável</strong> sem aviso prévio de 24h. Com aviso, o valor é aproveitado no reagendamento. Não compareceu sem avisar = perda do valor.</div>
       </div>
-    </div>
-    <div style="font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:10px">Forma de pagamento</div>
-    <div class="pay-opts">
-      <div class="pay-opt sel" id="po-pix" onclick="selPay('pix')">
-        <div class="pay-ico">📲</div>
-        <div class="pay-name">Pix</div>
-        <div class="pay-sub">Confirmação imediata</div>
+      <div class="charge-card">
+        <div class="charge-row"><span>Valor total</span><span style="color:var(--white);font-weight:500" id="c-tot">—</span></div>
+        <div class="charge-row"><span>Sinal de reserva (30%)</span><span style="color:var(--gold2);font-weight:500" id="c-sin">—</span></div>
+        <div class="charge-row"><span>Restante no balcão</span><span id="c-res">—</span></div>
+        <hr class="charge-divider"/>
+        <div style="display:flex;justify-content:space-between;align-items:baseline">
+          <span class="charge-lbl">Cobrar agora</span>
+          <span class="charge-total" id="c-now">—</span>
+        </div>
       </div>
-      <div class="pay-opt" id="po-card" onclick="selPay('card')">
-        <div class="pay-ico">💳</div>
-        <div class="pay-name">Cartão</div>
-        <div class="pay-sub">Crédito ou débito</div>
+      <div class="sec-lbl" style="margin-top:0">Forma de pagamento</div>
+      <div class="pay-grid">
+        <div class="pay-opt sel" id="pp" onclick="selPay('pix')">
+          <div class="pay-ico">📲</div>
+          <div class="pay-name">Pix</div>
+          <div class="pay-sub">Imediato</div>
+        </div>
+        <div class="pay-opt" id="pc" onclick="selPay('card')">
+          <div class="pay-ico">💳</div>
+          <div class="pay-name">Cartão</div>
+          <div class="pay-sub">Crédito ou débito</div>
+        </div>
       </div>
-    </div>
-    <div id="pix-sec">
-      <div class="pix-box">
-        <div style="font-size:10px;color:var(--gray);letter-spacing:.1em;text-transform:uppercase">Chave Pix</div>
-        <div class="pix-key">(11) 99999-9999</div>
-        <a href="https://wa.me/5511999999999" target="_blank" class="pix-link">↗ Enviar comprovante pelo WhatsApp</a>
+      <div id="pix-sec">
+        <div class="pix-card">
+          <div style="font-size:9px;color:var(--gray);letter-spacing:.18em;text-transform:uppercase">Chave Pix</div>
+          <div class="pix-key">(11) 99999-9999</div>
+          <a href="https://wa.me/5511999999999" target="_blank" class="pix-wa">↗ Enviar comprovante via WhatsApp</a>
+        </div>
       </div>
-    </div>
-    <div id="card-sec" style="display:none">
-      <div class="field"><span class="field-ico">💳</span><input type="text" placeholder="Número do cartão" inputmode="numeric"/></div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
-        <div class="field"><input type="text" placeholder="MM/AA"/></div>
-        <div class="field"><input type="text" placeholder="CVV" inputmode="numeric"/></div>
+      <div id="card-sec" style="display:none">
+        <div class="field"><span class="field-ico">💳</span><input type="text" placeholder="Número do cartão" inputmode="numeric"/></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+          <div class="field"><input type="text" placeholder="MM/AA"/></div>
+          <div class="field"><input type="text" placeholder="CVV" inputmode="numeric"/></div>
+        </div>
       </div>
+      <div class="agree-row">
+        <input type="checkbox" id="chk"/>
+        <label for="chk">Li e concordo com a política de cancelamento. Entendo que o sinal não é reembolsável sem aviso de 24 horas.</label>
+      </div>
+      <button class="btn btn-gold" onclick="confirmar()">✦ &nbsp;Confirmar e pagar sinal</button>
+      <p style="text-align:center;font-size:11px;color:var(--gray);margin-top:14px;letter-spacing:.03em">Pagamento seguro · Confirmação por WhatsApp</p>
     </div>
-    <div class="check-row">
-      <input type="checkbox" id="chk-pol"/>
-      <label for="chk-pol">Li e concordo com a política de cancelamento. Entendo que o sinal não é reembolsável sem aviso de 24 horas.</label>
-    </div>
-    <button class="btn" onclick="confirmar()">✦ &nbsp;Confirmar e pagar sinal</button>
-    <p style="text-align:center;font-size:12px;color:var(--gray);margin-top:12px">Pagamento processado com segurança · Confirmação por WhatsApp</p>
   </div>
 </div>
 
-<!-- ══ V6: SUCESSO ══ -->
-<div class="view" id="v-ok">
+<!-- ════════════════════
+  V6: SUCESSO
+════════════════════ -->
+<div class="view" id="v6">
   <div class="ok-wrap">
-    <div class="ok-icon">✓</div>
+    <div class="ok-ring">✓</div>
     <div class="ok-eyebrow">Reserva confirmada</div>
     <div class="ok-title">Até já!</div>
-    <div class="ok-sub">Sinal recebido com sucesso.<br>Confirmação pelo <strong style="color:var(--white)">WhatsApp</strong> em instantes.<br>Chegue 5 minutinhos antes. ✦</div>
-    <div class="sum-card" style="width:100%;margin-bottom:20px">
+    <div class="ok-sub">Sinal recebido. Confirmação pelo<br><strong style="color:var(--white)">WhatsApp</strong> em instantes.<br>Chegue 5 minutinhos antes. ✦</div>
+    <div class="sum-card" style="width:100%;margin-bottom:22px">
       <div class="sum-row"><span class="sum-lbl">Barbeiro</span><span class="sum-val">Johnny Andrade</span></div>
       <div class="sum-row"><span class="sum-lbl">Serviço</span><span class="sum-val" id="ok-svc">—</span></div>
       <div class="sum-row"><span class="sum-lbl">Data & hora</span><span class="sum-val" id="ok-dt">—</span></div>
-      <div class="sum-row"><span class="sum-lbl">Sinal pago</span><span class="sum-val" style="color:var(--gold)" id="ok-sinal">—</span></div>
+      <div class="sum-row"><span class="sum-lbl">Sinal pago</span><span class="sum-val" style="color:var(--gold2)" id="ok-sin">—</span></div>
     </div>
-    <button class="btn" onclick="goTo('v-land')">← Fazer novo agendamento</button>
+    <button class="btn btn-gold" onclick="goTo('v0')">← Novo agendamento</button>
   </div>
 </div>
 
 <!-- WhatsApp Float -->
-<a href="https://wa.me/5511999999999" target="_blank" class="wa" title="Falar com a barbearia">💬</a>
+<a href="https://wa.me/5511999999999" target="_blank" class="wa-btn">💬</a>
 
-</div>
+</div><!-- .app -->
 
 <script>
 const SVCS=[
-  {n:'Corte masculino',dur:'45 min',val:45},
-  {n:'Corte & barba',dur:'1h',val:65},
-  {n:'Corte + selagem',dur:'1h 30min',val:100},
-  {n:'Corte, barba & selagem',dur:'2h',val:120},
-  {n:'Corte premium + limpeza',dur:'1h 15min',val:100},
-  {n:'Limpeza de pele',dur:'45 min',val:60},
-  {n:'Combo completo',dur:'2h 30min',val:160},
+  {n:'Corte masculino',d:'45 min',v:45},
+  {n:'Corte & barba',d:'1h',v:65},
+  {n:'Corte + selagem',d:'1h 30min',v:100},
+  {n:'Corte, barba & selagem',d:'2h',v:120},
+  {n:'Corte premium + limpeza',d:'1h 15min',v:100},
+  {n:'Limpeza de pele',d:'45 min',v:60},
+  {n:'Combo completo',d:'2h 30min',v:160},
 ];
-const MONTHS=['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
-const FAKEDB={'11953826351':{name:'Carlos Silva',email:'carlos@email.com'},'11988887777':{name:'Rafael Souza',email:'rafa@email.com'}};
+const MOS=['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+const DB={'11953826351':{n:'Carlos Silva',e:'carlos@email.com'},'11988887777':{n:'Rafael Souza',e:'rafa@email.com'}};
 let CS={svc:null,price:0,date:'',hour:''};
 let calY=2026,calM=5,selDay=null;
 
@@ -465,12 +738,15 @@ function goTo(id){
 // SERVICES
 (function(){
   const el=document.getElementById('svc-list');
-  el.innerHTML='<div style="height:4px"></div>'+SVCS.map((s,i)=>`
+  el.innerHTML=SVCS.map((s,i)=>`
     <div class="svc-item" id="si${i}" onclick="selSvc(${i},this)">
-      <div class="svc-info"><div class="svc-name">${s.n}</div><div class="svc-dur">${s.dur}</div></div>
-      <div class="svc-price">R$ ${s.val}</div>
+      <div class="svc-left">
+        <div class="svc-name">${s.n}</div>
+        <div class="svc-dur">${s.d}</div>
+      </div>
+      <div class="svc-price">R$ ${s.v}</div>
       <div class="svc-chk" id="sc${i}"></div>
-    </div>`).join('')+'<div style="height:4px"></div>';
+    </div>`).join('');
 })();
 
 function selSvc(i,el){
@@ -478,13 +754,13 @@ function selSvc(i,el){
   document.querySelectorAll('.svc-chk').forEach(e=>e.classList.remove('sel'));
   el.classList.add('sel');
   document.getElementById('sc'+i).classList.add('sel');
-  CS.svc=SVCS[i].n;CS.price=SVCS[i].val;
-  setTimeout(()=>goTo('v-datetime'),320);
+  CS.svc=SVCS[i].n;CS.price=SVCS[i].v;
+  setTimeout(()=>goTo('v3'),300);
 }
 
-// CALENDAR
+// CAL
 function buildCal(){
-  document.getElementById('cal-m').textContent=MONTHS[calM]+' '+calY;
+  document.getElementById('cal-m').textContent=MOS[calM]+' '+calY;
   const first=new Date(calY,calM,1).getDay();
   const tot=new Date(calY,calM+1,0).getDate();
   const t=new Date();t.setHours(0,0,0,0);
@@ -500,28 +776,26 @@ function buildCal(){
   document.getElementById('cal-grid').innerHTML=h;
   buildSlots();
 }
-function pickDay(d){selDay=d;CS.date=`${d} de ${MONTHS[calM]} de ${calY}`;buildCal();}
+function pickDay(d){selDay=d;CS.date=`${d} de ${MOS[calM]} de ${calY}`;buildCal();}
 function calNav(dir){calM+=dir;if(calM>11){calM=0;calY++;}if(calM<0){calM=11;calY--;}buildCal();}
-
 function buildSlots(){
-  if(!selDay){document.getElementById('time-slots').innerHTML='<div style="font-size:13px;color:var(--gray);padding:8px 0">Selecione uma data acima.</div>';return;}
-  const periods={'Manhã':['09:00','09:30','10:00','10:30','11:00','11:30'],'Tarde':['14:00','14:30','15:00','15:30','16:00','16:30'],'Noite':['19:00','19:30','20:00','20:30']};
+  if(!selDay){document.getElementById('slots').innerHTML='<div style="font-size:13px;color:var(--gray);padding:6px 0">Selecione uma data acima.</div>';return;}
+  const ps={'Manhã':['09:00','09:30','10:00','10:30','11:00','11:30'],'Tarde':['14:00','14:30','15:00','15:30','16:00','16:30'],'Noite':['19:00','19:30','20:00','20:30']};
   let h='';
-  for(const[p,ts] of Object.entries(periods)){
-    h+=`<div class="t-section"><div class="t-lbl">${p}</div><div class="t-grid">`;
-    ts.forEach(t=>{h+=`<div class="tslot${CS.hour===t?' sel':''}" onclick="pickSlot('${t}')">${t}</div>`;});
+  for(const[p,ts] of Object.entries(ps)){
+    h+=`<div class="slot-sec"><div class="slot-lbl">${p}</div><div class="slot-grid">`;
+    ts.forEach(t=>{h+=`<div class="slot${CS.hour===t?' sel':''}" onclick="pickSlot('${t}')">${t}</div>`;});
     h+=`</div></div>`;
   }
-  document.getElementById('time-slots').innerHTML=h;
+  document.getElementById('slots').innerHTML=h;
 }
 function pickSlot(t){CS.hour=t;buildSlots();}
-
 function nextDT(){
   if(!selDay||!CS.hour){alert('Selecione data e horário para continuar.');return;}
-  document.getElementById('s-svc').textContent=CS.svc;
-  document.getElementById('s-dt').textContent=CS.date+' às '+CS.hour;
-  document.getElementById('s-total').textContent='R$ '+CS.price+',00';
-  goTo('v-data');
+  document.getElementById('r-svc').textContent=CS.svc;
+  document.getElementById('r-dt').textContent=CS.date+' às '+CS.hour;
+  document.getElementById('r-price').textContent='R$ '+CS.price+',00';
+  goTo('v4');
 }
 
 // PHONE
@@ -535,51 +809,43 @@ function phoneMask(v){
 function handleTel(inp){
   const raw=inp.value.replace(/\D/g,'');
   inp.value=phoneMask(inp.value);
-  document.getElementById('tel-clear').style.display=raw.length?'block':'none';
+  document.getElementById('tel-x').style.display=raw.length?'block':'none';
   if(raw.length>=11){
-    const f=FAKEDB[raw];
-    if(f){document.getElementById('inp-nome').value=f.name;document.getElementById('inp-email').value=f.email;document.getElementById('found').style.display='block';}
+    const f=DB[raw];
+    if(f){document.getElementById('i-nome').value=f.n;document.getElementById('i-email').value=f.e;document.getElementById('found').style.display='block';}
     else document.getElementById('found').style.display='none';
   } else document.getElementById('found').style.display='none';
 }
-function clearData(){
-  ['inp-tel','inp-nome','inp-email'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+function clearForm(){
+  ['i-tel','i-nome','i-email'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});
   document.getElementById('found').style.display='none';
-  document.getElementById('tel-clear').style.display='none';
+  document.getElementById('tel-x').style.display='none';
 }
-
 function nextData(){
-  if(!document.getElementById('inp-tel').value||!document.getElementById('inp-nome').value){alert('Preencha celular e nome para continuar.');return;}
-  const sinal=Math.ceil(CS.price*.3);
-  document.getElementById('c-total').textContent='R$ '+CS.price+',00';
-  document.getElementById('c-sinal').textContent='R$ '+sinal+',00';
-  document.getElementById('c-resto').textContent='R$ '+(CS.price-sinal)+',00';
-  document.getElementById('c-now').textContent='R$ '+sinal+',00';
-  goTo('v-checkout');
+  if(!document.getElementById('i-tel').value||!document.getElementById('i-nome').value){alert('Preencha celular e nome para continuar.');return;}
+  const sin=Math.ceil(CS.price*.3);
+  document.getElementById('c-tot').textContent='R$ '+CS.price+',00';
+  document.getElementById('c-sin').textContent='R$ '+sin+',00';
+  document.getElementById('c-res').textContent='R$ '+(CS.price-sin)+',00';
+  document.getElementById('c-now').textContent='R$ '+sin+',00';
+  goTo('v5');
 }
-
 function selPay(p){
-  document.getElementById('po-pix').classList.toggle('sel',p==='pix');
-  document.getElementById('po-card').classList.toggle('sel',p==='card');
+  document.getElementById('pp').classList.toggle('sel',p==='pix');
+  document.getElementById('pc').classList.toggle('sel',p==='card');
   document.getElementById('pix-sec').style.display=p==='pix'?'block':'none';
   document.getElementById('card-sec').style.display=p==='card'?'block':'none';
 }
-
 function confirmar(){
-  if(!document.getElementById('chk-pol').checked){alert('Confirme que leu a política de cancelamento.');return;}
-  const sinal=Math.ceil(CS.price*.3);
+  if(!document.getElementById('chk').checked){alert('Confirme que leu a política de cancelamento.');return;}
+  const sin=Math.ceil(CS.price*.3);
   document.getElementById('ok-svc').textContent=CS.svc;
   document.getElementById('ok-dt').textContent=CS.date+' às '+CS.hour;
-  document.getElementById('ok-sinal').textContent='R$ '+sinal+',00';
-  goTo('v-ok');
+  document.getElementById('ok-sin').textContent='R$ '+sin+',00';
+  goTo('v6');
 }
-
-function openLbox(src){
-  document.getElementById('lbox-img').src=src;
-  document.getElementById('lbox').classList.add('on');
-}
+function openLbox(src){document.getElementById('lbox-img').src=src;document.getElementById('lbox').classList.add('on');}
 function closeLbox(){document.getElementById('lbox').classList.remove('on');}
-
 buildCal();
 </script>
 </body>
