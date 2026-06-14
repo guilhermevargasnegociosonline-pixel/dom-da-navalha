@@ -92,7 +92,7 @@ body{background:#000;color:#fff;font-family:'DM Sans',system-ui,sans-serif;font-
 .land-logo-ring{
   width:96px;height:96px;
   border-radius:20px;
-  border:2px solid var(--w);
+  border:none;
   background:var(--bg2);
   display:flex;align-items:center;justify-content:center;
   overflow:hidden;margin-bottom:24px;
@@ -132,9 +132,18 @@ body{background:#000;color:#fff;font-family:'DM Sans',system-ui,sans-serif;font-
 .bcard{margin:0 18px;border-radius:16px;overflow:hidden;background:var(--bg2);border:1px solid var(--line)}
 .bcard-img{
   width:100%;
-  padding-bottom:90%;
+  height:85vw;
+  max-height:420px;
   position:relative;overflow:hidden;
-  background:url('johnny.jpg') center 5% / cover no-repeat;
+  background:#111;
+  display:flex;align-items:flex-start;justify-content:center;
+}
+.bcard-img-photo{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  object-position:center 0%;
+  display:block;
 }
 .bcard-img-grad{
   position:absolute;bottom:0;left:0;right:0;height:45%;
@@ -161,7 +170,7 @@ body{background:#000;color:#fff;font-family:'DM Sans',system-ui,sans-serif;font-
 .port-item{border-radius:10px;overflow:hidden;aspect-ratio:3/4;cursor:pointer;position:relative;background:var(--bg3)}
 .port-item img{width:100%;height:100%;object-fit:cover;object-position:center top;display:block;transition:transform .4s}
 .port-item:active img{transform:scale(1.05)}
-.port-ov{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.82) 0%,transparent 55%);display:flex;align-items:flex-end;padding:10px 12px}
+.port-ov{display:none}
 .port-lb{font-size:10px;color:var(--w);letter-spacing:.07em;text-transform:uppercase;font-weight:500}
 
 /* ═══════════════════════════════
@@ -330,6 +339,7 @@ body{background:#000;color:#fff;font-family:'DM Sans',system-ui,sans-serif;font-
   <div class="scroll" style="padding-bottom:110px">
     <div class="bcard">
       <div class="bcard-img">
+        <img src="johnny.jpg" class="bcard-img-photo" alt="Johnny Andrade"/>
         <div class="bcard-img-grad"></div>
       </div>
       <div class="bcard-body">
@@ -348,19 +358,19 @@ body{background:#000;color:#fff;font-family:'DM Sans',system-ui,sans-serif;font-
       <div class="port-grid">
         <div class="port-item" onclick="openLbox('corte1.jpg')">
           <img src="corte1.jpg" alt="Clássico Fade"/>
-          <div class="port-ov"><div class="port-lb">Clássico Fade</div></div>
+          <div class="port-ov"></div>
         </div>
         <div class="port-item" onclick="openLbox('corte2.jpg')">
           <img src="corte2.jpg" alt="Skin Fade"/>
-          <div class="port-ov"><div class="port-lb">Skin Fade</div></div>
+          <div class="port-ov"></div>
         </div>
         <div class="port-item" onclick="openLbox('corte3.jpg')">
           <img src="corte3.jpg" alt="Pompadour"/>
-          <div class="port-ov"><div class="port-lb">Pompadour</div></div>
+          <div class="port-ov"></div>
         </div>
         <div class="port-item" onclick="openLbox('corte4.jpg')">
           <img src="corte4.jpg" alt="Buzz Fade"/>
-          <div class="port-ov"><div class="port-lb">Buzz Fade</div></div>
+          <div class="port-ov"></div>
         </div>
       </div>
     </div>
@@ -428,7 +438,7 @@ body{background:#000;color:#fff;font-family:'DM Sans',system-ui,sans-serif;font-
       </div>
       <div class="field">
         <span class="f-ico">✉️</span>
-        <input type="email" id="i-email" placeholder="seu@email.com" inputmode="email" autocomplete="email"/>
+        <input type="email" id="i-email" placeholder="Email" inputmode="email" autocomplete="email"/>
       </div>
       <div class="sec-l">Resumo</div>
       <div class="sum-card">
