@@ -3,380 +3,339 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<meta name="theme-color" content="#080808">
+<meta name="theme-color" content="#000">
 <title>Dom da Navalha — Agendamento</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
+/* RESET GLOBAL — sem laterais brancas em nenhum tamanho */
+html{background:#000;margin:0;padding:0}
+body{background:#000;color:#fff;font-family:'DM Sans',system-ui,sans-serif;font-size:14px;min-height:100vh;margin:0;padding:0;overflow-x:hidden;-webkit-font-smoothing:antialiased}
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-:root{
-  --bg:#080808;--bg2:#111;--bg3:#1a1a1a;--bg4:#222;
-  --w:#fff;--w2:#e0e0e0;--w3:#999;--w4:#555;
-  --line:#2a2a2a;
-  --gold:#C9A84C;--gold2:#E0BC6A;--gdim:rgba(201,168,76,.1);--gbr:rgba(201,168,76,.22);
-  --grn:#22c55e;--grn-d:rgba(34,197,94,.1);--grn-b:rgba(34,197,94,.2);
-  --red:#ef4444;--red-d:rgba(239,68,68,.08);--red-b:rgba(239,68,68,.2);
-  --max:460px;
-}
-html,body{background:var(--bg);color:var(--w);font-family:'DM Sans',system-ui,sans-serif;font-size:14px;min-height:100vh;overflow-x:hidden}
 *::-webkit-scrollbar{display:none}*{scrollbar-width:none}
-.app{max-width:var(--max);margin:0 auto;min-height:100vh;background:var(--bg)}
+
+/* APP — centralizado mas com fundo preto nos lados */
+.app{
+  max-width:480px;
+  margin:0 auto;
+  min-height:100vh;
+  background:#000;
+  position:relative;
+}
+
+:root{
+  --bg:#000;--bg2:#0f0f0f;--bg3:#1a1a1a;--bg4:#242424;
+  --w:#fff;--w2:#e8e8e8;--w3:#aaa;--w4:#555;
+  --line:#2a2a2a;--line2:#333;
+  --gold:#C9A84C;--gdim:rgba(201,168,76,.1);--gbr:rgba(201,168,76,.22);
+  --grn:#22c55e;--grn-d:rgba(34,197,94,.08);--grn-b:rgba(34,197,94,.2);
+  --red:#ef4444;--red-d:rgba(239,68,68,.08);--red-b:rgba(239,68,68,.2);
+}
+
+/* VIEWS */
 .view{display:none;min-height:100vh;flex-direction:column}
-.view.on{display:flex;animation:fu .28s ease both}
-@keyframes fu{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.view.on{display:flex;animation:fu .25s ease both}
+@keyframes fu{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:none}}
 
 /* TOPBAR */
-.tb{display:flex;align-items:center;padding:14px 18px 12px;gap:10px;flex-shrink:0}
-.tb-back{width:38px;height:38px;border-radius:50%;background:var(--bg3);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:17px;color:var(--w3);flex-shrink:0}
-.tb-t{font-size:14px;font-weight:400;color:var(--w);flex:1;letter-spacing:.02em}
-.tb-logo{width:30px;height:30px;border-radius:7px;object-fit:cover;border:1.5px solid var(--w);flex-shrink:0}
+.tb{display:flex;align-items:center;padding:14px 18px 12px;gap:10px;flex-shrink:0;background:var(--bg)}
+.tb-bk{width:38px;height:38px;border-radius:50%;background:var(--bg3);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:17px;color:var(--w3);flex-shrink:0}
+.tb-t{font-size:14px;font-weight:400;color:var(--w);flex:1;letter-spacing:.01em}
+.tb-lg{width:30px;height:30px;border-radius:7px;object-fit:cover;border:1.5px solid var(--w);flex-shrink:0}
 
-/* STEPS */
-.steps{display:flex;padding:0 18px 14px;gap:4px;flex-shrink:0}
-.step{height:2px;flex:1;border-radius:1px;background:var(--line);transition:background .3s}
-.step.d{background:var(--gold)}
-.step.c{background:var(--gold);opacity:.45}
+/* PROGRESS */
+.prog{display:flex;padding:0 18px 14px;gap:4px;flex-shrink:0}
+.p{height:2px;flex:1;border-radius:1px;background:var(--line);transition:background .3s}
+.p.d{background:var(--w2)}.p.c{background:var(--w3)}
 
-/* SCROLL & CTA */
+/* SCROLL / CTA */
 .scroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch}
-.cta-wrap{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:var(--max);padding:12px 18px 34px;background:linear-gradient(to top,var(--bg) 65%,transparent);z-index:60;pointer-events:none}
-.cta-wrap>*{pointer-events:all}
+.cta-w{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;padding:12px 18px 34px;background:linear-gradient(to top,#000 65%,transparent);z-index:60;pointer-events:none}
+.cta-w>*{pointer-events:all}
 
 /* BUTTONS */
-.btn{width:100%;padding:16px 20px;border:none;border-radius:12px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .2s;-webkit-appearance:none;text-decoration:none}
-.btn-g{background:var(--gold);color:var(--bg)}
-.btn-g:active{background:var(--gold2);transform:scale(.97)}
-.btn-o{background:transparent;border:1px solid var(--line);color:var(--w3)}
-.btn-o:active{background:var(--bg3);transform:scale(.97)}
+.btn{width:100%;padding:16px 20px;border:none;border-radius:11px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .18s;-webkit-appearance:none;text-decoration:none}
 .btn-w{background:var(--w);color:var(--bg)}
 .btn-w:active{background:var(--w2);transform:scale(.97)}
+.btn-o{background:transparent;border:1px solid var(--line2);color:var(--w3)}
+.btn-o:active{background:var(--bg3);transform:scale(.97)}
+.btn-a{background:var(--w);color:var(--bg)}
+.btn-a:active{background:var(--w2);transform:scale(.97)}
 
-/* ══════════════════════════════════
-   LANDING — hero com logo + photo BG
-══════════════════════════════════ */
-.hero{
+/* ═══════════════════════════════
+   LANDING — logo centrado, sem foto
+═══════════════════════════════ */
+.land{
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+  background:var(--bg);
+}
+/* topo: área do logo centrada */
+.land-top{
+  flex:1;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  padding:48px 28px 32px;
   position:relative;
-  width:100%;
-  height:100svh;
-  min-height:600px;
-  overflow:hidden;
-  flex-shrink:0;
 }
-/* foto do johnny como background cobrindo tudo */
-.hero-bg{
-  position:absolute;inset:0;
-  background:url('johnny.jpg') center 10% / cover no-repeat;
-  transform:scale(1.02);
-}
-/* gradiente pesado de baixo */
-.hero-grad{
-  position:absolute;inset:0;
-  background:linear-gradient(
-    to bottom,
-    rgba(8,8,8,.55) 0%,
-    rgba(8,8,8,.1) 25%,
-    rgba(8,8,8,.0) 45%,
-    rgba(8,8,8,.75) 75%,
-    rgba(8,8,8,.98) 100%
-  );
-}
-.hero-body{
+/* linha divisória sutil */
+.land-top::after{
+  content:'';
   position:absolute;
-  bottom:0;left:0;right:0;
-  padding:0 22px 32px;
+  bottom:0;left:18px;right:18px;
+  height:1px;background:var(--line);
 }
-.hero-logo-ring{
-  width:72px;height:72px;
-  border-radius:16px;
+.land-logo-ring{
+  width:96px;height:96px;
+  border-radius:20px;
   border:2px solid var(--w);
-  background:rgba(0,0,0,.55);
-  backdrop-filter:blur(6px);
+  background:var(--bg2);
   display:flex;align-items:center;justify-content:center;
-  overflow:hidden;
-  margin-bottom:16px;
+  overflow:hidden;margin-bottom:24px;
+  box-shadow:0 0 0 8px rgba(255,255,255,.04);
 }
-.hero-logo-img{width:64px;height:64px;object-fit:contain;padding:3px}
-.hero-eyebrow{font-size:9px;letter-spacing:.26em;text-transform:uppercase;color:var(--gold);margin-bottom:6px}
-.hero-name{
+.land-logo-img{width:88px;height:88px;object-fit:contain;padding:4px}
+.land-ey{font-size:9px;letter-spacing:.28em;text-transform:uppercase;color:var(--w3);margin-bottom:10px;text-align:center}
+.land-name{
   font-family:'Cormorant Garamond',serif;
-  font-size:42px;font-weight:700;color:var(--w);
-  line-height:.95;letter-spacing:-.01em;margin-bottom:8px;
+  font-size:44px;font-weight:700;color:var(--w);
+  text-align:center;line-height:.92;letter-spacing:-.01em;margin-bottom:10px;
 }
-.hero-addr{font-size:12px;color:rgba(255,255,255,.55);margin-bottom:14px}
-.hero-chips{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:24px}
+.land-addr{font-size:12px;color:var(--w4);text-align:center;margin-bottom:18px}
+.land-chips{display:flex;flex-wrap:wrap;gap:5px;justify-content:center}
 .chip{
-  background:rgba(201,168,76,.12);border:1px solid rgba(201,168,76,.3);
+  background:rgba(255,255,255,.06);border:1px solid var(--line2);
   border-radius:4px;padding:4px 10px;font-size:10px;
-  color:var(--gold);letter-spacing:.06em;text-transform:uppercase;
+  color:var(--w3);letter-spacing:.06em;text-transform:uppercase;
 }
-.hero-btns{display:flex;flex-direction:column;gap:8px}
-.hero-row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-
-/* info strips */
-.info-strip{
+/* parte de baixo: botões e info */
+.land-bot{padding:22px 18px 40px;display:flex;flex-direction:column;gap:8px}
+.info-row{
   display:flex;align-items:center;gap:10px;
-  background:rgba(255,255,255,.06);
-  backdrop-filter:blur(8px);
-  border:1px solid rgba(255,255,255,.1);
-  border-radius:10px;padding:11px 14px;
+  background:var(--bg2);border:1px solid var(--line);
+  border-radius:11px;padding:12px 14px;
 }
-.i-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;box-shadow:0 0 7px currentColor}
+.i-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
 .i-body{flex:1;min-width:0}
-.i-title{font-size:12px;font-weight:500;color:var(--w)}
-.i-sub{font-size:11px;color:rgba(255,255,255,.45);margin-top:1px}
-.i-cta{font-size:11px;color:var(--gold);font-weight:500;flex-shrink:0}
+.i-title{font-size:12px;font-weight:500;color:var(--w);margin-bottom:1px}
+.i-sub{font-size:11px;color:var(--w4)}
+.i-cta{font-size:11px;color:var(--w3);flex-shrink:0}
+.btn-pair{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 
-/* ══════════════════════════════════
-   BARBEIRO CARD
-══════════════════════════════════ */
-.bcard{margin:0 18px 0;border-radius:18px;overflow:hidden;background:var(--bg2);border:1px solid var(--line);flex-shrink:0}
-
-/* foto do johnny como background no card também */
-.bcard-photo{
+/* ═══════════════════════════════
+   BARBEIRO — foto como BG quadrado
+═══════════════════════════════ */
+.bcard{margin:0 18px;border-radius:16px;overflow:hidden;background:var(--bg2);border:1px solid var(--line)}
+.bcard-img{
   width:100%;
-  padding-bottom:100%; /* quadrado perfeito */
-  position:relative;
-  overflow:hidden;
+  padding-bottom:90%;
+  position:relative;overflow:hidden;
+  background:url('johnny.jpg') center 5% / cover no-repeat;
 }
-.bcard-photo-bg{
-  position:absolute;inset:0;
-  background:url('johnny.jpg') center 8% / cover no-repeat;
+.bcard-img-grad{
+  position:absolute;bottom:0;left:0;right:0;height:45%;
+  background:linear-gradient(to top,var(--bg2),transparent);
 }
-/* gradiente sutil na base para texto */
-.bcard-photo-grad{
-  position:absolute;bottom:0;left:0;right:0;height:40%;
-  background:linear-gradient(to top,rgba(17,17,17,.9),transparent);
-}
-
 .bcard-body{padding:18px}
 .bcard-name{
   font-family:'Cormorant Garamond',serif;
-  font-size:26px;font-weight:600;color:var(--w);
+  font-size:28px;font-weight:600;color:var(--w);
   letter-spacing:.01em;margin-bottom:2px;
 }
-.bcard-role{font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:14px}
-.bcard-bio{font-size:13px;color:var(--w3);line-height:1.8;margin-bottom:16px;font-weight:300}
+.bcard-role{font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--w3);margin-bottom:14px}
+.bcard-bio{font-size:13px;color:var(--w4);line-height:1.8;margin-bottom:16px;font-weight:300}
 .bcard-tags{display:flex;flex-wrap:wrap;gap:5px}
 .btag{
   background:var(--bg3);border:1px solid var(--line);
-  border-radius:4px;font-size:10px;color:var(--w2);
+  border-radius:4px;font-size:10px;color:var(--w3);
   padding:4px 11px;letter-spacing:.05em;text-transform:uppercase;
 }
-
 /* portfolio */
 .port-wrap{padding:20px 18px 0}
-.port-lbl{font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin-bottom:12px}
+.port-ey{font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:var(--w3);margin-bottom:12px}
 .port-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px}
-.port-item{
-  border-radius:10px;overflow:hidden;
-  aspect-ratio:3/4;cursor:pointer;position:relative;
-  background:var(--bg3);
-}
-.port-item img{
-  width:100%;height:100%;
-  object-fit:cover;object-position:center top;
-  display:block;transition:transform .4s ease;
-}
+.port-item{border-radius:10px;overflow:hidden;aspect-ratio:3/4;cursor:pointer;position:relative;background:var(--bg3)}
+.port-item img{width:100%;height:100%;object-fit:cover;object-position:center top;display:block;transition:transform .4s}
 .port-item:active img{transform:scale(1.05)}
-.port-over{
-  position:absolute;inset:0;
-  background:linear-gradient(to top,rgba(8,8,8,.82) 0%,transparent 55%);
-  display:flex;align-items:flex-end;padding:10px 12px;
-}
-.port-plbl{font-size:10px;color:var(--w);letter-spacing:.07em;text-transform:uppercase;font-weight:500}
+.port-ov{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.82) 0%,transparent 55%);display:flex;align-items:flex-end;padding:10px 12px}
+.port-lb{font-size:10px;color:var(--w);letter-spacing:.07em;text-transform:uppercase;font-weight:500}
 
-/* ══════════════════════════════════
+/* ═══════════════════════════════
    SERVIÇOS
-══════════════════════════════════ */
-.svc-pad{padding:0 18px 110px}
+═══════════════════════════════ */
+.svc-pad{padding:4px 18px 110px}
 .svc-item{
   background:var(--bg2);border:1px solid var(--line);
-  border-radius:12px;padding:17px;
+  border-radius:11px;padding:16px;
   display:flex;align-items:center;gap:12px;
   margin-bottom:8px;cursor:pointer;transition:all .2s;
 }
-.svc-item.sel{border-color:var(--gold);background:var(--gdim)}
-.svc-info{flex:1;min-width:0}
+.svc-item.sel{border-color:var(--w3);background:rgba(255,255,255,.04)}
+.svc-l{flex:1;min-width:0}
 .svc-name{font-size:14px;font-weight:500;color:var(--w);margin-bottom:2px}
 .svc-dur{font-size:11px;color:var(--w4)}
-.svc-val{
+.svc-price{
   font-family:'Cormorant Garamond',serif;
-  font-size:22px;font-weight:600;color:var(--gold);flex-shrink:0;
+  font-size:20px;font-weight:600;color:var(--w2);flex-shrink:0;
 }
-.svc-chk{
-  width:22px;height:22px;border-radius:50%;
-  border:1.5px solid var(--line);flex-shrink:0;
-  display:flex;align-items:center;justify-content:center;transition:all .2s;
-}
-.svc-item.sel .svc-chk{background:var(--gold);border-color:var(--gold)}
+.svc-chk{width:22px;height:22px;border-radius:50%;border:1.5px solid var(--line2);flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .2s}
+.svc-item.sel .svc-chk{background:var(--w);border-color:var(--w)}
 .svc-item.sel .svc-chk::after{content:"✓";font-size:11px;color:var(--bg);font-weight:700}
 
-/* ══════════════════════════════════
+/* ═══════════════════════════════
    DATA & HORA
-══════════════════════════════════ */
+═══════════════════════════════ */
 .dt-pad{padding:0 18px 110px}
 .cal-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
 .cal-m{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:600;color:var(--w)}
 .cal-nav{width:36px;height:36px;border-radius:50%;background:var(--bg2);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:15px;color:var(--w3)}
-.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;text-align:center;margin-bottom:22px}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;text-align:center;margin-bottom:20px}
 .cal-dow{font-size:9px;letter-spacing:.07em;text-transform:uppercase;color:var(--w4);padding:3px 0 9px}
-.cday{aspect-ratio:1;display:flex;align-items:center;justify-content:center;border-radius:8px;font-size:13px;cursor:pointer;transition:all .18s;color:var(--w3)}
+.cday{aspect-ratio:1;display:flex;align-items:center;justify-content:center;border-radius:8px;font-size:13px;cursor:pointer;transition:all .15s;color:var(--w3)}
 .cday:active:not(.past):not(.empty){background:var(--bg3)}
-.cday.today{color:var(--gold);font-weight:700}
-.cday.sel{background:var(--gold);color:var(--bg);font-weight:700;border-radius:50%}
-.cday.past{color:var(--line);cursor:default}
+.cday.today{color:var(--w);font-weight:700}
+.cday.sel{background:var(--w);color:var(--bg);font-weight:700;border-radius:50%}
+.cday.past{color:var(--line2);cursor:default}
 .sl-sec{margin-bottom:16px}
 .sl-lbl{font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--w4);margin-bottom:8px}
 .sl-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
-.sl{background:var(--bg2);border:1px solid var(--line);border-radius:9px;padding:11px 4px;text-align:center;font-size:13px;cursor:pointer;color:var(--w3);transition:all .18s}
-.sl.sel{background:var(--gold);border-color:var(--gold);color:var(--bg);font-weight:600}
+.sl{background:var(--bg2);border:1px solid var(--line);border-radius:9px;padding:11px 4px;text-align:center;font-size:13px;cursor:pointer;color:var(--w3);transition:all .15s}
+.sl.sel{background:var(--w);border-color:var(--w);color:var(--bg);font-weight:600}
 
-/* ══════════════════════════════════
+/* ═══════════════════════════════
    DADOS
-══════════════════════════════════ */
+═══════════════════════════════ */
 .form-pad{padding:0 18px 110px}
-.sec-l{font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin-bottom:10px;margin-top:20px}
+.sec-l{font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:var(--w3);margin-bottom:10px;margin-top:20px}
 .field{background:var(--bg2);border:1px solid var(--line);border-radius:11px;padding:14px 16px;display:flex;align-items:center;gap:10px;margin-bottom:9px;transition:border .2s}
-.field:focus-within{border-color:var(--gbr)}
+.field:focus-within{border-color:var(--w4)}
 .f-ico{font-size:15px;flex-shrink:0;color:var(--w4)}
 .field input{background:none;border:none;outline:none;font-family:'DM Sans',sans-serif;font-size:14px;color:var(--w);flex:1;-webkit-appearance:none}
 .field input::placeholder{color:var(--w4)}
 .f-x{cursor:pointer;color:var(--w4);font-size:19px;line-height:1;display:none}
-/* lookup status */
-.lookup-box{border-radius:9px;padding:10px 14px;margin-bottom:9px;font-size:13px;display:none}
-.lb-found{background:var(--grn-d);border:1px solid var(--grn-b);color:var(--grn)}
-.lb-new{background:rgba(255,255,255,.05);border:1px solid var(--line);color:var(--w3)}
+.lb{border-radius:9px;padding:10px 14px;margin-bottom:9px;font-size:13px;display:none}
+.lb-ok{background:var(--grn-d);border:1px solid var(--grn-b);color:var(--grn)}
+.lb-nw{background:rgba(255,255,255,.04);border:1px solid var(--line);color:var(--w3)}
 .sum-card{background:var(--bg2);border:1px solid var(--line);border-radius:14px;padding:17px;margin-bottom:14px}
 .sum-row{display:flex;justify-content:space-between;align-items:flex-start;padding:8px 0;border-bottom:1px solid var(--line);font-size:13px;gap:10px}
 .sum-row:last-child{border:none;padding-top:12px}
 .sum-lbl{color:var(--w4);flex-shrink:0}
 .sum-val{color:var(--w);font-weight:500;text-align:right}
-.sum-price{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:600;color:var(--gold)}
+.sum-price{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:600;color:var(--w)}
 
-/* ══════════════════════════════════
+/* ═══════════════════════════════
    CHECKOUT
-══════════════════════════════════ */
+═══════════════════════════════ */
 .co-pad{padding:0 18px 110px}
 .pol-box{background:var(--red-d);border:1px solid var(--red-b);border-radius:12px;padding:14px 16px;margin-bottom:14px}
 .pol-t{font-size:10px;font-weight:600;color:var(--red);text-transform:uppercase;letter-spacing:.08em;margin-bottom:5px}
 .pol-b{font-size:13px;color:var(--red);line-height:1.7;font-weight:300}
-.charge{background:var(--gdim);border:1px solid var(--gbr);border-radius:14px;padding:17px;margin-bottom:16px}
+.charge{background:rgba(255,255,255,.04);border:1px solid var(--line2);border-radius:14px;padding:17px;margin-bottom:16px}
 .ch-row{display:flex;justify-content:space-between;font-size:13px;margin-bottom:6px;align-items:center;color:var(--w3)}
-.ch-div{border:none;border-top:1px solid var(--gbr);margin:11px 0}
+.ch-div{border:none;border-top:1px solid var(--line2);margin:11px 0}
 .ch-lbl{font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--w4)}
-.ch-val{font-family:'Cormorant Garamond',serif;font-size:30px;font-weight:600;color:var(--gold)}
+.ch-val{font-family:'Cormorant Garamond',serif;font-size:30px;font-weight:600;color:var(--w)}
 .pay-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px}
-.pay-opt{background:var(--bg2);border:1.5px solid var(--line);border-radius:13px;padding:16px 12px;text-align:center;cursor:pointer;transition:all .2s}
-.pay-opt.sel{border-color:var(--gold);background:var(--gdim)}
+.pay-opt{background:var(--bg2);border:1.5px solid var(--line);border-radius:12px;padding:16px 12px;text-align:center;cursor:pointer;transition:all .2s}
+.pay-opt.sel{border-color:var(--w3);background:rgba(255,255,255,.05)}
 .p-ico{font-size:24px;margin-bottom:6px}
 .p-name{font-size:13px;font-weight:500;color:var(--w)}
 .p-sub{font-size:11px;color:var(--w4);margin-top:2px}
 .pix-card{background:var(--bg2);border:1px solid var(--line);border-radius:13px;padding:18px;text-align:center;margin-bottom:14px}
 .pix-key{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:600;color:var(--w);margin:7px 0}
-.pix-wa{font-size:13px;color:var(--gold);text-decoration:none}
+.pix-wa{font-size:13px;color:var(--w3);text-decoration:none}
 .agree{display:flex;align-items:flex-start;gap:11px;background:var(--bg2);border:1px solid var(--line);border-radius:11px;padding:14px;margin-bottom:14px}
-.agree input{width:20px;height:20px;accent-color:var(--gold);flex-shrink:0;margin-top:1px;cursor:pointer}
+.agree input{width:20px;height:20px;accent-color:var(--w);flex-shrink:0;margin-top:1px;cursor:pointer}
 .agree label{font-size:12px;color:var(--w4);line-height:1.7;cursor:pointer;font-weight:300}
 
-/* SUCCESS */
+/* SUCESSO */
 .ok{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:40px 22px}
-.ok-ring{width:70px;height:70px;border-radius:50%;background:var(--gdim);border:1.5px solid var(--gold);display:flex;align-items:center;justify-content:center;margin-bottom:18px;font-size:27px;box-shadow:0 0 28px rgba(201,168,76,.12)}
-.ok-ey{font-size:9px;letter-spacing:.28em;text-transform:uppercase;color:var(--gold);margin-bottom:9px;text-align:center}
+.ok-ring{width:70px;height:70px;border-radius:50%;background:rgba(255,255,255,.06);border:1.5px solid var(--w3);display:flex;align-items:center;justify-content:center;margin-bottom:18px;font-size:27px}
+.ok-ey{font-size:9px;letter-spacing:.28em;text-transform:uppercase;color:var(--w3);margin-bottom:9px;text-align:center}
 .ok-ttl{font-family:'Cormorant Garamond',serif;font-size:34px;font-weight:600;color:var(--w);text-align:center;margin-bottom:10px}
 .ok-sub{font-size:14px;color:var(--w4);text-align:center;line-height:1.8;margin-bottom:26px;font-weight:300}
 
 /* LIGHTBOX */
-.lbox{position:fixed;inset:0;background:rgba(0,0,0,.96);z-index:200;display:none;align-items:center;justify-content:center;padding:22px}
+.lbox{position:fixed;inset:0;background:rgba(0,0,0,.97);z-index:200;display:none;align-items:center;justify-content:center;padding:22px}
 .lbox.on{display:flex}
 .lbox img{max-width:100%;max-height:88vh;border-radius:14px;object-fit:contain}
 .lbox-x{position:absolute;top:18px;right:18px;width:38px;height:38px;background:var(--bg3);border:1px solid var(--line);border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:18px;color:var(--w3)}
 
-/* WA */
-.wa{position:fixed;bottom:100px;right:18px;width:52px;height:52px;background:#22c55e;border-radius:50%;display:flex;align-items:center;justify-content:center;z-index:40;font-size:25px;text-decoration:none;box-shadow:0 4px 20px rgba(34,197,94,.32);transition:transform .2s}
-.wa:active{transform:scale(.92)}
-
-/* SPINNER (Supabase lookup) */
-.spin{display:inline-block;width:14px;height:14px;border:2px solid rgba(255,255,255,.15);border-top-color:var(--gold);border-radius:50%;animation:sp .6s linear infinite;vertical-align:middle;margin-right:6px}
-@keyframes sp{to{transform:rotate(360deg)}}
+/* WA FLOAT */
+.wa{position:fixed;bottom:100px;right:18px;width:50px;height:50px;background:#22c55e;border-radius:50%;display:flex;align-items:center;justify-content:center;z-index:40;font-size:24px;text-decoration:none;box-shadow:0 4px 18px rgba(34,197,94,.3);transition:transform .2s}
+.wa:active{transform:scale(.9)}
 </style>
 </head>
 <body>
 <div class="app">
 
-<!-- LIGHTBOX -->
 <div class="lbox" id="lbox" onclick="closeLbox()">
   <div class="lbox-x">×</div>
-  <img id="lbox-img" src="" alt="Portfólio Dom da Navalha"/>
+  <img id="lbox-img" src="" alt="Portfólio"/>
 </div>
 
-<!-- ══════════════════
-  V0: LANDING
-══════════════════ -->
+<!-- ══ V0: LANDING ══ -->
 <div class="view on" id="v0">
-  <!-- HERO: foto do Johnny como background, preenchendo 100vh -->
-  <div class="hero">
-    <div class="hero-bg"></div>
-    <div class="hero-grad"></div>
-    <div class="hero-body">
-      <div class="hero-logo-ring">
-        <img src="logo.jpg" class="hero-logo-img" alt="Dom da Navalha"/>
+  <div class="land">
+    <div class="land-top">
+      <div class="land-logo-ring">
+        <img src="logo.jpg" class="land-logo-img" alt="Dom da Navalha"/>
       </div>
-      <div class="hero-eyebrow">Agendamento online</div>
-      <div class="hero-name">Dom da<br>Navalha</div>
-      <div class="hero-addr">Rua Dr. Benedito Arruda Vianna, 97 · São Paulo</div>
-      <div class="hero-chips">
+      <div class="land-ey">Agendamento online</div>
+      <div class="land-name">Dom da<br>Navalha</div>
+      <div class="land-addr">Rua Dr. Benedito Arruda Vianna, 97 · São Paulo</div>
+      <div class="land-chips">
         <span class="chip">10+ anos</span>
         <span class="chip">Master Barber</span>
         <span class="chip">Reserva em 2 min</span>
       </div>
-      <div class="hero-btns">
-        <button class="btn btn-w" onclick="goTo('v1')">✦ &nbsp;Agendar agora</button>
-        <div class="hero-row">
-          <a href="https://wa.me/5511999999999" target="_blank" class="btn btn-o" style="font-size:12px">💬 WhatsApp</a>
-          <a href="https://instagram.com/domDaNavalha" target="_blank" class="btn btn-o" style="font-size:12px">📸 Instagram</a>
+    </div>
+    <div class="land-bot">
+      <button class="btn btn-w" onclick="goTo('v1')">✦ &nbsp;Agendar agora</button>
+      <div class="btn-pair">
+        <a href="https://wa.me/5511999999999" target="_blank" class="btn btn-o" style="font-size:12px">💬 WhatsApp</a>
+        <a href="https://instagram.com/domDaNavalha" target="_blank" class="btn btn-o" style="font-size:12px">📸 Instagram</a>
+      </div>
+      <div class="info-row">
+        <div class="i-dot" style="background:#22c55e;box-shadow:0 0 6px #22c55e"></div>
+        <div class="i-body">
+          <div class="i-title">Próximo horário disponível</div>
+          <div class="i-sub">Hoje às 14:00 com Johnny Andrade</div>
         </div>
-        <div class="info-strip">
-          <div class="i-dot" style="background:var(--grn);color:var(--grn)"></div>
-          <div class="i-body">
-            <div class="i-title">Próximo horário disponível</div>
-            <div class="i-sub">Hoje às 14:00 com Johnny Andrade</div>
-          </div>
-          <div class="i-cta">Ver →</div>
-        </div>
-        <div class="info-strip">
-          <div style="color:var(--gold);font-size:13px;line-height:1">★★★★★</div>
-          <div class="i-body">
-            <div class="i-title">4.9 · 127 avaliações</div>
-            <div class="i-sub">"Melhor barbearia da região"</div>
-          </div>
+        <div class="i-cta">Ver →</div>
+      </div>
+      <div class="info-row">
+        <div style="font-size:13px;color:#C9A84C;line-height:1">★★★★★</div>
+        <div class="i-body">
+          <div class="i-title">4.9 · 127 avaliações</div>
+          <div class="i-sub">"Melhor barbearia da região"</div>
         </div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- ══════════════════
-  V1: BARBEIRO
-══════════════════ -->
+<!-- ══ V1: BARBEIRO ══ -->
 <div class="view" id="v1">
   <div class="tb">
-    <div class="tb-back" onclick="goTo('v0')">←</div>
+    <div class="tb-bk" onclick="goTo('v0')">←</div>
     <div class="tb-t">Seu barbeiro</div>
-    <img src="logo.jpg" class="tb-logo" alt="logo"/>
+    <img src="logo.jpg" class="tb-lg" alt="logo"/>
   </div>
-  <div class="steps"><div class="step c"></div><div class="step"></div><div class="step"></div><div class="step"></div><div class="step"></div></div>
+  <div class="prog"><div class="p c"></div><div class="p"></div><div class="p"></div><div class="p"></div><div class="p"></div></div>
   <div class="scroll" style="padding-bottom:110px">
     <div class="bcard">
-      <!-- foto como background preenchendo quadrado perfeito -->
-      <div class="bcard-photo">
-        <div class="bcard-photo-bg"></div>
-        <div class="bcard-photo-grad"></div>
+      <div class="bcard-img">
+        <div class="bcard-img-grad"></div>
       </div>
       <div class="bcard-body">
         <div class="bcard-name">Johnny Andrade</div>
         <div class="bcard-role">Master Barber · Fundador · 10 anos</div>
-        <div class="bcard-bio">Sou barbeiro profissional com mais de 10 anos de experiência na área. Ao longo da minha trajetória, aperfeiçoei técnicas de corte masculino, barba e acabamento, sempre buscando oferecer atendimento de qualidade e satisfação.<br><br>Tenho experiência em cortes clássicos e modernos. Meu compromisso é entender o estilo de cada cliente e entregar um resultado que valorize sua aparência e personalidade.<br><br>A barbearia vai além de um corte — é um espaço de confiança, cuidado e bem-estar.</div>
+        <div class="bcard-bio">Sou barbeiro profissional com mais de 10 anos de experiência na área. Aperfeiçoei técnicas de corte masculino, barba e acabamento, sempre buscando oferecer qualidade e satisfação.<br><br>Tenho experiência em cortes clássicos e modernos. Meu compromisso é entender o estilo de cada cliente e entregar um resultado que valorize sua aparência e personalidade.<br><br>A barbearia vai além de um corte — é um espaço de confiança, cuidado e bem-estar.</div>
         <div class="bcard-tags">
           <span class="btag">Degradê</span><span class="btag">Navalha</span>
           <span class="btag">Selagem</span><span class="btag">Barba</span>
@@ -385,56 +344,52 @@ html,body{background:var(--bg);color:var(--w);font-family:'DM Sans',system-ui,sa
       </div>
     </div>
     <div class="port-wrap">
-      <div class="port-lbl">Portfólio recente</div>
+      <div class="port-ey">Portfólio recente</div>
       <div class="port-grid">
         <div class="port-item" onclick="openLbox('corte1.jpg')">
           <img src="corte1.jpg" alt="Clássico Fade"/>
-          <div class="port-over"><div class="port-plbl">Clássico Fade</div></div>
+          <div class="port-ov"><div class="port-lb">Clássico Fade</div></div>
         </div>
         <div class="port-item" onclick="openLbox('corte2.jpg')">
           <img src="corte2.jpg" alt="Skin Fade"/>
-          <div class="port-over"><div class="port-plbl">Skin Fade</div></div>
+          <div class="port-ov"><div class="port-lb">Skin Fade</div></div>
         </div>
         <div class="port-item" onclick="openLbox('corte3.jpg')">
           <img src="corte3.jpg" alt="Pompadour"/>
-          <div class="port-over"><div class="port-plbl">Pompadour</div></div>
+          <div class="port-ov"><div class="port-lb">Pompadour</div></div>
         </div>
         <div class="port-item" onclick="openLbox('corte4.jpg')">
           <img src="corte4.jpg" alt="Buzz Fade"/>
-          <div class="port-over"><div class="port-plbl">Buzz Fade</div></div>
+          <div class="port-ov"><div class="port-lb">Buzz Fade</div></div>
         </div>
       </div>
     </div>
     <div style="height:8px"></div>
   </div>
-  <div class="cta-wrap">
-    <button class="btn btn-g" onclick="goTo('v2')">Agendar com Johnny →</button>
+  <div class="cta-w">
+    <button class="btn btn-a" onclick="goTo('v2')">Agendar com Johnny →</button>
   </div>
 </div>
 
-<!-- ══════════════════
-  V2: SERVIÇO
-══════════════════ -->
+<!-- ══ V2: SERVIÇO ══ -->
 <div class="view" id="v2">
   <div class="tb">
-    <div class="tb-back" onclick="goTo('v1')">←</div>
+    <div class="tb-bk" onclick="goTo('v1')">←</div>
     <div class="tb-t">Escolha o serviço</div>
-    <img src="logo.jpg" class="tb-logo" alt="logo"/>
+    <img src="logo.jpg" class="tb-lg" alt="logo"/>
   </div>
-  <div class="steps"><div class="step d"></div><div class="step c"></div><div class="step"></div><div class="step"></div><div class="step"></div></div>
-  <div class="scroll"><div class="svc-pad" id="svc-list" style="padding-top:4px"></div></div>
+  <div class="prog"><div class="p d"></div><div class="p c"></div><div class="p"></div><div class="p"></div><div class="p"></div></div>
+  <div class="scroll"><div class="svc-pad" id="svc-list"></div></div>
 </div>
 
-<!-- ══════════════════
-  V3: DATA & HORA
-══════════════════ -->
+<!-- ══ V3: DATA & HORA ══ -->
 <div class="view" id="v3">
   <div class="tb">
-    <div class="tb-back" onclick="goTo('v2')">←</div>
+    <div class="tb-bk" onclick="goTo('v2')">←</div>
     <div class="tb-t">Data & horário</div>
-    <img src="logo.jpg" class="tb-logo" alt="logo"/>
+    <img src="logo.jpg" class="tb-lg" alt="logo"/>
   </div>
-  <div class="steps"><div class="step d"></div><div class="step d"></div><div class="step c"></div><div class="step"></div><div class="step"></div></div>
+  <div class="prog"><div class="p d"></div><div class="p d"></div><div class="p c"></div><div class="p"></div><div class="p"></div></div>
   <div class="scroll">
     <div class="dt-pad">
       <div class="cal-hdr">
@@ -446,19 +401,17 @@ html,body{background:var(--bg);color:var(--w);font-family:'DM Sans',system-ui,sa
       <div id="slots"></div>
     </div>
   </div>
-  <div class="cta-wrap"><button class="btn btn-g" onclick="nextDT()">Continuar →</button></div>
+  <div class="cta-w"><button class="btn btn-a" onclick="nextDT()">Continuar →</button></div>
 </div>
 
-<!-- ══════════════════
-  V4: DADOS
-══════════════════ -->
+<!-- ══ V4: DADOS ══ -->
 <div class="view" id="v4">
   <div class="tb">
-    <div class="tb-back" onclick="goTo('v3')">←</div>
+    <div class="tb-bk" onclick="goTo('v3')">←</div>
     <div class="tb-t">Seus dados</div>
-    <img src="logo.jpg" class="tb-logo" alt="logo"/>
+    <img src="logo.jpg" class="tb-lg" alt="logo"/>
   </div>
-  <div class="steps"><div class="step d"></div><div class="step d"></div><div class="step d"></div><div class="step c"></div><div class="step"></div></div>
+  <div class="prog"><div class="p d"></div><div class="p d"></div><div class="p d"></div><div class="p c"></div><div class="p"></div></div>
   <div class="scroll">
     <div class="form-pad">
       <div class="sec-l" style="margin-top:4px">Identificação</div>
@@ -467,9 +420,8 @@ html,body{background:var(--bg);color:var(--w);font-family:'DM Sans',system-ui,sa
         <input type="tel" id="i-tel" placeholder="(11) 99999-9999" oninput="handleTel(this)" maxlength="15" inputmode="numeric" autocomplete="tel"/>
         <span class="f-x" id="tel-x" onclick="clearF()">×</span>
       </div>
-      <!-- lookup status -->
-      <div class="lookup-box lb-found" id="lb-found">✓ Bem-vindo de volta! Dados preenchidos.</div>
-      <div class="lookup-box lb-new" id="lb-new">Novo cliente — complete seus dados abaixo.</div>
+      <div class="lb lb-ok" id="lb-ok">✓ Bem-vindo de volta! Dados preenchidos.</div>
+      <div class="lb lb-nw" id="lb-nw">Novo cliente — preencha seus dados abaixo.</div>
       <div class="field">
         <span class="f-ico">👤</span>
         <input type="text" id="i-nome" placeholder="Seu nome completo" autocomplete="name"/>
@@ -487,19 +439,17 @@ html,body{background:var(--bg);color:var(--w);font-family:'DM Sans',system-ui,sa
       </div>
     </div>
   </div>
-  <div class="cta-wrap"><button class="btn btn-g" onclick="nextData()">Ir para pagamento →</button></div>
+  <div class="cta-w"><button class="btn btn-a" onclick="nextData()">Ir para pagamento →</button></div>
 </div>
 
-<!-- ══════════════════
-  V5: CHECKOUT
-══════════════════ -->
+<!-- ══ V5: CHECKOUT ══ -->
 <div class="view" id="v5">
   <div class="tb">
-    <div class="tb-back" onclick="goTo('v4')">←</div>
+    <div class="tb-bk" onclick="goTo('v4')">←</div>
     <div class="tb-t">Confirmar reserva</div>
-    <img src="logo.jpg" class="tb-logo" alt="logo"/>
+    <img src="logo.jpg" class="tb-lg" alt="logo"/>
   </div>
-  <div class="steps"><div class="step d"></div><div class="step d"></div><div class="step d"></div><div class="step d"></div><div class="step c"></div></div>
+  <div class="prog"><div class="p d"></div><div class="p d"></div><div class="p d"></div><div class="p d"></div><div class="p c"></div></div>
   <div class="scroll">
     <div class="co-pad">
       <div class="pol-box">
@@ -508,7 +458,7 @@ html,body{background:var(--bg);color:var(--w);font-family:'DM Sans',system-ui,sa
       </div>
       <div class="charge">
         <div class="ch-row"><span>Valor total</span><span style="color:var(--w);font-weight:500" id="c-tot">—</span></div>
-        <div class="ch-row"><span>Sinal de reserva (30%)</span><span style="color:var(--gold);font-weight:500" id="c-sin">—</span></div>
+        <div class="ch-row"><span>Sinal de reserva (30%)</span><span style="color:var(--w);font-weight:500" id="c-sin">—</span></div>
         <div class="ch-row"><span>Restante no balcão</span><span id="c-res">—</span></div>
         <hr class="ch-div"/>
         <div style="display:flex;justify-content:space-between;align-items:baseline">
@@ -543,15 +493,13 @@ html,body{background:var(--bg);color:var(--w);font-family:'DM Sans',system-ui,sa
         <input type="checkbox" id="chk"/>
         <label for="chk">Li e concordo com a política de cancelamento. Entendo que o sinal não é reembolsável sem aviso de 24 horas.</label>
       </div>
-      <button class="btn btn-g" onclick="confirmar()">✦ &nbsp;Confirmar e pagar sinal</button>
+      <button class="btn btn-a" onclick="confirmar()">✦ &nbsp;Confirmar e pagar sinal</button>
       <p style="text-align:center;font-size:11px;color:var(--w4);margin-top:13px;letter-spacing:.03em">Pagamento seguro · Confirmação por WhatsApp</p>
     </div>
   </div>
 </div>
 
-<!-- ══════════════════
-  V6: SUCESSO
-══════════════════ -->
+<!-- ══ V6: SUCESSO ══ -->
 <div class="view" id="v6">
   <div class="ok">
     <div class="ok-ring">✓</div>
@@ -562,9 +510,9 @@ html,body{background:var(--bg);color:var(--w);font-family:'DM Sans',system-ui,sa
       <div class="sum-row"><span class="sum-lbl">Barbeiro</span><span class="sum-val">Johnny Andrade</span></div>
       <div class="sum-row"><span class="sum-lbl">Serviço</span><span class="sum-val" id="ok-svc">—</span></div>
       <div class="sum-row"><span class="sum-lbl">Data & hora</span><span class="sum-val" id="ok-dt">—</span></div>
-      <div class="sum-row"><span class="sum-lbl">Sinal pago</span><span class="sum-val" style="color:var(--gold)" id="ok-sin">—</span></div>
+      <div class="sum-row"><span class="sum-lbl">Sinal pago</span><span class="sum-val" id="ok-sin">—</span></div>
     </div>
-    <button class="btn btn-g" onclick="goTo('v0')">← Novo agendamento</button>
+    <button class="btn btn-a" onclick="goTo('v0')">← Novo agendamento</button>
   </div>
 </div>
 
@@ -572,194 +520,43 @@ html,body{background:var(--bg);color:var(--w);font-family:'DM Sans',system-ui,sa
 
 </div>
 <script>
-/* ══ CONFIG SUPABASE ══
-   Substitua as duas linhas abaixo quando tiver a conta criada:
-   SUPABASE_URL = 'https://SEU-PROJETO.supabase.co'
-   SUPABASE_KEY = 'sua-anon-key-aqui'
-*/
-const SUPABASE_URL = '';
-const SUPABASE_KEY = '';
-
-const SVCS=[
-  {n:'Corte masculino',d:'45 min',v:45},
-  {n:'Corte & barba',d:'1h',v:65},
-  {n:'Corte + selagem',d:'1h 30min',v:100},
-  {n:'Corte, barba & selagem',d:'2h',v:120},
-  {n:'Corte premium + limpeza',d:'1h 15min',v:100},
-  {n:'Limpeza de pele',d:'45 min',v:60},
-  {n:'Combo completo',d:'2h 30min',v:160},
-];
+const SUPABASE_URL='';
+const SUPABASE_KEY='';
+const LOCAL_DB={'11953826351':{nome:'Carlos Silva',email:'carlos@email.com'},'11988887777':{nome:'Rafael Souza',email:'rafa@email.com'}};
+const SVCS=[{n:'Corte masculino',d:'45 min',v:45},{n:'Corte & barba',d:'1h',v:65},{n:'Corte + selagem',d:'1h 30min',v:100},{n:'Corte, barba & selagem',d:'2h',v:120},{n:'Corte premium + limpeza',d:'1h 15min',v:100},{n:'Limpeza de pele',d:'45 min',v:60},{n:'Combo completo',d:'2h 30min',v:160}];
 const MOS=['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
-
-/* Fallback local enquanto Supabase não está configurado */
-const LOCAL_DB={
-  '11953826351':{nome:'Carlos Silva',email:'carlos@email.com'},
-  '11988887777':{nome:'Rafael Souza',email:'rafa@email.com'}
-};
-
 let CS={svc:null,price:0,date:'',hour:''};
 let calY=2026,calM=5,selDay=null;
 
-function goTo(id){
-  document.querySelectorAll('.view').forEach(v=>v.classList.remove('on'));
-  document.getElementById(id).classList.add('on');
-  window.scrollTo(0,0);
-}
+function goTo(id){document.querySelectorAll('.view').forEach(v=>v.classList.remove('on'));document.getElementById(id).classList.add('on');window.scrollTo(0,0);}
 
-/* ── SERVICES ── */
-(function(){
-  document.getElementById('svc-list').innerHTML=
-    SVCS.map((s,i)=>`
-      <div class="svc-item" id="si${i}" onclick="selSvc(${i},this)">
-        <div class="svc-info"><div class="svc-name">${s.n}</div><div class="svc-dur">${s.d}</div></div>
-        <div class="svc-val">R$&nbsp;${s.v}</div>
-        <div class="svc-chk" id="sc${i}"></div>
-      </div>`).join('');
-})();
+(function(){document.getElementById('svc-list').innerHTML=SVCS.map((s,i)=>`<div class="svc-item" id="si${i}" onclick="selSvc(${i},this)"><div class="svc-l"><div class="svc-name">${s.n}</div><div class="svc-dur">${s.d}</div></div><div class="svc-price">R$&nbsp;${s.v}</div><div class="svc-chk" id="sc${i}"></div></div>`).join('');})();
 
-function selSvc(i,el){
-  document.querySelectorAll('.svc-item').forEach(e=>e.classList.remove('sel'));
-  document.querySelectorAll('.svc-chk').forEach(e=>e.classList.remove('sel'));
-  el.classList.add('sel');
-  document.getElementById('sc'+i).classList.add('sel');
-  CS.svc=SVCS[i].n; CS.price=SVCS[i].v;
-  setTimeout(()=>goTo('v3'),290);
-}
+function selSvc(i,el){document.querySelectorAll('.svc-item').forEach(e=>e.classList.remove('sel'));document.querySelectorAll('.svc-chk').forEach(e=>e.classList.remove('sel'));el.classList.add('sel');document.getElementById('sc'+i).classList.add('sel');CS.svc=SVCS[i].n;CS.price=SVCS[i].v;setTimeout(()=>goTo('v3'),290);}
 
-/* ── CALENDAR ── */
-function buildCal(){
-  document.getElementById('cal-m').textContent=MOS[calM]+' '+calY;
-  const first=new Date(calY,calM,1).getDay();
-  const tot=new Date(calY,calM+1,0).getDate();
-  const t=new Date(); t.setHours(0,0,0,0);
-  let h=['D','S','T','Q','Q','S','S'].map(d=>`<div class="cal-dow">${d}</div>`).join('');
-  for(let i=0;i<first;i++) h+=`<div class="cday empty"></div>`;
-  for(let d=1;d<=tot;d++){
-    const dt=new Date(calY,calM,d);
-    const p=dt<t, isT=dt.toDateString()===t.toDateString(), sel=d===selDay&&calM===5&&calY===2026;
-    h+=`<div class="cday${p?' past':''}${isT?' today':''}${sel?' sel':''}" ${p?'':'onclick="pickDay('+d+')"'}>${d}</div>`;
-  }
-  document.getElementById('cal-grid').innerHTML=h;
-  buildSlots();
-}
-function pickDay(d){selDay=d; CS.date=`${d} de ${MOS[calM]} de ${calY}`; buildCal();}
-function calNav(d){calM+=d; if(calM>11){calM=0;calY++;} if(calM<0){calM=11;calY--;} buildCal();}
-function buildSlots(){
-  if(!selDay){document.getElementById('slots').innerHTML='<div style="font-size:13px;color:var(--w4);padding:6px 0">Selecione uma data acima.</div>';return;}
-  const ps={'Manhã':['09:00','09:30','10:00','10:30','11:00','11:30'],'Tarde':['14:00','14:30','15:00','15:30','16:00','16:30'],'Noite':['19:00','19:30','20:00','20:30']};
-  let h='';
-  for(const[p,ts] of Object.entries(ps)){
-    h+=`<div class="sl-sec"><div class="sl-lbl">${p}</div><div class="sl-grid">`;
-    ts.forEach(t=>{ h+=`<div class="sl${CS.hour===t?' sel':''}" onclick="pickSlot('${t}')">${t}</div>`; });
-    h+=`</div></div>`;
-  }
-  document.getElementById('slots').innerHTML=h;
-}
-function pickSlot(t){CS.hour=t; buildSlots();}
-function nextDT(){
-  if(!selDay||!CS.hour){alert('Selecione data e horário para continuar.');return;}
-  document.getElementById('r-svc').textContent=CS.svc;
-  document.getElementById('r-dt').textContent=CS.date+' às '+CS.hour;
-  document.getElementById('r-price').textContent='R$ '+CS.price+',00';
-  goTo('v4');
-}
+function buildCal(){document.getElementById('cal-m').textContent=MOS[calM]+' '+calY;const first=new Date(calY,calM,1).getDay(),tot=new Date(calY,calM+1,0).getDate(),t=new Date();t.setHours(0,0,0,0);let h=['D','S','T','Q','Q','S','S'].map(d=>`<div class="cal-dow">${d}</div>`).join('');for(let i=0;i<first;i++)h+=`<div class="cday empty"></div>`;for(let d=1;d<=tot;d++){const dt=new Date(calY,calM,d),p=dt<t,isT=dt.toDateString()===t.toDateString(),s=d===selDay&&calM===5;h+=`<div class="cday${p?' past':''}${isT?' today':''}${s?' sel':''}" ${p?'':'onclick="pickDay('+d+')"'}>${d}</div>`;}document.getElementById('cal-grid').innerHTML=h;buildSlots();}
+function pickDay(d){selDay=d;CS.date=`${d} de ${MOS[calM]} de ${calY}`;buildCal();}
+function calNav(d){calM+=d;if(calM>11){calM=0;calY++;}if(calM<0){calM=11;calY--;}buildCal();}
+function buildSlots(){if(!selDay){document.getElementById('slots').innerHTML='<div style="font-size:13px;color:var(--w4);padding:6px 0">Selecione uma data acima.</div>';return;}const ps={'Manhã':['09:00','09:30','10:00','10:30','11:00','11:30'],'Tarde':['14:00','14:30','15:00','15:30','16:00','16:30'],'Noite':['19:00','19:30','20:00','20:30']};let h='';for(const[p,ts] of Object.entries(ps)){h+=`<div class="sl-sec"><div class="sl-lbl">${p}</div><div class="sl-grid">`;ts.forEach(t=>{h+=`<div class="sl${CS.hour===t?' sel':''}" onclick="pickSlot('${t}')">${t}</div>`;});h+=`</div></div>`;}document.getElementById('slots').innerHTML=h;}
+function pickSlot(t){CS.hour=t;buildSlots();}
+function nextDT(){if(!selDay||!CS.hour){alert('Selecione data e horário para continuar.');return;}document.getElementById('r-svc').textContent=CS.svc;document.getElementById('r-dt').textContent=CS.date+' às '+CS.hour;document.getElementById('r-price').textContent='R$ '+CS.price+',00';goTo('v4');}
 
-/* ── PHONE + SUPABASE LOOKUP ── */
-function phoneMask(v){
-  let d=v.replace(/\D/g,'').slice(0,11);
-  if(!d) return '';
-  if(d.length<=2) return '('+d;
-  if(d.length<=7) return '('+d.slice(0,2)+') '+d.slice(2);
-  return '('+d.slice(0,2)+') '+d.slice(2,7)+'-'+d.slice(7);
-}
-
-let lookupTimer=null;
-function handleTel(inp){
-  const raw=inp.value.replace(/\D/g,'');
-  inp.value=phoneMask(inp.value);
-  document.getElementById('tel-x').style.display=raw.length?'block':'none';
-  hideLookup();
-  clearTimeout(lookupTimer);
-  if(raw.length>=11){
-    lookupTimer=setTimeout(()=>lookupClient(raw),400);
-  }
-}
-
-function hideLookup(){
-  document.getElementById('lb-found').style.display='none';
-  document.getElementById('lb-new').style.display='none';
-}
-
+function phoneMask(v){let d=v.replace(/\D/g,'').slice(0,11);if(!d)return'';if(d.length<=2)return'('+d;if(d.length<=7)return'('+d.slice(0,2)+') '+d.slice(2);return'('+d.slice(0,2)+') '+d.slice(2,7)+'-'+d.slice(7);}
+let lt=null;
+function handleTel(inp){const raw=inp.value.replace(/\D/g,'');inp.value=phoneMask(inp.value);document.getElementById('tel-x').style.display=raw.length?'block':'none';hideLB();clearTimeout(lt);if(raw.length>=11)lt=setTimeout(()=>lookupClient(raw),400);}
+function hideLB(){document.getElementById('lb-ok').style.display='none';document.getElementById('lb-nw').style.display='none';}
 async function lookupClient(raw){
-  /* 1. Tenta Supabase se configurado */
-  if(SUPABASE_URL && SUPABASE_KEY){
-    try{
-      const res=await fetch(
-        `${SUPABASE_URL}/rest/v1/clientes?telefone=eq.${raw}&select=nome,email&limit=1`,
-        {headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+SUPABASE_KEY}}
-      );
-      const data=await res.json();
-      if(data && data.length>0){
-        fillClient(data[0].nome, data[0].email);
-        return;
-      }
-      /* cliente não encontrado no Supabase */
-      document.getElementById('lb-new').style.display='block';
-      return;
-    }catch(e){
-      console.warn('Supabase offline, usando fallback local');
-    }
-  }
-  /* 2. Fallback local */
+  if(SUPABASE_URL&&SUPABASE_KEY){try{const r=await fetch(`${SUPABASE_URL}/rest/v1/clientes?telefone=eq.${raw}&select=nome,email&limit=1`,{headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+SUPABASE_KEY}});const d=await r.json();if(d&&d.length>0){fillC(d[0].nome,d[0].email);return;}document.getElementById('lb-nw').style.display='block';return;}catch(e){}}
   const f=LOCAL_DB[raw];
-  if(f){ fillClient(f.nome, f.email); }
-  else { document.getElementById('lb-new').style.display='block'; }
+  if(f)fillC(f.nome,f.email);else document.getElementById('lb-nw').style.display='block';
 }
-
-function fillClient(nome, email){
-  document.getElementById('i-nome').value=nome;
-  document.getElementById('i-email').value=email;
-  document.getElementById('lb-found').style.display='block';
-}
-
-function clearF(){
-  ['i-tel','i-nome','i-email'].forEach(id=>{ const e=document.getElementById(id); if(e) e.value=''; });
-  hideLookup();
-  document.getElementById('tel-x').style.display='none';
-}
-
-function nextData(){
-  if(!document.getElementById('i-tel').value||!document.getElementById('i-nome').value){
-    alert('Preencha celular e nome para continuar.'); return;
-  }
-  const sin=Math.ceil(CS.price*.3);
-  document.getElementById('c-tot').textContent='R$ '+CS.price+',00';
-  document.getElementById('c-sin').textContent='R$ '+sin+',00';
-  document.getElementById('c-res').textContent='R$ '+(CS.price-sin)+',00';
-  document.getElementById('c-now').textContent='R$ '+sin+',00';
-  goTo('v5');
-}
-
-/* ── PAY & CONFIRM ── */
-function selPay(p){
-  document.getElementById('pp').classList.toggle('sel',p==='pix');
-  document.getElementById('pc').classList.toggle('sel',p==='card');
-  document.getElementById('pix-sec').style.display=p==='pix'?'block':'none';
-  document.getElementById('card-sec').style.display=p==='card'?'block':'none';
-}
-function confirmar(){
-  if(!document.getElementById('chk').checked){alert('Confirme que leu a política de cancelamento.');return;}
-  const sin=Math.ceil(CS.price*.3);
-  document.getElementById('ok-svc').textContent=CS.svc;
-  document.getElementById('ok-dt').textContent=CS.date+' às '+CS.hour;
-  document.getElementById('ok-sin').textContent='R$ '+sin+',00';
-  goTo('v6');
-}
-
-/* ── LIGHTBOX ── */
-function openLbox(src){document.getElementById('lbox-img').src=src; document.getElementById('lbox').classList.add('on');}
+function fillC(n,e){document.getElementById('i-nome').value=n;document.getElementById('i-email').value=e;document.getElementById('lb-ok').style.display='block';}
+function clearF(){['i-tel','i-nome','i-email'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});hideLB();document.getElementById('tel-x').style.display='none';}
+function nextData(){if(!document.getElementById('i-tel').value||!document.getElementById('i-nome').value){alert('Preencha celular e nome para continuar.');return;}const s=Math.ceil(CS.price*.3);document.getElementById('c-tot').textContent='R$ '+CS.price+',00';document.getElementById('c-sin').textContent='R$ '+s+',00';document.getElementById('c-res').textContent='R$ '+(CS.price-s)+',00';document.getElementById('c-now').textContent='R$ '+s+',00';goTo('v5');}
+function selPay(p){document.getElementById('pp').classList.toggle('sel',p==='pix');document.getElementById('pc').classList.toggle('sel',p==='card');document.getElementById('pix-sec').style.display=p==='pix'?'block':'none';document.getElementById('card-sec').style.display=p==='card'?'block':'none';}
+function confirmar(){if(!document.getElementById('chk').checked){alert('Confirme que leu a política de cancelamento.');return;}const s=Math.ceil(CS.price*.3);document.getElementById('ok-svc').textContent=CS.svc;document.getElementById('ok-dt').textContent=CS.date+' às '+CS.hour;document.getElementById('ok-sin').textContent='R$ '+s+',00';goTo('v6');}
+function openLbox(src){document.getElementById('lbox-img').src=src;document.getElementById('lbox').classList.add('on');}
 function closeLbox(){document.getElementById('lbox').classList.remove('on');}
-
 buildCal();
 </script>
 </body>
