@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#0A0806">
+<title>Dom da Navalha — Agendar</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+:root{
+  --ink:#0A0806;--ink2:#141210;--ink3:#1C1916;--ink4:#242018;
+  --parch:#F0E6CC;--parch2:#C8B98A;--dust:#6E6558;--line:#2A2520;
+  --gold:#C9A84C;--gold2:#E8C97A;--gdim:rgba(201,168,76,.13);--gbr:rgba(201,168,76,.28);
+  --grn:#2ecc71;--grn-bg:rgba(46,204,113,.1);--grn-br:rgba(46,204,113,.22);
+  --red:#e74c3c;--red-bg:rgba(231,76,60,.1);--red-br:rgba(231,76,60,.22);
+  --amb:#f39c12;
+  --max:480px;
+}
+html,body{background:var(--ink);color:var(--parch);font-family:'DM Sans',system-ui,sans-serif;font-size:14px;min-height:100vh;overflow-x:hidden}
+*::-webkit-scrollbar{display:none}*{scrollbar-width:none}
+.app{max-width:var(--max);margin:0 auto;min-height:100vh;background:var(--ink)}
+
+/* VIEWS */
+.view{display:none;min-height:100vh;flex-direction:column}
+.view.on{display:flex;animation:fadeUp .28s ease both}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+/* TOPBAR */
+.topbar{display:flex;align-items:center;padding:14px 18px 12px;gap:10px;flex-shrink:0;background:var(--ink)}
+.tb-back{width:38px;height:38px;border-radius:50%;background:var(--ink3);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;font-size:18px;color:var(--parch2);text-decoration:none}
+.tb-title{font-size:14px;font-weight:500;color:var(--parch);flex:1}
+.tb-logo{height:30px;width:30px;border-radius:7px;object-fit:cover;flex-shrink:0}
+
+/* STEPS */
+.steps{display:flex;align-items:center;padding:0 18px 12px;gap:5px;flex-shrink:0}
+.step{height:3px;border-radius:2px;flex:1;background:var(--line);transition:background .3s}
+.step.done{background:var(--gold)}
+.step.active{background:var(--gold);opacity:.55}
+
+/* SCROLL */
+.scroll{flex:1;overflow-y:auto;padding:0 18px 110px;-webkit-overflow-scrolling:touch}
+
+/* FIXED BOTTOM */
+.bottom{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:var(--max);padding:12px 18px 32px;background:linear-gradient(to top,var(--ink) 70%,transparent);z-index:50;pointer-events:none}
+.bottom .btn{pointer-events:all}
+
+/* BUTTONS */
+.btn{width:100%;padding:16px;border:none;border-radius:14px;background:var(--gold);color:var(--ink);font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;letter-spacing:.04em;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .2s;-webkit-appearance:none;text-decoration:none}
+.btn:active{transform:scale(.97);background:var(--gold2)}
+.btn.outline{background:transparent;border:1.5px solid var(--line);color:var(--parch2)}
+.btn.outline:active{background:var(--ink3)}
+
+/* HERO */
+.hero{position:relative;overflow:hidden;border-radius:0 0 30px 30px;margin-bottom:0}
+.hero-img{width:100%;height:70vw;max-height:360px;object-fit:cover;object-position:center 15%;display:block}
+.hero-overlay{position:absolute;inset:0;background:linear-gradient(175deg,rgba(10,8,6,.1) 0%,rgba(10,8,6,.92) 100%)}
+.hero-content{position:absolute;bottom:0;left:0;right:0;padding:20px 20px 24px}
+.hero-logo{width:56px;height:56px;border-radius:11px;object-fit:cover;margin-bottom:10px;border:1.5px solid rgba(201,168,76,.35);display:block}
+.hero-eyebrow{font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin-bottom:5px}
+.hero-name{font-family:'Playfair Display',serif;font-size:34px;font-weight:900;color:#fff;line-height:1.02;margin-bottom:6px}
+.hero-addr{font-size:12px;color:rgba(240,230,204,.6);line-height:1.4}
+.hero-chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.chip{background:rgba(201,168,76,.12);border:1px solid rgba(201,168,76,.22);border-radius:20px;padding:4px 12px;font-size:11px;color:var(--gold)}
+
+/* SECTION LABEL */
+.sec{font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:10px;margin-top:20px}
+
+/* BARBER CARD */
+.bcard{background:var(--ink3);border:1px solid var(--line);border-radius:18px;overflow:hidden;margin-bottom:16px}
+.bcard-photo{width:100%;height:52vw;max-height:270px;object-fit:cover;object-position:center 10%;display:block}
+.bcard-body{padding:18px}
+.bcard-name{font-family:'Playfair Display',serif;font-size:22px;font-weight:700;color:var(--parch);margin-bottom:2px}
+.bcard-role{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);margin-bottom:14px}
+.bcard-bio{font-size:13px;color:var(--dust);line-height:1.75;margin-bottom:14px}
+.bcard-tags{display:flex;flex-wrap:wrap;gap:5px}
+.btag{background:var(--ink4);border:1px solid var(--line);border-radius:20px;font-size:11px;color:var(--parch2);padding:4px 12px}
+
+/* PORTFOLIO */
+.port-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:6px}
+.port-item{border-radius:12px;overflow:hidden;aspect-ratio:1;cursor:pointer;position:relative}
+.port-item img{width:100%;height:100%;object-fit:cover;transition:transform .3s;display:block}
+.port-item:active img{transform:scale(1.05)}
+.port-overlay{position:absolute;inset:0;background:rgba(10,8,6,.5);display:flex;align-items:flex-end;padding:8px;opacity:0;transition:opacity .2s}
+.port-item:hover .port-overlay{opacity:1}
+.port-lbl{font-size:11px;font-weight:500;color:#fff}
+
+/* SERVICE ITEMS */
+.svc-item{background:var(--ink3);border:1.5px solid var(--line);border-radius:14px;padding:16px;display:flex;align-items:center;gap:12px;margin-bottom:8px;cursor:pointer;transition:all .2s}
+.svc-item.sel,.svc-item:active{border-color:var(--gold);background:rgba(201,168,76,.06)}
+.svc-info{flex:1;min-width:0}
+.svc-name{font-size:14px;font-weight:500;color:var(--parch);margin-bottom:2px}
+.svc-dur{font-size:12px;color:var(--dust)}
+.svc-price{font-family:'Playfair Display',serif;font-size:20px;font-weight:700;color:var(--gold);flex-shrink:0}
+.svc-chk{width:22px;height:22px;border-radius:50%;border:1.5px solid var(--line);flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .2s}
+.svc-item.sel .svc-chk{background:var(--gold);border-color:var(--gold)}
+.svc-item.sel .svc-chk::after{content:"✓";font-size:12px;color:var(--ink);font-weight:700}
+
+/* CALENDAR */
+.cal-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.cal-m{font-family:'Playfair Display',serif;font-size:18px;color:var(--parch)}
+.cal-nav{width:38px;height:38px;border-radius:50%;background:var(--ink3);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px;color:var(--parch2)}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;text-align:center;margin-bottom:20px}
+.cal-dow{font-size:9px;letter-spacing:.06em;text-transform:uppercase;color:var(--dust);padding:3px 0 9px}
+.cday{aspect-ratio:1;display:flex;align-items:center;justify-content:center;border-radius:10px;font-size:13px;cursor:pointer;transition:all .18s;color:var(--parch2)}
+.cday:active:not(.past):not(.empty){background:var(--ink3)}
+.cday.today{color:var(--gold);font-weight:700}
+.cday.sel{background:var(--gold);color:var(--ink);font-weight:700;border-radius:50%}
+.cday.past{color:var(--line);cursor:default}
+
+/* TIME SLOTS */
+.t-section{margin-bottom:14px}
+.t-lbl{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--dust);margin-bottom:8px}
+.t-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.tslot{background:var(--ink3);border:1.5px solid var(--line);border-radius:10px;padding:11px 4px;text-align:center;font-size:13px;cursor:pointer;color:var(--parch2);transition:all .18s}
+.tslot.sel{background:var(--gold);border-color:var(--gold);color:var(--ink);font-weight:600}
+.tslot:active:not(.sel){background:var(--ink4)}
+
+/* FIELDS */
+.field{background:var(--ink3);border:1.5px solid var(--line);border-radius:12px;padding:14px 16px;display:flex;align-items:center;gap:10px;margin-bottom:10px;transition:border .2s}
+.field:focus-within{border-color:rgba(201,168,76,.5)}
+.field-ico{font-size:16px;flex-shrink:0;color:var(--dust)}
+.field input{background:none;border:none;outline:none;font-family:'DM Sans',sans-serif;font-size:14px;color:var(--parch);flex:1;-webkit-appearance:none}
+.field input::placeholder{color:var(--dust)}
+.field-clear{cursor:pointer;color:var(--dust);font-size:20px;line-height:1;display:none;padding:2px}
+.found{background:var(--grn-bg);border:1px solid var(--grn-br);border-radius:10px;padding:11px 14px;margin-bottom:10px;font-size:13px;color:var(--grn);display:none}
+
+/* SUMMARY */
+.sum-card{background:var(--ink3);border:1px solid var(--line);border-radius:16px;padding:16px;margin-bottom:14px}
+.sum-row{display:flex;justify-content:space-between;align-items:flex-start;padding:8px 0;border-bottom:1px solid var(--line);font-size:13px;gap:8px}
+.sum-row:last-child{border:none;padding-top:12px}
+.sum-lbl{color:var(--dust);flex-shrink:0}
+.sum-val{color:var(--parch);font-weight:500;text-align:right}
+.sum-big{font-family:'Playfair Display',serif;font-size:24px;color:var(--gold);font-weight:700}
+
+/* POLICY */
+.policy{background:var(--red-bg);border:1px solid var(--red-br);border-radius:12px;padding:14px 16px;margin-bottom:14px}
+.policy-t{font-size:11px;font-weight:600;color:var(--red);text-transform:uppercase;letter-spacing:.05em;margin-bottom:5px}
+.policy-b{font-size:13px;color:var(--red);line-height:1.65}
+
+/* CHARGE */
+.charge{background:var(--gdim);border:1px solid var(--gbr);border-radius:16px;padding:16px;margin-bottom:14px}
+.charge-row{display:flex;justify-content:space-between;font-size:13px;margin-bottom:6px;align-items:center}
+.charge-div{border:none;border-top:1px solid rgba(201,168,76,.2);margin:10px 0}
+.charge-lbl{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--dust)}
+.charge-val{font-family:'Playfair Display',serif;font-size:28px;color:var(--gold);font-weight:700}
+
+/* PAY */
+.pay-opts{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px}
+.pay-opt{background:var(--ink3);border:2px solid var(--line);border-radius:14px;padding:16px 12px;text-align:center;cursor:pointer;transition:all .2s}
+.pay-opt.sel{border-color:var(--gold);background:rgba(201,168,76,.07)}
+.pay-ico{font-size:24px;margin-bottom:6px}
+.pay-name{font-size:13px;font-weight:500;color:var(--parch)}
+.pay-sub{font-size:11px;color:var(--dust);margin-top:2px}
+.pix-box{background:var(--ink3);border:1px solid var(--line);border-radius:14px;padding:18px;text-align:center;margin-bottom:14px}
+.pix-key{font-size:18px;font-weight:600;color:var(--parch);margin:7px 0}
+.pix-link{font-size:13px;color:var(--gold);text-decoration:none;display:inline-block;margin-top:4px}
+
+/* CHECK */
+.check-row{display:flex;align-items:flex-start;gap:11px;background:var(--ink3);border:1px solid var(--line);border-radius:12px;padding:14px;margin-bottom:14px}
+.check-row input{width:20px;height:20px;accent-color:var(--gold);flex-shrink:0;margin-top:1px;cursor:pointer}
+.check-row label{font-size:12px;color:var(--dust);line-height:1.65;cursor:pointer}
+
+/* SUCCESS */
+.success-wrap{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:32px 24px}
+.success-icon{width:68px;height:68px;background:var(--gdim);border:2px solid var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;margin-bottom:18px;font-size:28px}
+.success-eyebrow{font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;text-align:center}
+.success-title{font-family:'Playfair Display',serif;font-size:30px;color:var(--parch);text-align:center;margin-bottom:10px}
+.success-sub{font-size:14px;color:var(--dust);text-align:center;line-height:1.75;margin-bottom:26px}
+
+/* LIGHTBOX */
+.lbox{position:fixed;inset:0;background:rgba(0,0,0,.93);z-index:200;display:none;align-items:center;justify-content:center;padding:20px}
+.lbox.on{display:flex}
+.lbox img{max-width:100%;max-height:88vh;border-radius:14px;object-fit:contain}
+.lbox-x{position:absolute;top:16px;right:16px;width:38px;height:38px;background:var(--ink3);border:1px solid var(--line);border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:18px;color:var(--parch)}
+
+/* WA FLOAT */
+.wa{position:fixed;bottom:96px;right:18px;width:52px;height:52px;background:#25D366;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 22px rgba(37,211,102,.45);cursor:pointer;z-index:40;font-size:26px;text-decoration:none}
+</style>
+</head>
+<body>
+<div class="app">
+
+<!-- LIGHTBOX -->
+<div class="lbox" id="lbox" onclick="closeLbox()">
+  <div class="lbox-x">×</div>
+  <img id="lbox-img" src="" alt="Portfolio"/>
+</div>
+
+<!-- V0: LANDING -->
+<div class="view on" id="v-land">
+  <div class="hero">
+    <img src="johnny.jpg" class="hero-img" alt="Johnny Andrade — Dom da Navalha"/>
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <img src="logo.jpg" class="hero-logo" alt="Dom da Navalha logo"/>
+      <div class="hero-eyebrow">Agendamento online</div>
+      <div class="hero-name">Dom da<br>Navalha</div>
+      <div class="hero-addr">Rua Dr. Benedito Arruda Vianna, 97 · São Paulo</div>
+      <div class="hero-chips">
+        <span class="chip">10+ anos</span>
+        <span class="chip">Master Barber</span>
+        <span class="chip">Reserva em 2 min</span>
+      </div>
+    </div>
+  </div>
+  <div style="padding:20px 18px 110px">
+    <button class="btn" onclick="goTo('v-barber')" style="margin-bottom:10px">✦ &nbsp;Agendar agora</button>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+      <a href="https://wa.me/5511999999999" target="_blank" class="btn outline" style="font-size:13px">💬 WhatsApp</a>
+      <a href="https://instagram.com/domDaNavalha" target="_blank" class="btn outline" style="font-size:13px">📸 Instagram</a>
+    </div>
+  </div>
+</div>
+
+<!-- V1: BARBEIRO -->
+<div class="view" id="v-barber">
+  <div class="topbar">
+    <div class="tb-back" onclick="goTo('v-land')">←</div>
+    <div class="tb-title">Seu barbeiro</div>
+    <img src="logo.jpg" class="tb-logo" alt="logo"/>
+  </div>
+  <div class="steps"><div class="step active"></div><div class="step"></div><div class="step"></div><div class="step"></div><div class="step"></div></div>
+  <div class="scroll">
+    <div class="bcard">
+      <img src="johnny.jpg" class="bcard-photo" alt="Johnny Andrade"/>
+      <div class="bcard-body">
+        <div class="bcard-name">Johnny Andrade</div>
+        <div class="bcard-role">Master Barber · Fundador · 10 anos</div>
+        <div class="bcard-bio">Sou barbeiro profissional com mais de 10 anos de experiência na área. Ao longo da minha trajetória, aperfeiçoei técnicas de corte masculino, barba e acabamento, sempre buscando oferecer um atendimento de qualidade e satisfação aos clientes.<br><br>Tenho experiência em diversos estilos de cortes, desde os mais clássicos e tradicionais até os mais modernos e atuais. Meu compromisso é entender o estilo de cada cliente e entregar um resultado que valorize sua aparência e personalidade.<br><br>Acredito que a barbearia vai além de um simples corte de cabelo — é um espaço de confiança, cuidado e bem-estar.</div>
+        <div class="bcard-tags">
+          <span class="btag">Degradê</span><span class="btag">Navalha</span><span class="btag">Selagem</span>
+          <span class="btag">Barba</span><span class="btag">Clássico</span><span class="btag">Moderno</span>
+        </div>
+      </div>
+    </div>
+    <div class="sec">Portfólio recente</div>
+    <div class="port-grid">
+      <div class="port-item" onclick="openLbox('p1')">
+        <img id="p1" src="portfolio.jpg" style="object-position:0% 0%" alt="Degradê + Risco"/>
+        <div class="port-overlay"><div class="port-lbl">Degradê + Risco</div></div>
+      </div>
+      <div class="port-item" onclick="openLbox('p2')">
+        <img id="p2" src="portfolio.jpg" style="object-position:100% 0%" alt="Skin Fade"/>
+        <div class="port-overlay"><div class="port-lbl">Skin Fade</div></div>
+      </div>
+      <div class="port-item" onclick="openLbox('p3')">
+        <img id="p3" src="portfolio.jpg" style="object-position:0% 100%" alt="Clássico"/>
+        <div class="port-overlay"><div class="port-lbl">Clássico</div></div>
+      </div>
+      <div class="port-item" onclick="openLbox('p4')">
+        <img id="p4" src="portfolio.jpg" style="object-position:100% 100%" alt="Pompadour"/>
+        <div class="port-overlay"><div class="port-lbl">Pompadour Fade</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="bottom">
+    <button class="btn" onclick="goTo('v-service')">Agendar com Johnny →</button>
+  </div>
+</div>
+
+<!-- V2: SERVIÇO -->
+<div class="view" id="v-service">
+  <div class="topbar">
+    <div class="tb-back" onclick="goTo('v-barber')">←</div>
+    <div class="tb-title">Escolha o serviço</div>
+    <img src="logo.jpg" class="tb-logo" alt="logo"/>
+  </div>
+  <div class="steps"><div class="step done"></div><div class="step active"></div><div class="step"></div><div class="step"></div><div class="step"></div></div>
+  <div class="scroll" id="svc-list"></div>
+</div>
+
+<!-- V3: DATA & HORA -->
+<div class="view" id="v-datetime">
+  <div class="topbar">
+    <div class="tb-back" onclick="goTo('v-service')">←</div>
+    <div class="tb-title">Data & horário</div>
+    <img src="logo.jpg" class="tb-logo" alt="logo"/>
+  </div>
+  <div class="steps"><div class="step done"></div><div class="step done"></div><div class="step active"></div><div class="step"></div><div class="step"></div></div>
+  <div class="scroll">
+    <div class="cal-hdr">
+      <div class="cal-nav" onclick="calNav(-1)">‹</div>
+      <div class="cal-m" id="cal-m">Junho 2026</div>
+      <div class="cal-nav" onclick="calNav(1)">›</div>
+    </div>
+    <div class="cal-grid" id="cal-grid"></div>
+    <div id="time-slots"></div>
+  </div>
+  <div class="bottom">
+    <button class="btn" onclick="nextDT()">Continuar →</button>
+  </div>
+</div>
+
+<!-- V4: DADOS -->
+<div class="view" id="v-data">
+  <div class="topbar">
+    <div class="tb-back" onclick="goTo('v-datetime')">←</div>
+    <div class="tb-title">Seus dados</div>
+    <img src="logo.jpg" class="tb-logo" alt="logo"/>
+  </div>
+  <div class="steps"><div class="step done"></div><div class="step done"></div><div class="step done"></div><div class="step active"></div><div class="step"></div></div>
+  <div class="scroll">
+    <div class="sec" style="margin-top:4px">Identificação</div>
+    <div class="field">
+      <span class="field-ico">📱</span>
+      <input type="tel" id="inp-tel" placeholder="(11) 99999-9999" oninput="handleTel(this)" maxlength="15" inputmode="numeric" autocomplete="tel"/>
+      <span class="field-clear" id="tel-clear" onclick="clearData()">×</span>
+    </div>
+    <div class="found" id="found">✓ Bem-vindo de volta! Seus dados foram preenchidos.</div>
+    <div class="field">
+      <span class="field-ico">👤</span>
+      <input type="text" id="inp-nome" placeholder="Seu nome completo" autocomplete="name"/>
+    </div>
+    <div class="field">
+      <span class="field-ico">✉️</span>
+      <input type="email" id="inp-email" placeholder="seu@email.com" inputmode="email" autocomplete="email"/>
+    </div>
+    <div class="sec">Resumo</div>
+    <div class="sum-card">
+      <div class="sum-row"><span class="sum-lbl">Barbeiro</span><span class="sum-val">Johnny Andrade</span></div>
+      <div class="sum-row"><span class="sum-lbl">Serviço</span><span class="sum-val" id="s-svc">—</span></div>
+      <div class="sum-row"><span class="sum-lbl">Data & hora</span><span class="sum-val" id="s-dt">—</span></div>
+      <div class="sum-row"><span class="sum-lbl">Total</span><span class="sum-big" id="s-total">—</span></div>
+    </div>
+  </div>
+  <div class="bottom">
+    <button class="btn" onclick="nextData()">Ir para pagamento →</button>
+  </div>
+</div>
+
+<!-- V5: CHECKOUT -->
+<div class="view" id="v-checkout">
+  <div class="topbar">
+    <div class="tb-back" onclick="goTo('v-data')">←</div>
+    <div class="tb-title">Confirmar reserva</div>
+    <img src="logo.jpg" class="tb-logo" alt="logo"/>
+  </div>
+  <div class="steps"><div class="step done"></div><div class="step done"></div><div class="step done"></div><div class="step done"></div><div class="step active"></div></div>
+  <div class="scroll">
+    <div class="policy">
+      <div class="policy-t">⚠ Política de cancelamento</div>
+      <div class="policy-b">O sinal <strong>não é reembolsável</strong> sem aviso prévio de 24h. Com aviso, o valor é aproveitado no reagendamento. <strong>Não compareceu sem avisar = perda do valor.</strong></div>
+    </div>
+    <div class="charge">
+      <div class="charge-row"><span style="color:var(--parch2)">Valor total</span><span style="color:var(--parch);font-weight:500" id="c-total">—</span></div>
+      <div class="charge-row"><span style="color:var(--parch2)">Sinal de reserva (30%)</span><span style="color:var(--gold);font-weight:500" id="c-sinal">—</span></div>
+      <div class="charge-row"><span style="color:var(--parch2)">Restante no balcão</span><span style="color:var(--parch2)" id="c-resto">—</span></div>
+      <hr class="charge-div"/>
+      <div style="display:flex;justify-content:space-between;align-items:baseline">
+        <span class="charge-lbl">Cobrar agora</span>
+        <span class="charge-val" id="c-now">—</span>
+      </div>
+    </div>
+    <div class="sec" style="margin-top:0">Forma de pagamento</div>
+    <div class="pay-opts">
+      <div class="pay-opt sel" id="po-pix" onclick="selPay('pix')">
+        <div class="pay-ico">📲</div>
+        <div class="pay-name">Pix</div>
+        <div class="pay-sub">Confirmação imediata</div>
+      </div>
+      <div class="pay-opt" id="po-card" onclick="selPay('card')">
+        <div class="pay-ico">💳</div>
+        <div class="pay-name">Cartão</div>
+        <div class="pay-sub">Crédito ou débito</div>
+      </div>
+    </div>
+    <div id="pix-sec">
+      <div class="pix-box">
+        <div style="font-size:11px;color:var(--dust);letter-spacing:.1em;text-transform:uppercase">Chave Pix</div>
+        <div class="pix-key">(11) 99999-9999</div>
+        <a href="https://wa.me/5511999999999" target="_blank" class="pix-link">↗ Enviar comprovante pelo WhatsApp</a>
+      </div>
+    </div>
+    <div id="card-sec" style="display:none">
+      <div class="field"><span class="field-ico">💳</span><input type="text" placeholder="Número do cartão" inputmode="numeric"/></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+        <div class="field"><input type="text" placeholder="MM/AA"/></div>
+        <div class="field"><input type="text" placeholder="CVV" inputmode="numeric"/></div>
+      </div>
+    </div>
+    <div class="check-row">
+      <input type="checkbox" id="chk-pol"/>
+      <label for="chk-pol">Li e concordo com a política de cancelamento. Entendo que o sinal não é reembolsável sem aviso de 24 horas.</label>
+    </div>
+    <button class="btn" onclick="confirmar()">✦ &nbsp;Confirmar e pagar sinal</button>
+    <p style="text-align:center;font-size:12px;color:var(--dust);margin-top:12px;margin-bottom:4px">Processado via Stripe · Confirmação por WhatsApp</p>
+  </div>
+</div>
+
+<!-- V6: SUCESSO -->
+<div class="view" id="v-ok">
+  <div class="success-wrap">
+    <div class="success-icon">✓</div>
+    <div class="success-eyebrow">Reserva confirmada</div>
+    <div class="success-title">Até já!</div>
+    <div class="success-sub">Sinal recebido com sucesso.<br>Confirmação pelo <strong style="color:var(--parch)">WhatsApp</strong> em instantes.<br>Chegue 5 minutinhos antes. ✦</div>
+    <div class="sum-card" style="width:100%;margin-bottom:20px">
+      <div class="sum-row"><span class="sum-lbl">Barbeiro</span><span class="sum-val">Johnny Andrade</span></div>
+      <div class="sum-row"><span class="sum-lbl">Serviço</span><span class="sum-val" id="ok-svc">—</span></div>
+      <div class="sum-row"><span class="sum-lbl">Data & hora</span><span class="sum-val" id="ok-dt">—</span></div>
+      <div class="sum-row"><span class="sum-lbl">Sinal pago</span><span class="sum-val" style="color:var(--gold)" id="ok-sinal">—</span></div>
+    </div>
+    <button class="btn" onclick="goTo('v-land')">← Novo agendamento</button>
+  </div>
+</div>
+
+<!-- WhatsApp Float Button -->
+<a href="https://wa.me/5511999999999" target="_blank" class="wa" title="Falar com a barbearia">💬</a>
+
+</div>
+
+<script>
+const SVCS=[
+  {n:'Corte masculino',dur:'45 min',val:45},
+  {n:'Corte & barba',dur:'1h',val:65},
+  {n:'Corte + selagem',dur:'1h 30min',val:100},
+  {n:'Corte, barba & selagem',dur:'2h',val:120},
+  {n:'Corte premium + limpeza',dur:'1h 15min',val:100},
+  {n:'Limpeza de pele',dur:'45 min',val:60},
+  {n:'Combo completo',dur:'2h 30min',val:160},
+];
+const MONTHS=['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+const FAKEDB={'11953826351':{name:'Carlos Silva',email:'carlos@email.com'},'11988887777':{name:'Rafael Souza',email:'rafa@email.com'}};
+let CS={svc:null,price:0,date:'',hour:''};
+let calY=2026,calM=5,selDay=null;
+
+function goTo(id){
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('on'));
+  document.getElementById(id).classList.add('on');
+  window.scrollTo(0,0);
+}
+
+// SERVICES
+(function buildSvcs(){
+  const el=document.getElementById('svc-list');
+  el.innerHTML='<div style="height:4px"></div>'+SVCS.map((s,i)=>`
+    <div class="svc-item" id="si${i}" onclick="selSvc(${i},this)">
+      <div class="svc-info">
+        <div class="svc-name">${s.n}</div>
+        <div class="svc-dur">${s.dur}</div>
+      </div>
+      <div class="svc-price">R$ ${s.val}</div>
+      <div class="svc-chk" id="sc${i}"></div>
+    </div>`).join('')+'<div style="height:4px"></div>';
+})();
+
+function selSvc(i,el){
+  document.querySelectorAll('.svc-item').forEach(e=>e.classList.remove('sel'));
+  document.querySelectorAll('.svc-chk').forEach(e=>e.classList.remove('sel'));
+  el.classList.add('sel');
+  document.getElementById('sc'+i).classList.add('sel');
+  CS.svc=SVCS[i].n; CS.price=SVCS[i].val;
+  setTimeout(()=>goTo('v-datetime'),320);
+}
+
+// CALENDAR
+function buildCal(){
+  document.getElementById('cal-m').textContent=MONTHS[calM]+' '+calY;
+  const first=new Date(calY,calM,1).getDay();
+  const tot=new Date(calY,calM+1,0).getDate();
+  const t=new Date(); t.setHours(0,0,0,0);
+  let h=['D','S','T','Q','Q','S','S'].map(d=>`<div class="cal-dow">${d}</div>`).join('');
+  for(let i=0;i<first;i++)h+=`<div class="cday empty"></div>`;
+  for(let d=1;d<=tot;d++){
+    const dt=new Date(calY,calM,d);
+    const past=dt<t;
+    const isT=dt.toDateString()===t.toDateString();
+    const isSel=d===selDay&&calM===5&&calY===2026;
+    h+=`<div class="cday${past?' past':''}${isT?' today':''}${isSel?' sel':''}" ${past?'':'onclick="pickDay('+d+')"'}>${d}</div>`;
+  }
+  document.getElementById('cal-grid').innerHTML=h;
+  buildSlots();
+}
+function pickDay(d){selDay=d;CS.date=`${d} de ${MONTHS[calM]} de ${calY}`;buildCal();}
+function calNav(dir){calM+=dir;if(calM>11){calM=0;calY++;}if(calM<0){calM=11;calY--;}buildCal();}
+
+function buildSlots(){
+  if(!selDay){document.getElementById('time-slots').innerHTML='<div style="font-size:13px;color:var(--dust);padding:8px 0">Selecione uma data acima.</div>';return;}
+  const periods={'Manhã':['09:00','09:30','10:00','10:30','11:00','11:30'],'Tarde':['14:00','14:30','15:00','15:30','16:00','16:30'],'Noite':['19:00','19:30','20:00','20:30']};
+  let h='';
+  for(const[p,ts] of Object.entries(periods)){
+    h+=`<div class="t-section"><div class="t-lbl">${p}</div><div class="t-grid">`;
+    ts.forEach(t=>{h+=`<div class="tslot${CS.hour===t?' sel':''}" onclick="pickSlot('${t}')">${t}</div>`;});
+    h+=`</div></div>`;
+  }
+  document.getElementById('time-slots').innerHTML=h;
+}
+function pickSlot(t){CS.hour=t;buildSlots();}
+
+function nextDT(){
+  if(!selDay||!CS.hour){alert('Selecione data e horário para continuar.');return;}
+  document.getElementById('s-svc').textContent=CS.svc;
+  document.getElementById('s-dt').textContent=CS.date+' às '+CS.hour;
+  document.getElementById('s-total').textContent='R$ '+CS.price+',00';
+  goTo('v-data');
+}
+
+// PHONE
+function phoneMask(v){
+  let d=v.replace(/\D/g,'').slice(0,11);
+  if(!d)return'';
+  if(d.length<=2)return'('+d;
+  if(d.length<=7)return'('+d.slice(0,2)+') '+d.slice(2);
+  return'('+d.slice(0,2)+') '+d.slice(2,7)+'-'+d.slice(7);
+}
+function handleTel(inp){
+  const raw=inp.value.replace(/\D/g,'');
+  inp.value=phoneMask(inp.value);
+  document.getElementById('tel-clear').style.display=raw.length?'block':'none';
+  if(raw.length>=11){
+    const f=FAKEDB[raw];
+    if(f){document.getElementById('inp-nome').value=f.name;document.getElementById('inp-email').value=f.email;document.getElementById('found').style.display='block';}
+    else document.getElementById('found').style.display='none';
+  } else document.getElementById('found').style.display='none';
+}
+function clearData(){
+  ['inp-tel','inp-nome','inp-email'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  document.getElementById('found').style.display='none';
+  document.getElementById('tel-clear').style.display='none';
+}
+
+function nextData(){
+  if(!document.getElementById('inp-tel').value||!document.getElementById('inp-nome').value){alert('Preencha celular e nome para continuar.');return;}
+  const sinal=Math.ceil(CS.price*.3);
+  document.getElementById('c-total').textContent='R$ '+CS.price+',00';
+  document.getElementById('c-sinal').textContent='R$ '+sinal+',00';
+  document.getElementById('c-resto').textContent='R$ '+(CS.price-sinal)+',00';
+  document.getElementById('c-now').textContent='R$ '+sinal+',00';
+  goTo('v-checkout');
+}
+
+function selPay(p){
+  document.getElementById('po-pix').classList.toggle('sel',p==='pix');
+  document.getElementById('po-card').classList.toggle('sel',p==='card');
+  document.getElementById('pix-sec').style.display=p==='pix'?'block':'none';
+  document.getElementById('card-sec').style.display=p==='card'?'block':'none';
+}
+
+function confirmar(){
+  if(!document.getElementById('chk-pol').checked){alert('Confirme que leu a política de cancelamento.');return;}
+  const sinal=Math.ceil(CS.price*.3);
+  document.getElementById('ok-svc').textContent=CS.svc;
+  document.getElementById('ok-dt').textContent=CS.date+' às '+CS.hour;
+  document.getElementById('ok-sinal').textContent='R$ '+sinal+',00';
+  goTo('v-ok');
+}
+
+// LIGHTBOX
+function openLbox(id){
+  const src=document.getElementById(id).src;
+  document.getElementById('lbox-img').src=src;
+  document.getElementById('lbox').classList.add('on');
+}
+function closeLbox(){document.getElementById('lbox').classList.remove('on');}
+
+// INIT
+buildCal();
+</script>
+</body>
+</html>
