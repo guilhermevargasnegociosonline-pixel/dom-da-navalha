@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<meta name="theme-color" content="#0A0A0A">
+<meta name="theme-color" content="#080808">
 <title>Dom da Navalha — Agendamento</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -11,194 +11,162 @@
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 :root{
-  --bg:#0A0A0A;
-  --bg2:#111111;
-  --bg3:#1A1A1A;
-  --bg4:#242424;
-  --gold:#B8922A;
-  --gold2:#D4A843;
-  --gold3:#E8C97A;
-  --gold-dim:rgba(184,146,42,.1);
-  --gold-br:rgba(184,146,42,.25);
-  --white:#FFFFFF;
-  --white2:#E8E8E8;
-  --white3:#AAAAAA;
-  --gray:#666666;
-  --line:#2A2A2A;
-  --grn:#22C55E;
-  --grn-dim:rgba(34,197,94,.1);
-  --grn-br:rgba(34,197,94,.2);
-  --red:#EF4444;
-  --red-dim:rgba(239,68,68,.08);
-  --red-br:rgba(239,68,68,.2);
+  --bg:#080808;--bg2:#111;--bg3:#1a1a1a;--bg4:#222;
+  --w:#fff;--w2:#e0e0e0;--w3:#999;--w4:#555;
+  --line:#2a2a2a;
+  --gold:#C9A84C;--gold2:#E0BC6A;--gdim:rgba(201,168,76,.1);--gbr:rgba(201,168,76,.22);
+  --grn:#22c55e;--grn-d:rgba(34,197,94,.1);--grn-b:rgba(34,197,94,.2);
+  --red:#ef4444;--red-d:rgba(239,68,68,.08);--red-b:rgba(239,68,68,.2);
   --max:460px;
 }
-html,body{background:var(--bg);color:var(--white);font-family:'DM Sans',system-ui,sans-serif;font-size:14px;min-height:100vh;overflow-x:hidden}
+html,body{background:var(--bg);color:var(--w);font-family:'DM Sans',system-ui,sans-serif;font-size:14px;min-height:100vh;overflow-x:hidden}
 *::-webkit-scrollbar{display:none}*{scrollbar-width:none}
-.app{max-width:var(--max);margin:0 auto;min-height:100vh;background:var(--bg);position:relative}
-
-/* VIEWS */
+.app{max-width:var(--max);margin:0 auto;min-height:100vh;background:var(--bg)}
 .view{display:none;min-height:100vh;flex-direction:column}
-.view.on{display:flex;animation:fadeUp .3s ease both}
-@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.view.on{display:flex;animation:fu .28s ease both}
+@keyframes fu{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 
 /* TOPBAR */
-.topbar{display:flex;align-items:center;padding:16px 20px 14px;gap:12px;flex-shrink:0;background:var(--bg)}
-.back{width:40px;height:40px;border-radius:50%;background:var(--bg3);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:18px;color:var(--white3);flex-shrink:0}
-.tb-title{font-size:14px;font-weight:400;color:var(--white);flex:1;letter-spacing:.02em}
-.tb-logo{width:32px;height:32px;border-radius:8px;object-fit:cover;flex-shrink:0;border:1.5px solid var(--white)}
+.tb{display:flex;align-items:center;padding:14px 18px 12px;gap:10px;flex-shrink:0}
+.tb-back{width:38px;height:38px;border-radius:50%;background:var(--bg3);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:17px;color:var(--w3);flex-shrink:0}
+.tb-t{font-size:14px;font-weight:400;color:var(--w);flex:1;letter-spacing:.02em}
+.tb-logo{width:30px;height:30px;border-radius:7px;object-fit:cover;border:1.5px solid var(--w);flex-shrink:0}
 
-/* STEPS BAR */
-.stepbar{display:flex;padding:0 20px 16px;gap:4px;flex-shrink:0}
-.sb{height:2px;flex:1;border-radius:1px;background:var(--line);transition:background .4s}
-.sb.done{background:var(--gold2)}
-.sb.cur{background:var(--gold3);opacity:.6}
+/* STEPS */
+.steps{display:flex;padding:0 18px 14px;gap:4px;flex-shrink:0}
+.step{height:2px;flex:1;border-radius:1px;background:var(--line);transition:background .3s}
+.step.d{background:var(--gold)}
+.step.c{background:var(--gold);opacity:.45}
 
-/* SCROLL */
+/* SCROLL & CTA */
 .scroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch}
-
-/* FIXED BOTTOM CTA */
-.cta-wrap{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:var(--max);padding:14px 20px 36px;background:linear-gradient(to top,var(--bg) 68%,transparent);z-index:60;pointer-events:none}
+.cta-wrap{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:var(--max);padding:12px 18px 34px;background:linear-gradient(to top,var(--bg) 65%,transparent);z-index:60;pointer-events:none}
 .cta-wrap>*{pointer-events:all}
 
 /* BUTTONS */
-.btn{width:100%;padding:17px 24px;border:none;border-radius:12px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500;letter-spacing:.06em;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:9px;transition:all .22s;-webkit-appearance:none;text-decoration:none;text-transform:uppercase}
-.btn-gold{background:var(--gold2);color:var(--bg)}
-.btn-gold:active{background:var(--gold3);transform:scale(.97)}
-.btn-ghost{background:transparent;border:1px solid var(--line);color:var(--white3)}
-.btn-ghost:active{background:var(--bg3);transform:scale(.97)}
+.btn{width:100%;padding:16px 20px;border:none;border-radius:12px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .2s;-webkit-appearance:none;text-decoration:none}
+.btn-g{background:var(--gold);color:var(--bg)}
+.btn-g:active{background:var(--gold2);transform:scale(.97)}
+.btn-o{background:transparent;border:1px solid var(--line);color:var(--w3)}
+.btn-o:active{background:var(--bg3);transform:scale(.97)}
+.btn-w{background:var(--w);color:var(--bg)}
+.btn-w:active{background:var(--w2);transform:scale(.97)}
 
-/* ═══════════════════════════════════
-   LANDING
-═══════════════════════════════════ */
-.land-hero{
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  padding:60px 32px 48px;
-  min-height:56vw;
-  max-height:320px;
-  background:var(--bg);
-  border-bottom:1px solid var(--line);
+/* ══════════════════════════════════
+   LANDING — hero com logo + photo BG
+══════════════════════════════════ */
+.hero{
   position:relative;
+  width:100%;
+  height:100svh;
+  min-height:600px;
   overflow:hidden;
+  flex-shrink:0;
 }
-.land-hero::before{
-  content:'';
+/* foto do johnny como background cobrindo tudo */
+.hero-bg{
+  position:absolute;inset:0;
+  background:url('johnny.jpg') center 10% / cover no-repeat;
+  transform:scale(1.02);
+}
+/* gradiente pesado de baixo */
+.hero-grad{
+  position:absolute;inset:0;
+  background:linear-gradient(
+    to bottom,
+    rgba(8,8,8,.55) 0%,
+    rgba(8,8,8,.1) 25%,
+    rgba(8,8,8,.0) 45%,
+    rgba(8,8,8,.75) 75%,
+    rgba(8,8,8,.98) 100%
+  );
+}
+.hero-body{
   position:absolute;
-  inset:0;
-  background:radial-gradient(ellipse 80% 60% at 50% 0%,rgba(184,146,42,.06) 0%,transparent 70%);
+  bottom:0;left:0;right:0;
+  padding:0 22px 32px;
 }
-.land-logo-ring{
-  width:88px;
-  height:88px;
-  border-radius:20px;
-  border:1.5px solid var(--white);
-  background:var(--bg2);
-  display:flex;
-  align-items:center;
-  justify-content:center;
+.hero-logo-ring{
+  width:72px;height:72px;
+  border-radius:16px;
+  border:2px solid var(--w);
+  background:rgba(0,0,0,.55);
+  backdrop-filter:blur(6px);
+  display:flex;align-items:center;justify-content:center;
   overflow:hidden;
-  margin-bottom:22px;
-  position:relative;
-  box-shadow:0 0 0 6px rgba(255,255,255,.04), 0 20px 50px rgba(0,0,0,.5);
+  margin-bottom:16px;
 }
-.land-logo-img{
-  width:78px;
-  height:78px;
-  object-fit:contain;
-  padding:4px;
-}
-.land-eyebrow{
-  font-size:9px;
-  letter-spacing:.28em;
-  text-transform:uppercase;
-  color:var(--gold2);
-  margin-bottom:10px;
-  text-align:center;
-}
-.land-name{
+.hero-logo-img{width:64px;height:64px;object-fit:contain;padding:3px}
+.hero-eyebrow{font-size:9px;letter-spacing:.26em;text-transform:uppercase;color:var(--gold);margin-bottom:6px}
+.hero-name{
   font-family:'Cormorant Garamond',serif;
-  font-size:36px;
-  font-weight:600;
-  color:var(--white);
-  text-align:center;
-  line-height:1;
-  letter-spacing:.02em;
-  margin-bottom:8px;
+  font-size:42px;font-weight:700;color:var(--w);
+  line-height:.95;letter-spacing:-.01em;margin-bottom:8px;
 }
-.land-addr{
-  font-size:12px;
-  color:var(--gray);
-  text-align:center;
-  letter-spacing:.02em;
-}
-.land-chips{
-  display:flex;
-  gap:6px;
-  margin-top:16px;
-  flex-wrap:wrap;
-  justify-content:center;
-}
+.hero-addr{font-size:12px;color:rgba(255,255,255,.55);margin-bottom:14px}
+.hero-chips{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:24px}
 .chip{
-  background:var(--gold-dim);
-  border:1px solid var(--gold-br);
-  border-radius:4px;
-  padding:5px 11px;
-  font-size:10px;
-  color:var(--gold2);
-  letter-spacing:.06em;
-  text-transform:uppercase;
+  background:rgba(201,168,76,.12);border:1px solid rgba(201,168,76,.3);
+  border-radius:4px;padding:4px 10px;font-size:10px;
+  color:var(--gold);letter-spacing:.06em;text-transform:uppercase;
 }
-.land-btns{padding:24px 20px 110px;display:flex;flex-direction:column;gap:10px}
-.land-info{
-  display:flex;
-  align-items:center;
-  gap:12px;
-  background:var(--bg2);
-  border:1px solid var(--line);
-  border-radius:12px;
-  padding:14px 16px;
-}
-.land-info-dot{
-  width:7px;height:7px;border-radius:50%;flex-shrink:0;
-  box-shadow:0 0 8px currentColor;
-}
-.land-info-body{flex:1;min-width:0}
-.land-info-title{font-size:13px;font-weight:500;color:var(--white);margin-bottom:1px}
-.land-info-sub{font-size:11px;color:var(--gray)}
-.land-info-cta{font-size:11px;color:var(--gold2);font-weight:500;flex-shrink:0;letter-spacing:.03em}
-.stars{display:flex;gap:2px;margin-bottom:2px}
-.star{color:var(--gold2);font-size:12px}
+.hero-btns{display:flex;flex-direction:column;gap:8px}
+.hero-row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 
-/* ═══════════════════════════════════
-   BARBER CARD
-═══════════════════════════════════ */
-.bcard{margin:16px 20px 0;border-radius:18px;overflow:hidden;background:var(--bg2);border:1px solid var(--line)}
+/* info strips */
+.info-strip{
+  display:flex;align-items:center;gap:10px;
+  background:rgba(255,255,255,.06);
+  backdrop-filter:blur(8px);
+  border:1px solid rgba(255,255,255,.1);
+  border-radius:10px;padding:11px 14px;
+}
+.i-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;box-shadow:0 0 7px currentColor}
+.i-body{flex:1;min-width:0}
+.i-title{font-size:12px;font-weight:500;color:var(--w)}
+.i-sub{font-size:11px;color:rgba(255,255,255,.45);margin-top:1px}
+.i-cta{font-size:11px;color:var(--gold);font-weight:500;flex-shrink:0}
+
+/* ══════════════════════════════════
+   BARBEIRO CARD
+══════════════════════════════════ */
+.bcard{margin:0 18px 0;border-radius:18px;overflow:hidden;background:var(--bg2);border:1px solid var(--line);flex-shrink:0}
+
+/* foto do johnny como background no card também */
 .bcard-photo{
   width:100%;
-  height:72vw;
-  max-height:340px;
-  object-fit:cover;
-  object-position:center 8%;
-  display:block;
+  padding-bottom:100%; /* quadrado perfeito */
+  position:relative;
+  overflow:hidden;
 }
-.bcard-body{padding:20px}
+.bcard-photo-bg{
+  position:absolute;inset:0;
+  background:url('johnny.jpg') center 8% / cover no-repeat;
+}
+/* gradiente sutil na base para texto */
+.bcard-photo-grad{
+  position:absolute;bottom:0;left:0;right:0;height:40%;
+  background:linear-gradient(to top,rgba(17,17,17,.9),transparent);
+}
+
+.bcard-body{padding:18px}
 .bcard-name{
   font-family:'Cormorant Garamond',serif;
-  font-size:26px;
-  font-weight:600;
-  color:var(--white);
-  letter-spacing:.02em;
-  margin-bottom:3px;
+  font-size:26px;font-weight:600;color:var(--w);
+  letter-spacing:.01em;margin-bottom:2px;
 }
-.bcard-role{font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold2);margin-bottom:14px}
-.bcard-bio{font-size:13px;color:var(--gray);line-height:1.8;margin-bottom:16px;font-weight:300}
+.bcard-role{font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:14px}
+.bcard-bio{font-size:13px;color:var(--w3);line-height:1.8;margin-bottom:16px;font-weight:300}
 .bcard-tags{display:flex;flex-wrap:wrap;gap:5px}
-.btag{background:var(--bg3);border:1px solid var(--line);border-radius:4px;font-size:10px;color:var(--white3);padding:4px 11px;letter-spacing:.04em;text-transform:uppercase}
-.port-wrap{padding:20px 20px 0}
-.port-eyebrow{font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold2);margin-bottom:12px}
+.btag{
+  background:var(--bg3);border:1px solid var(--line);
+  border-radius:4px;font-size:10px;color:var(--w2);
+  padding:4px 11px;letter-spacing:.05em;text-transform:uppercase;
+}
+
+/* portfolio */
+.port-wrap{padding:20px 18px 0}
+.port-lbl{font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin-bottom:12px}
 .port-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px}
 .port-item{
   border-radius:10px;overflow:hidden;
@@ -206,237 +174,131 @@ html,body{background:var(--bg);color:var(--white);font-family:'DM Sans',system-u
   background:var(--bg3);
 }
 .port-item img{
-  width:100%;height:100%;object-fit:cover;
-  object-position:center top;display:block;
-  transition:transform .4s ease;
+  width:100%;height:100%;
+  object-fit:cover;object-position:center top;
+  display:block;transition:transform .4s ease;
 }
 .port-item:active img{transform:scale(1.05)}
-.port-overlay{
+.port-over{
   position:absolute;inset:0;
-  background:linear-gradient(to top,rgba(10,10,10,.8) 0%,transparent 50%);
+  background:linear-gradient(to top,rgba(8,8,8,.82) 0%,transparent 55%);
   display:flex;align-items:flex-end;padding:10px 12px;
 }
-.port-lbl{font-size:10px;color:var(--white);letter-spacing:.06em;text-transform:uppercase;font-weight:500}
-.barber-scroll-pad{height:110px}
+.port-plbl{font-size:10px;color:var(--w);letter-spacing:.07em;text-transform:uppercase;font-weight:500}
 
-/* ═══════════════════════════════════
+/* ══════════════════════════════════
    SERVIÇOS
-═══════════════════════════════════ */
-.svc-pad{padding:0 20px 110px}
+══════════════════════════════════ */
+.svc-pad{padding:0 18px 110px}
 .svc-item{
-  background:var(--bg2);
-  border:1px solid var(--line);
-  border-radius:12px;
-  padding:18px;
-  display:flex;
-  align-items:center;
-  gap:14px;
-  margin-bottom:8px;
-  cursor:pointer;
-  transition:all .2s;
-  position:relative;
-  overflow:hidden;
+  background:var(--bg2);border:1px solid var(--line);
+  border-radius:12px;padding:17px;
+  display:flex;align-items:center;gap:12px;
+  margin-bottom:8px;cursor:pointer;transition:all .2s;
 }
-.svc-item::before{
-  content:'';position:absolute;inset:0;
-  background:linear-gradient(135deg,var(--gold-dim),transparent 60%);
-  opacity:0;transition:opacity .2s;
-}
-.svc-item.sel::before{opacity:1}
-.svc-item.sel{border-color:var(--gold2)}
-.svc-left{flex:1;min-width:0;position:relative}
-.svc-name{font-size:14px;font-weight:500;color:var(--white);margin-bottom:3px;letter-spacing:.01em}
-.svc-dur{font-size:11px;color:var(--gray);letter-spacing:.04em}
-.svc-price{
+.svc-item.sel{border-color:var(--gold);background:var(--gdim)}
+.svc-info{flex:1;min-width:0}
+.svc-name{font-size:14px;font-weight:500;color:var(--w);margin-bottom:2px}
+.svc-dur{font-size:11px;color:var(--w4)}
+.svc-val{
   font-family:'Cormorant Garamond',serif;
-  font-size:22px;font-weight:600;
-  color:var(--gold2);flex-shrink:0;position:relative;
+  font-size:22px;font-weight:600;color:var(--gold);flex-shrink:0;
 }
 .svc-chk{
   width:22px;height:22px;border-radius:50%;
   border:1.5px solid var(--line);flex-shrink:0;
-  display:flex;align-items:center;justify-content:center;
-  transition:all .2s;position:relative;
+  display:flex;align-items:center;justify-content:center;transition:all .2s;
 }
-.svc-item.sel .svc-chk{background:var(--gold2);border-color:var(--gold2)}
+.svc-item.sel .svc-chk{background:var(--gold);border-color:var(--gold)}
 .svc-item.sel .svc-chk::after{content:"✓";font-size:11px;color:var(--bg);font-weight:700}
 
-/* ═══════════════════════════════════
+/* ══════════════════════════════════
    DATA & HORA
-═══════════════════════════════════ */
-.dt-pad{padding:0 20px 110px}
-.cal-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
-.cal-m{
-  font-family:'Cormorant Garamond',serif;
-  font-size:20px;font-weight:600;color:var(--white);letter-spacing:.02em;
-}
-.cal-nav{
-  width:38px;height:38px;border-radius:50%;
-  background:var(--bg2);border:1px solid var(--line);
-  display:flex;align-items:center;justify-content:center;
-  cursor:pointer;font-size:16px;color:var(--white3);
-}
-.cal-grid{
-  display:grid;grid-template-columns:repeat(7,1fr);
-  gap:3px;text-align:center;margin-bottom:24px;
-}
-.cal-dow{font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:var(--gray);padding:3px 0 10px}
-.cday{
-  aspect-ratio:1;display:flex;align-items:center;justify-content:center;
-  border-radius:8px;font-size:13px;cursor:pointer;
-  transition:all .18s;color:var(--white3);
-}
+══════════════════════════════════ */
+.dt-pad{padding:0 18px 110px}
+.cal-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.cal-m{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:600;color:var(--w)}
+.cal-nav{width:36px;height:36px;border-radius:50%;background:var(--bg2);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:15px;color:var(--w3)}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;text-align:center;margin-bottom:22px}
+.cal-dow{font-size:9px;letter-spacing:.07em;text-transform:uppercase;color:var(--w4);padding:3px 0 9px}
+.cday{aspect-ratio:1;display:flex;align-items:center;justify-content:center;border-radius:8px;font-size:13px;cursor:pointer;transition:all .18s;color:var(--w3)}
 .cday:active:not(.past):not(.empty){background:var(--bg3)}
-.cday.today{color:var(--gold2);font-weight:600}
-.cday.sel{background:var(--gold2);color:var(--bg);font-weight:700;border-radius:50%}
+.cday.today{color:var(--gold);font-weight:700}
+.cday.sel{background:var(--gold);color:var(--bg);font-weight:700;border-radius:50%}
 .cday.past{color:var(--line);cursor:default}
-.slot-sec{margin-bottom:18px}
-.slot-lbl{font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--gray);margin-bottom:9px}
-.slot-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
-.slot{
-  background:var(--bg2);border:1px solid var(--line);
-  border-radius:9px;padding:12px 4px;text-align:center;
-  font-size:13px;cursor:pointer;color:var(--white3);
-  transition:all .18s;
-}
-.slot.sel{background:var(--gold2);border-color:var(--gold2);color:var(--bg);font-weight:600}
-.slot:active:not(.sel){background:var(--bg3)}
+.sl-sec{margin-bottom:16px}
+.sl-lbl{font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--w4);margin-bottom:8px}
+.sl-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.sl{background:var(--bg2);border:1px solid var(--line);border-radius:9px;padding:11px 4px;text-align:center;font-size:13px;cursor:pointer;color:var(--w3);transition:all .18s}
+.sl.sel{background:var(--gold);border-color:var(--gold);color:var(--bg);font-weight:600}
 
-/* ═══════════════════════════════════
+/* ══════════════════════════════════
    DADOS
-═══════════════════════════════════ */
-.form-pad{padding:0 20px 110px}
-.sec-lbl{font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold2);margin-bottom:10px;margin-top:22px}
-.field{
-  background:var(--bg2);border:1px solid var(--line);
-  border-radius:11px;padding:15px 16px;
-  display:flex;align-items:center;gap:11px;
-  margin-bottom:9px;transition:border .2s;
-}
-.field:focus-within{border-color:var(--gold-br)}
-.field-ico{font-size:16px;flex-shrink:0;color:var(--gray)}
-.field input{
-  background:none;border:none;outline:none;
-  font-family:'DM Sans',sans-serif;font-size:14px;
-  color:var(--white);flex:1;-webkit-appearance:none;
-}
-.field input::placeholder{color:var(--gray)}
-.field-x{cursor:pointer;color:var(--gray);font-size:20px;line-height:1;display:none}
-.found-box{
-  background:var(--grn-dim);border:1px solid var(--grn-br);
-  border-radius:9px;padding:12px 14px;margin-bottom:9px;
-  font-size:13px;color:var(--grn);display:none;
-}
-.sum-card{
-  background:var(--bg2);border:1px solid var(--line);
-  border-radius:14px;padding:18px;margin-bottom:14px;
-}
-.sum-row{
-  display:flex;justify-content:space-between;align-items:flex-start;
-  padding:9px 0;border-bottom:1px solid var(--line);
-  font-size:13px;gap:10px;
-}
-.sum-row:last-child{border:none;padding-top:14px}
-.sum-lbl{color:var(--gray);flex-shrink:0;letter-spacing:.02em}
-.sum-val{color:var(--white);font-weight:500;text-align:right;line-height:1.4}
-.sum-price{
-  font-family:'Cormorant Garamond',serif;
-  font-size:26px;font-weight:600;color:var(--gold2);
-}
+══════════════════════════════════ */
+.form-pad{padding:0 18px 110px}
+.sec-l{font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin-bottom:10px;margin-top:20px}
+.field{background:var(--bg2);border:1px solid var(--line);border-radius:11px;padding:14px 16px;display:flex;align-items:center;gap:10px;margin-bottom:9px;transition:border .2s}
+.field:focus-within{border-color:var(--gbr)}
+.f-ico{font-size:15px;flex-shrink:0;color:var(--w4)}
+.field input{background:none;border:none;outline:none;font-family:'DM Sans',sans-serif;font-size:14px;color:var(--w);flex:1;-webkit-appearance:none}
+.field input::placeholder{color:var(--w4)}
+.f-x{cursor:pointer;color:var(--w4);font-size:19px;line-height:1;display:none}
+/* lookup status */
+.lookup-box{border-radius:9px;padding:10px 14px;margin-bottom:9px;font-size:13px;display:none}
+.lb-found{background:var(--grn-d);border:1px solid var(--grn-b);color:var(--grn)}
+.lb-new{background:rgba(255,255,255,.05);border:1px solid var(--line);color:var(--w3)}
+.sum-card{background:var(--bg2);border:1px solid var(--line);border-radius:14px;padding:17px;margin-bottom:14px}
+.sum-row{display:flex;justify-content:space-between;align-items:flex-start;padding:8px 0;border-bottom:1px solid var(--line);font-size:13px;gap:10px}
+.sum-row:last-child{border:none;padding-top:12px}
+.sum-lbl{color:var(--w4);flex-shrink:0}
+.sum-val{color:var(--w);font-weight:500;text-align:right}
+.sum-price{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:600;color:var(--gold)}
 
-/* ═══════════════════════════════════
+/* ══════════════════════════════════
    CHECKOUT
-═══════════════════════════════════ */
-.co-pad{padding:0 20px 110px}
-.policy-box{
-  background:var(--red-dim);border:1px solid var(--red-br);
-  border-radius:12px;padding:15px 16px;margin-bottom:14px;
-}
-.policy-title{font-size:10px;font-weight:600;color:var(--red);text-transform:uppercase;letter-spacing:.08em;margin-bottom:5px}
-.policy-body{font-size:13px;color:var(--red);line-height:1.7;font-weight:300}
-.charge-card{
-  background:var(--gold-dim);border:1px solid var(--gold-br);
-  border-radius:14px;padding:18px;margin-bottom:16px;
-}
-.charge-row{display:flex;justify-content:space-between;font-size:13px;margin-bottom:7px;align-items:center;color:var(--white3)}
-.charge-divider{border:none;border-top:1px solid var(--gold-br);margin:12px 0}
-.charge-lbl{font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--gray)}
-.charge-total{
-  font-family:'Cormorant Garamond',serif;
-  font-size:32px;font-weight:600;color:var(--gold2);
-}
+══════════════════════════════════ */
+.co-pad{padding:0 18px 110px}
+.pol-box{background:var(--red-d);border:1px solid var(--red-b);border-radius:12px;padding:14px 16px;margin-bottom:14px}
+.pol-t{font-size:10px;font-weight:600;color:var(--red);text-transform:uppercase;letter-spacing:.08em;margin-bottom:5px}
+.pol-b{font-size:13px;color:var(--red);line-height:1.7;font-weight:300}
+.charge{background:var(--gdim);border:1px solid var(--gbr);border-radius:14px;padding:17px;margin-bottom:16px}
+.ch-row{display:flex;justify-content:space-between;font-size:13px;margin-bottom:6px;align-items:center;color:var(--w3)}
+.ch-div{border:none;border-top:1px solid var(--gbr);margin:11px 0}
+.ch-lbl{font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--w4)}
+.ch-val{font-family:'Cormorant Garamond',serif;font-size:30px;font-weight:600;color:var(--gold)}
 .pay-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px}
-.pay-opt{
-  background:var(--bg2);border:1.5px solid var(--line);
-  border-radius:13px;padding:17px 12px;text-align:center;
-  cursor:pointer;transition:all .2s;
-}
-.pay-opt.sel{border-color:var(--gold2);background:var(--gold-dim)}
-.pay-ico{font-size:26px;margin-bottom:7px}
-.pay-name{font-size:13px;font-weight:500;color:var(--white);letter-spacing:.02em}
-.pay-sub{font-size:11px;color:var(--gray);margin-top:3px}
-.pix-card{
-  background:var(--bg2);border:1px solid var(--line);
-  border-radius:13px;padding:20px;text-align:center;margin-bottom:14px;
-}
-.pix-key{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:600;color:var(--white);margin:8px 0}
-.pix-wa{font-size:13px;color:var(--gold2);text-decoration:none;letter-spacing:.02em}
-.agree-row{
-  display:flex;align-items:flex-start;gap:12px;
-  background:var(--bg2);border:1px solid var(--line);
-  border-radius:11px;padding:15px;margin-bottom:14px;
-}
-.agree-row input{width:20px;height:20px;accent-color:var(--gold2);flex-shrink:0;margin-top:1px;cursor:pointer}
-.agree-row label{font-size:12px;color:var(--gray);line-height:1.7;cursor:pointer;font-weight:300}
+.pay-opt{background:var(--bg2);border:1.5px solid var(--line);border-radius:13px;padding:16px 12px;text-align:center;cursor:pointer;transition:all .2s}
+.pay-opt.sel{border-color:var(--gold);background:var(--gdim)}
+.p-ico{font-size:24px;margin-bottom:6px}
+.p-name{font-size:13px;font-weight:500;color:var(--w)}
+.p-sub{font-size:11px;color:var(--w4);margin-top:2px}
+.pix-card{background:var(--bg2);border:1px solid var(--line);border-radius:13px;padding:18px;text-align:center;margin-bottom:14px}
+.pix-key{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:600;color:var(--w);margin:7px 0}
+.pix-wa{font-size:13px;color:var(--gold);text-decoration:none}
+.agree{display:flex;align-items:flex-start;gap:11px;background:var(--bg2);border:1px solid var(--line);border-radius:11px;padding:14px;margin-bottom:14px}
+.agree input{width:20px;height:20px;accent-color:var(--gold);flex-shrink:0;margin-top:1px;cursor:pointer}
+.agree label{font-size:12px;color:var(--w4);line-height:1.7;cursor:pointer;font-weight:300}
 
-/* ═══════════════════════════════════
-   SUCESSO
-═══════════════════════════════════ */
-.ok-wrap{
-  display:flex;flex-direction:column;
-  align-items:center;justify-content:center;
-  min-height:100vh;padding:40px 24px;
-}
-.ok-ring{
-  width:72px;height:72px;border-radius:50%;
-  background:var(--gold-dim);border:1.5px solid var(--gold2);
-  display:flex;align-items:center;justify-content:center;
-  margin-bottom:20px;font-size:28px;
-  box-shadow:0 0 30px rgba(184,146,42,.15);
-}
-.ok-eyebrow{font-size:9px;letter-spacing:.28em;text-transform:uppercase;color:var(--gold2);margin-bottom:10px;text-align:center}
-.ok-title{font-family:'Cormorant Garamond',serif;font-size:34px;font-weight:600;color:var(--white);text-align:center;margin-bottom:10px}
-.ok-sub{font-size:14px;color:var(--gray);text-align:center;line-height:1.8;margin-bottom:28px;font-weight:300}
+/* SUCCESS */
+.ok{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:40px 22px}
+.ok-ring{width:70px;height:70px;border-radius:50%;background:var(--gdim);border:1.5px solid var(--gold);display:flex;align-items:center;justify-content:center;margin-bottom:18px;font-size:27px;box-shadow:0 0 28px rgba(201,168,76,.12)}
+.ok-ey{font-size:9px;letter-spacing:.28em;text-transform:uppercase;color:var(--gold);margin-bottom:9px;text-align:center}
+.ok-ttl{font-family:'Cormorant Garamond',serif;font-size:34px;font-weight:600;color:var(--w);text-align:center;margin-bottom:10px}
+.ok-sub{font-size:14px;color:var(--w4);text-align:center;line-height:1.8;margin-bottom:26px;font-weight:300}
 
-/* ═══════════════════════════════════
-   LIGHTBOX
-═══════════════════════════════════ */
-.lbox{
-  position:fixed;inset:0;background:rgba(0,0,0,.96);
-  z-index:200;display:none;align-items:center;
-  justify-content:center;padding:24px;
-}
+/* LIGHTBOX */
+.lbox{position:fixed;inset:0;background:rgba(0,0,0,.96);z-index:200;display:none;align-items:center;justify-content:center;padding:22px}
 .lbox.on{display:flex}
 .lbox img{max-width:100%;max-height:88vh;border-radius:14px;object-fit:contain}
-.lbox-x{
-  position:absolute;top:18px;right:18px;
-  width:38px;height:38px;background:var(--bg3);
-  border:1px solid var(--line);border-radius:50%;
-  display:flex;align-items:center;justify-content:center;
-  cursor:pointer;font-size:18px;color:var(--white3);
-}
+.lbox-x{position:absolute;top:18px;right:18px;width:38px;height:38px;background:var(--bg3);border:1px solid var(--line);border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:18px;color:var(--w3)}
 
-/* WA FLOAT */
-.wa-btn{
-  position:fixed;bottom:100px;right:18px;
-  width:52px;height:52px;background:#22C55E;
-  border-radius:50%;display:flex;align-items:center;
-  justify-content:center;z-index:40;font-size:26px;
-  text-decoration:none;
-  box-shadow:0 4px 20px rgba(34,197,94,.35);
-  transition:transform .2s;
-}
-.wa-btn:active{transform:scale(.93)}
+/* WA */
+.wa{position:fixed;bottom:100px;right:18px;width:52px;height:52px;background:#22c55e;border-radius:50%;display:flex;align-items:center;justify-content:center;z-index:40;font-size:25px;text-decoration:none;box-shadow:0 4px 20px rgba(34,197,94,.32);transition:transform .2s}
+.wa:active{transform:scale(.92)}
+
+/* SPINNER (Supabase lookup) */
+.spin{display:inline-block;width:14px;height:14px;border:2px solid rgba(255,255,255,.15);border-top-color:var(--gold);border-radius:50%;animation:sp .6s linear infinite;vertical-align:middle;margin-right:6px}
+@keyframes sp{to{transform:rotate(360deg)}}
 </style>
 </head>
 <body>
@@ -445,71 +307,76 @@ html,body{background:var(--bg);color:var(--white);font-family:'DM Sans',system-u
 <!-- LIGHTBOX -->
 <div class="lbox" id="lbox" onclick="closeLbox()">
   <div class="lbox-x">×</div>
-  <img id="lbox-img" src="" alt="Dom da Navalha — Portfólio"/>
+  <img id="lbox-img" src="" alt="Portfólio Dom da Navalha"/>
 </div>
 
-<!-- ════════════════════
+<!-- ══════════════════
   V0: LANDING
-════════════════════ -->
+══════════════════ -->
 <div class="view on" id="v0">
-  <div class="land-hero">
-    <div class="land-logo-ring">
-      <img src="logo.jpg" class="land-logo-img" alt="Dom da Navalha"/>
-    </div>
-    <div class="land-eyebrow">Agendamento online</div>
-    <div class="land-name">Dom da Navalha</div>
-    <div class="land-addr">Rua Dr. Benedito Arruda Vianna, 97 · São Paulo</div>
-    <div class="land-chips">
-      <span class="chip">10+ anos</span>
-      <span class="chip">Master Barber</span>
-      <span class="chip">Reserva em 2 min</span>
-    </div>
-  </div>
-  <div class="land-btns">
-    <button class="btn btn-gold" onclick="goTo('v1')">✦ &nbsp;Agendar agora</button>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
-      <a href="https://wa.me/5511999999999" target="_blank" class="btn btn-ghost" style="font-size:12px">💬 WhatsApp</a>
-      <a href="https://instagram.com/domDaNavalha" target="_blank" class="btn btn-ghost" style="font-size:12px">📸 Instagram</a>
-    </div>
-    <div class="land-info">
-      <div class="land-info-dot" style="background:var(--grn);color:var(--grn)"></div>
-      <div class="land-info-body">
-        <div class="land-info-title">Próximo horário disponível</div>
-        <div class="land-info-sub">Hoje às 14:00 com Johnny Andrade</div>
+  <!-- HERO: foto do Johnny como background, preenchendo 100vh -->
+  <div class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-grad"></div>
+    <div class="hero-body">
+      <div class="hero-logo-ring">
+        <img src="logo.jpg" class="hero-logo-img" alt="Dom da Navalha"/>
       </div>
-      <div class="land-info-cta">Ver →</div>
-    </div>
-    <div class="land-info">
-      <div style="font-size:11px">
-        <div class="stars">
-          <span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span>
+      <div class="hero-eyebrow">Agendamento online</div>
+      <div class="hero-name">Dom da<br>Navalha</div>
+      <div class="hero-addr">Rua Dr. Benedito Arruda Vianna, 97 · São Paulo</div>
+      <div class="hero-chips">
+        <span class="chip">10+ anos</span>
+        <span class="chip">Master Barber</span>
+        <span class="chip">Reserva em 2 min</span>
+      </div>
+      <div class="hero-btns">
+        <button class="btn btn-w" onclick="goTo('v1')">✦ &nbsp;Agendar agora</button>
+        <div class="hero-row">
+          <a href="https://wa.me/5511999999999" target="_blank" class="btn btn-o" style="font-size:12px">💬 WhatsApp</a>
+          <a href="https://instagram.com/domDaNavalha" target="_blank" class="btn btn-o" style="font-size:12px">📸 Instagram</a>
+        </div>
+        <div class="info-strip">
+          <div class="i-dot" style="background:var(--grn);color:var(--grn)"></div>
+          <div class="i-body">
+            <div class="i-title">Próximo horário disponível</div>
+            <div class="i-sub">Hoje às 14:00 com Johnny Andrade</div>
+          </div>
+          <div class="i-cta">Ver →</div>
+        </div>
+        <div class="info-strip">
+          <div style="color:var(--gold);font-size:13px;line-height:1">★★★★★</div>
+          <div class="i-body">
+            <div class="i-title">4.9 · 127 avaliações</div>
+            <div class="i-sub">"Melhor barbearia da região"</div>
+          </div>
         </div>
       </div>
-      <div class="land-info-body">
-        <div class="land-info-title">4.9 · 127 avaliações</div>
-        <div class="land-info-sub">"Melhor barbearia da região"</div>
-      </div>
     </div>
   </div>
 </div>
 
-<!-- ════════════════════
+<!-- ══════════════════
   V1: BARBEIRO
-════════════════════ -->
+══════════════════ -->
 <div class="view" id="v1">
-  <div class="topbar">
-    <div class="back" onclick="goTo('v0')">←</div>
-    <div class="tb-title">Seu barbeiro</div>
+  <div class="tb">
+    <div class="tb-back" onclick="goTo('v0')">←</div>
+    <div class="tb-t">Seu barbeiro</div>
     <img src="logo.jpg" class="tb-logo" alt="logo"/>
   </div>
-  <div class="stepbar"><div class="sb cur"></div><div class="sb"></div><div class="sb"></div><div class="sb"></div><div class="sb"></div></div>
-  <div class="scroll">
+  <div class="steps"><div class="step c"></div><div class="step"></div><div class="step"></div><div class="step"></div><div class="step"></div></div>
+  <div class="scroll" style="padding-bottom:110px">
     <div class="bcard">
-      <img src="johnny.jpg" class="bcard-photo" alt="Johnny Andrade"/>
+      <!-- foto como background preenchendo quadrado perfeito -->
+      <div class="bcard-photo">
+        <div class="bcard-photo-bg"></div>
+        <div class="bcard-photo-grad"></div>
+      </div>
       <div class="bcard-body">
         <div class="bcard-name">Johnny Andrade</div>
         <div class="bcard-role">Master Barber · Fundador · 10 anos</div>
-        <div class="bcard-bio">Sou barbeiro profissional com mais de 10 anos de experiência na área. Ao longo da minha trajetória, aperfeiçoei técnicas de corte masculino, barba e acabamento, sempre buscando oferecer um atendimento de qualidade e satisfação aos clientes.<br><br>Tenho experiência em diversos estilos de cortes, desde os mais clássicos e tradicionais até os mais modernos e atuais. Meu compromisso é entender o estilo de cada cliente e entregar um resultado que valorize sua aparência e personalidade.<br><br>Acredito que a barbearia vai além de um simples corte de cabelo — é um espaço de confiança, cuidado e bem-estar.</div>
+        <div class="bcard-bio">Sou barbeiro profissional com mais de 10 anos de experiência na área. Ao longo da minha trajetória, aperfeiçoei técnicas de corte masculino, barba e acabamento, sempre buscando oferecer atendimento de qualidade e satisfação.<br><br>Tenho experiência em cortes clássicos e modernos. Meu compromisso é entender o estilo de cada cliente e entregar um resultado que valorize sua aparência e personalidade.<br><br>A barbearia vai além de um corte — é um espaço de confiança, cuidado e bem-estar.</div>
         <div class="bcard-tags">
           <span class="btag">Degradê</span><span class="btag">Navalha</span>
           <span class="btag">Selagem</span><span class="btag">Barba</span>
@@ -518,58 +385,56 @@ html,body{background:var(--bg);color:var(--white);font-family:'DM Sans',system-u
       </div>
     </div>
     <div class="port-wrap">
-      <div class="port-eyebrow">Portfólio recente</div>
+      <div class="port-lbl">Portfólio recente</div>
       <div class="port-grid">
         <div class="port-item" onclick="openLbox('corte1.jpg')">
           <img src="corte1.jpg" alt="Clássico Fade"/>
-          <div class="port-overlay"><div class="port-lbl">Clássico Fade</div></div>
+          <div class="port-over"><div class="port-plbl">Clássico Fade</div></div>
         </div>
         <div class="port-item" onclick="openLbox('corte2.jpg')">
-          <img src="corte2.jpg" alt="Skin Fade + Risco"/>
-          <div class="port-overlay"><div class="port-lbl">Skin Fade</div></div>
+          <img src="corte2.jpg" alt="Skin Fade"/>
+          <div class="port-over"><div class="port-plbl">Skin Fade</div></div>
         </div>
         <div class="port-item" onclick="openLbox('corte3.jpg')">
           <img src="corte3.jpg" alt="Pompadour"/>
-          <div class="port-overlay"><div class="port-lbl">Pompadour</div></div>
+          <div class="port-over"><div class="port-plbl">Pompadour</div></div>
         </div>
         <div class="port-item" onclick="openLbox('corte4.jpg')">
           <img src="corte4.jpg" alt="Buzz Fade"/>
-          <div class="port-overlay"><div class="port-lbl">Buzz Fade</div></div>
+          <div class="port-over"><div class="port-plbl">Buzz Fade</div></div>
         </div>
       </div>
     </div>
-    <div class="barber-scroll-pad"></div>
+    <div style="height:8px"></div>
   </div>
   <div class="cta-wrap">
-    <button class="btn btn-gold" onclick="goTo('v2')">Agendar com Johnny →</button>
+    <button class="btn btn-g" onclick="goTo('v2')">Agendar com Johnny →</button>
   </div>
 </div>
 
-<!-- ════════════════════
+<!-- ══════════════════
   V2: SERVIÇO
-════════════════════ -->
+══════════════════ -->
 <div class="view" id="v2">
-  <div class="topbar">
-    <div class="back" onclick="goTo('v1')">←</div>
-    <div class="tb-title">Escolha o serviço</div>
+  <div class="tb">
+    <div class="tb-back" onclick="goTo('v1')">←</div>
+    <div class="tb-t">Escolha o serviço</div>
     <img src="logo.jpg" class="tb-logo" alt="logo"/>
   </div>
-  <div class="stepbar"><div class="sb done"></div><div class="sb cur"></div><div class="sb"></div><div class="sb"></div><div class="sb"></div></div>
-  <div class="scroll">
-    <div class="svc-pad" id="svc-list" style="padding-top:4px"></div>
-  </div>
+  <div class="steps"><div class="step d"></div><div class="step c"></div><div class="step"></div><div class="step"></div><div class="step"></div></div>
+  <div class="scroll"><div class="svc-pad" id="svc-list" style="padding-top:4px"></div></div>
 </div>
 
-<!-- ════════════════════
+<!-- ══════════════════
   V3: DATA & HORA
-════════════════════ -->
+══════════════════ -->
 <div class="view" id="v3">
-  <div class="topbar">
-    <div class="back" onclick="goTo('v2')">←</div>
-    <div class="tb-title">Data & horário</div>
+  <div class="tb">
+    <div class="tb-back" onclick="goTo('v2')">←</div>
+    <div class="tb-t">Data & horário</div>
     <img src="logo.jpg" class="tb-logo" alt="logo"/>
   </div>
-  <div class="stepbar"><div class="sb done"></div><div class="sb done"></div><div class="sb cur"></div><div class="sb"></div><div class="sb"></div></div>
+  <div class="steps"><div class="step d"></div><div class="step d"></div><div class="step c"></div><div class="step"></div><div class="step"></div></div>
   <div class="scroll">
     <div class="dt-pad">
       <div class="cal-hdr">
@@ -581,39 +446,39 @@ html,body{background:var(--bg);color:var(--white);font-family:'DM Sans',system-u
       <div id="slots"></div>
     </div>
   </div>
-  <div class="cta-wrap">
-    <button class="btn btn-gold" onclick="nextDT()">Continuar →</button>
-  </div>
+  <div class="cta-wrap"><button class="btn btn-g" onclick="nextDT()">Continuar →</button></div>
 </div>
 
-<!-- ════════════════════
+<!-- ══════════════════
   V4: DADOS
-════════════════════ -->
+══════════════════ -->
 <div class="view" id="v4">
-  <div class="topbar">
-    <div class="back" onclick="goTo('v3')">←</div>
-    <div class="tb-title">Seus dados</div>
+  <div class="tb">
+    <div class="tb-back" onclick="goTo('v3')">←</div>
+    <div class="tb-t">Seus dados</div>
     <img src="logo.jpg" class="tb-logo" alt="logo"/>
   </div>
-  <div class="stepbar"><div class="sb done"></div><div class="sb done"></div><div class="sb done"></div><div class="sb cur"></div><div class="sb"></div></div>
+  <div class="steps"><div class="step d"></div><div class="step d"></div><div class="step d"></div><div class="step c"></div><div class="step"></div></div>
   <div class="scroll">
     <div class="form-pad">
-      <div class="sec-lbl" style="margin-top:4px">Identificação</div>
+      <div class="sec-l" style="margin-top:4px">Identificação</div>
       <div class="field">
-        <span class="field-ico">📱</span>
+        <span class="f-ico">📱</span>
         <input type="tel" id="i-tel" placeholder="(11) 99999-9999" oninput="handleTel(this)" maxlength="15" inputmode="numeric" autocomplete="tel"/>
-        <span class="field-x" id="tel-x" onclick="clearForm()">×</span>
+        <span class="f-x" id="tel-x" onclick="clearF()">×</span>
       </div>
-      <div class="found-box" id="found">✓ Bem-vindo de volta! Dados preenchidos.</div>
+      <!-- lookup status -->
+      <div class="lookup-box lb-found" id="lb-found">✓ Bem-vindo de volta! Dados preenchidos.</div>
+      <div class="lookup-box lb-new" id="lb-new">Novo cliente — complete seus dados abaixo.</div>
       <div class="field">
-        <span class="field-ico">👤</span>
+        <span class="f-ico">👤</span>
         <input type="text" id="i-nome" placeholder="Seu nome completo" autocomplete="name"/>
       </div>
       <div class="field">
-        <span class="field-ico">✉️</span>
+        <span class="f-ico">✉️</span>
         <input type="email" id="i-email" placeholder="seu@email.com" inputmode="email" autocomplete="email"/>
       </div>
-      <div class="sec-lbl">Resumo</div>
+      <div class="sec-l">Resumo</div>
       <div class="sum-card">
         <div class="sum-row"><span class="sum-lbl">Barbeiro</span><span class="sum-val">Johnny Andrade</span></div>
         <div class="sum-row"><span class="sum-lbl">Serviço</span><span class="sum-val" id="r-svc">—</span></div>
@@ -622,99 +487,99 @@ html,body{background:var(--bg);color:var(--white);font-family:'DM Sans',system-u
       </div>
     </div>
   </div>
-  <div class="cta-wrap">
-    <button class="btn btn-gold" onclick="nextData()">Ir para pagamento →</button>
-  </div>
+  <div class="cta-wrap"><button class="btn btn-g" onclick="nextData()">Ir para pagamento →</button></div>
 </div>
 
-<!-- ════════════════════
+<!-- ══════════════════
   V5: CHECKOUT
-════════════════════ -->
+══════════════════ -->
 <div class="view" id="v5">
-  <div class="topbar">
-    <div class="back" onclick="goTo('v4')">←</div>
-    <div class="tb-title">Confirmar reserva</div>
+  <div class="tb">
+    <div class="tb-back" onclick="goTo('v4')">←</div>
+    <div class="tb-t">Confirmar reserva</div>
     <img src="logo.jpg" class="tb-logo" alt="logo"/>
   </div>
-  <div class="stepbar"><div class="sb done"></div><div class="sb done"></div><div class="sb done"></div><div class="sb done"></div><div class="sb cur"></div></div>
+  <div class="steps"><div class="step d"></div><div class="step d"></div><div class="step d"></div><div class="step d"></div><div class="step c"></div></div>
   <div class="scroll">
     <div class="co-pad">
-      <div class="policy-box">
-        <div class="policy-title">⚠ Política de cancelamento</div>
-        <div class="policy-body">O sinal <strong>não é reembolsável</strong> sem aviso prévio de 24h. Com aviso, o valor é aproveitado no reagendamento. Não compareceu sem avisar = perda do valor.</div>
+      <div class="pol-box">
+        <div class="pol-t">⚠ Política de cancelamento</div>
+        <div class="pol-b">O sinal <strong>não é reembolsável</strong> sem aviso de 24h. Com aviso, o valor é aproveitado no reagendamento. Não compareceu sem avisar = perda do valor.</div>
       </div>
-      <div class="charge-card">
-        <div class="charge-row"><span>Valor total</span><span style="color:var(--white);font-weight:500" id="c-tot">—</span></div>
-        <div class="charge-row"><span>Sinal de reserva (30%)</span><span style="color:var(--gold2);font-weight:500" id="c-sin">—</span></div>
-        <div class="charge-row"><span>Restante no balcão</span><span id="c-res">—</span></div>
-        <hr class="charge-divider"/>
+      <div class="charge">
+        <div class="ch-row"><span>Valor total</span><span style="color:var(--w);font-weight:500" id="c-tot">—</span></div>
+        <div class="ch-row"><span>Sinal de reserva (30%)</span><span style="color:var(--gold);font-weight:500" id="c-sin">—</span></div>
+        <div class="ch-row"><span>Restante no balcão</span><span id="c-res">—</span></div>
+        <hr class="ch-div"/>
         <div style="display:flex;justify-content:space-between;align-items:baseline">
-          <span class="charge-lbl">Cobrar agora</span>
-          <span class="charge-total" id="c-now">—</span>
+          <span class="ch-lbl">Cobrar agora</span>
+          <span class="ch-val" id="c-now">—</span>
         </div>
       </div>
-      <div class="sec-lbl" style="margin-top:0">Forma de pagamento</div>
+      <div class="sec-l" style="margin-top:0">Forma de pagamento</div>
       <div class="pay-grid">
         <div class="pay-opt sel" id="pp" onclick="selPay('pix')">
-          <div class="pay-ico">📲</div>
-          <div class="pay-name">Pix</div>
-          <div class="pay-sub">Imediato</div>
+          <div class="p-ico">📲</div><div class="p-name">Pix</div><div class="p-sub">Imediato</div>
         </div>
         <div class="pay-opt" id="pc" onclick="selPay('card')">
-          <div class="pay-ico">💳</div>
-          <div class="pay-name">Cartão</div>
-          <div class="pay-sub">Crédito ou débito</div>
+          <div class="p-ico">💳</div><div class="p-name">Cartão</div><div class="p-sub">Crédito ou débito</div>
         </div>
       </div>
       <div id="pix-sec">
         <div class="pix-card">
-          <div style="font-size:9px;color:var(--gray);letter-spacing:.18em;text-transform:uppercase">Chave Pix</div>
+          <div style="font-size:9px;color:var(--w4);letter-spacing:.18em;text-transform:uppercase">Chave Pix</div>
           <div class="pix-key">(11) 99999-9999</div>
           <a href="https://wa.me/5511999999999" target="_blank" class="pix-wa">↗ Enviar comprovante via WhatsApp</a>
         </div>
       </div>
       <div id="card-sec" style="display:none">
-        <div class="field"><span class="field-ico">💳</span><input type="text" placeholder="Número do cartão" inputmode="numeric"/></div>
+        <div class="field"><span class="f-ico">💳</span><input type="text" placeholder="Número do cartão" inputmode="numeric"/></div>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
           <div class="field"><input type="text" placeholder="MM/AA"/></div>
           <div class="field"><input type="text" placeholder="CVV" inputmode="numeric"/></div>
         </div>
       </div>
-      <div class="agree-row">
+      <div class="agree">
         <input type="checkbox" id="chk"/>
         <label for="chk">Li e concordo com a política de cancelamento. Entendo que o sinal não é reembolsável sem aviso de 24 horas.</label>
       </div>
-      <button class="btn btn-gold" onclick="confirmar()">✦ &nbsp;Confirmar e pagar sinal</button>
-      <p style="text-align:center;font-size:11px;color:var(--gray);margin-top:14px;letter-spacing:.03em">Pagamento seguro · Confirmação por WhatsApp</p>
+      <button class="btn btn-g" onclick="confirmar()">✦ &nbsp;Confirmar e pagar sinal</button>
+      <p style="text-align:center;font-size:11px;color:var(--w4);margin-top:13px;letter-spacing:.03em">Pagamento seguro · Confirmação por WhatsApp</p>
     </div>
   </div>
 </div>
 
-<!-- ════════════════════
+<!-- ══════════════════
   V6: SUCESSO
-════════════════════ -->
+══════════════════ -->
 <div class="view" id="v6">
-  <div class="ok-wrap">
+  <div class="ok">
     <div class="ok-ring">✓</div>
-    <div class="ok-eyebrow">Reserva confirmada</div>
-    <div class="ok-title">Até já!</div>
-    <div class="ok-sub">Sinal recebido. Confirmação pelo<br><strong style="color:var(--white)">WhatsApp</strong> em instantes.<br>Chegue 5 minutinhos antes. ✦</div>
+    <div class="ok-ey">Reserva confirmada</div>
+    <div class="ok-ttl">Até já!</div>
+    <div class="ok-sub">Sinal recebido com sucesso.<br>Confirmação pelo <strong style="color:var(--w)">WhatsApp</strong> em instantes.<br>Chegue 5 minutinhos antes. ✦</div>
     <div class="sum-card" style="width:100%;margin-bottom:22px">
       <div class="sum-row"><span class="sum-lbl">Barbeiro</span><span class="sum-val">Johnny Andrade</span></div>
       <div class="sum-row"><span class="sum-lbl">Serviço</span><span class="sum-val" id="ok-svc">—</span></div>
       <div class="sum-row"><span class="sum-lbl">Data & hora</span><span class="sum-val" id="ok-dt">—</span></div>
-      <div class="sum-row"><span class="sum-lbl">Sinal pago</span><span class="sum-val" style="color:var(--gold2)" id="ok-sin">—</span></div>
+      <div class="sum-row"><span class="sum-lbl">Sinal pago</span><span class="sum-val" style="color:var(--gold)" id="ok-sin">—</span></div>
     </div>
-    <button class="btn btn-gold" onclick="goTo('v0')">← Novo agendamento</button>
+    <button class="btn btn-g" onclick="goTo('v0')">← Novo agendamento</button>
   </div>
 </div>
 
-<!-- WhatsApp Float -->
-<a href="https://wa.me/5511999999999" target="_blank" class="wa-btn">💬</a>
+<a href="https://wa.me/5511999999999" target="_blank" class="wa">💬</a>
 
-</div><!-- .app -->
-
+</div>
 <script>
+/* ══ CONFIG SUPABASE ══
+   Substitua as duas linhas abaixo quando tiver a conta criada:
+   SUPABASE_URL = 'https://SEU-PROJETO.supabase.co'
+   SUPABASE_KEY = 'sua-anon-key-aqui'
+*/
+const SUPABASE_URL = '';
+const SUPABASE_KEY = '';
+
 const SVCS=[
   {n:'Corte masculino',d:'45 min',v:45},
   {n:'Corte & barba',d:'1h',v:65},
@@ -725,7 +590,13 @@ const SVCS=[
   {n:'Combo completo',d:'2h 30min',v:160},
 ];
 const MOS=['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
-const DB={'11953826351':{n:'Carlos Silva',e:'carlos@email.com'},'11988887777':{n:'Rafael Souza',e:'rafa@email.com'}};
+
+/* Fallback local enquanto Supabase não está configurado */
+const LOCAL_DB={
+  '11953826351':{nome:'Carlos Silva',email:'carlos@email.com'},
+  '11988887777':{nome:'Rafael Souza',email:'rafa@email.com'}
+};
+
 let CS={svc:null,price:0,date:'',hour:''};
 let calY=2026,calM=5,selDay=null;
 
@@ -735,18 +606,15 @@ function goTo(id){
   window.scrollTo(0,0);
 }
 
-// SERVICES
+/* ── SERVICES ── */
 (function(){
-  const el=document.getElementById('svc-list');
-  el.innerHTML=SVCS.map((s,i)=>`
-    <div class="svc-item" id="si${i}" onclick="selSvc(${i},this)">
-      <div class="svc-left">
-        <div class="svc-name">${s.n}</div>
-        <div class="svc-dur">${s.d}</div>
-      </div>
-      <div class="svc-price">R$ ${s.v}</div>
-      <div class="svc-chk" id="sc${i}"></div>
-    </div>`).join('');
+  document.getElementById('svc-list').innerHTML=
+    SVCS.map((s,i)=>`
+      <div class="svc-item" id="si${i}" onclick="selSvc(${i},this)">
+        <div class="svc-info"><div class="svc-name">${s.n}</div><div class="svc-dur">${s.d}</div></div>
+        <div class="svc-val">R$&nbsp;${s.v}</div>
+        <div class="svc-chk" id="sc${i}"></div>
+      </div>`).join('');
 })();
 
 function selSvc(i,el){
@@ -754,42 +622,40 @@ function selSvc(i,el){
   document.querySelectorAll('.svc-chk').forEach(e=>e.classList.remove('sel'));
   el.classList.add('sel');
   document.getElementById('sc'+i).classList.add('sel');
-  CS.svc=SVCS[i].n;CS.price=SVCS[i].v;
-  setTimeout(()=>goTo('v3'),300);
+  CS.svc=SVCS[i].n; CS.price=SVCS[i].v;
+  setTimeout(()=>goTo('v3'),290);
 }
 
-// CAL
+/* ── CALENDAR ── */
 function buildCal(){
   document.getElementById('cal-m').textContent=MOS[calM]+' '+calY;
   const first=new Date(calY,calM,1).getDay();
   const tot=new Date(calY,calM+1,0).getDate();
-  const t=new Date();t.setHours(0,0,0,0);
+  const t=new Date(); t.setHours(0,0,0,0);
   let h=['D','S','T','Q','Q','S','S'].map(d=>`<div class="cal-dow">${d}</div>`).join('');
-  for(let i=0;i<first;i++)h+=`<div class="cday empty"></div>`;
+  for(let i=0;i<first;i++) h+=`<div class="cday empty"></div>`;
   for(let d=1;d<=tot;d++){
     const dt=new Date(calY,calM,d);
-    const past=dt<t;
-    const isT=dt.toDateString()===t.toDateString();
-    const isSel=d===selDay&&calM===5&&calY===2026;
-    h+=`<div class="cday${past?' past':''}${isT?' today':''}${isSel?' sel':''}" ${past?'':'onclick="pickDay('+d+')"'}>${d}</div>`;
+    const p=dt<t, isT=dt.toDateString()===t.toDateString(), sel=d===selDay&&calM===5&&calY===2026;
+    h+=`<div class="cday${p?' past':''}${isT?' today':''}${sel?' sel':''}" ${p?'':'onclick="pickDay('+d+')"'}>${d}</div>`;
   }
   document.getElementById('cal-grid').innerHTML=h;
   buildSlots();
 }
-function pickDay(d){selDay=d;CS.date=`${d} de ${MOS[calM]} de ${calY}`;buildCal();}
-function calNav(dir){calM+=dir;if(calM>11){calM=0;calY++;}if(calM<0){calM=11;calY--;}buildCal();}
+function pickDay(d){selDay=d; CS.date=`${d} de ${MOS[calM]} de ${calY}`; buildCal();}
+function calNav(d){calM+=d; if(calM>11){calM=0;calY++;} if(calM<0){calM=11;calY--;} buildCal();}
 function buildSlots(){
-  if(!selDay){document.getElementById('slots').innerHTML='<div style="font-size:13px;color:var(--gray);padding:6px 0">Selecione uma data acima.</div>';return;}
+  if(!selDay){document.getElementById('slots').innerHTML='<div style="font-size:13px;color:var(--w4);padding:6px 0">Selecione uma data acima.</div>';return;}
   const ps={'Manhã':['09:00','09:30','10:00','10:30','11:00','11:30'],'Tarde':['14:00','14:30','15:00','15:30','16:00','16:30'],'Noite':['19:00','19:30','20:00','20:30']};
   let h='';
   for(const[p,ts] of Object.entries(ps)){
-    h+=`<div class="slot-sec"><div class="slot-lbl">${p}</div><div class="slot-grid">`;
-    ts.forEach(t=>{h+=`<div class="slot${CS.hour===t?' sel':''}" onclick="pickSlot('${t}')">${t}</div>`;});
+    h+=`<div class="sl-sec"><div class="sl-lbl">${p}</div><div class="sl-grid">`;
+    ts.forEach(t=>{ h+=`<div class="sl${CS.hour===t?' sel':''}" onclick="pickSlot('${t}')">${t}</div>`; });
     h+=`</div></div>`;
   }
   document.getElementById('slots').innerHTML=h;
 }
-function pickSlot(t){CS.hour=t;buildSlots();}
+function pickSlot(t){CS.hour=t; buildSlots();}
 function nextDT(){
   if(!selDay||!CS.hour){alert('Selecione data e horário para continuar.');return;}
   document.getElementById('r-svc').textContent=CS.svc;
@@ -798,31 +664,74 @@ function nextDT(){
   goTo('v4');
 }
 
-// PHONE
+/* ── PHONE + SUPABASE LOOKUP ── */
 function phoneMask(v){
   let d=v.replace(/\D/g,'').slice(0,11);
-  if(!d)return'';
-  if(d.length<=2)return'('+d;
-  if(d.length<=7)return'('+d.slice(0,2)+') '+d.slice(2);
-  return'('+d.slice(0,2)+') '+d.slice(2,7)+'-'+d.slice(7);
+  if(!d) return '';
+  if(d.length<=2) return '('+d;
+  if(d.length<=7) return '('+d.slice(0,2)+') '+d.slice(2);
+  return '('+d.slice(0,2)+') '+d.slice(2,7)+'-'+d.slice(7);
 }
+
+let lookupTimer=null;
 function handleTel(inp){
   const raw=inp.value.replace(/\D/g,'');
   inp.value=phoneMask(inp.value);
   document.getElementById('tel-x').style.display=raw.length?'block':'none';
+  hideLookup();
+  clearTimeout(lookupTimer);
   if(raw.length>=11){
-    const f=DB[raw];
-    if(f){document.getElementById('i-nome').value=f.n;document.getElementById('i-email').value=f.e;document.getElementById('found').style.display='block';}
-    else document.getElementById('found').style.display='none';
-  } else document.getElementById('found').style.display='none';
+    lookupTimer=setTimeout(()=>lookupClient(raw),400);
+  }
 }
-function clearForm(){
-  ['i-tel','i-nome','i-email'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});
-  document.getElementById('found').style.display='none';
+
+function hideLookup(){
+  document.getElementById('lb-found').style.display='none';
+  document.getElementById('lb-new').style.display='none';
+}
+
+async function lookupClient(raw){
+  /* 1. Tenta Supabase se configurado */
+  if(SUPABASE_URL && SUPABASE_KEY){
+    try{
+      const res=await fetch(
+        `${SUPABASE_URL}/rest/v1/clientes?telefone=eq.${raw}&select=nome,email&limit=1`,
+        {headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+SUPABASE_KEY}}
+      );
+      const data=await res.json();
+      if(data && data.length>0){
+        fillClient(data[0].nome, data[0].email);
+        return;
+      }
+      /* cliente não encontrado no Supabase */
+      document.getElementById('lb-new').style.display='block';
+      return;
+    }catch(e){
+      console.warn('Supabase offline, usando fallback local');
+    }
+  }
+  /* 2. Fallback local */
+  const f=LOCAL_DB[raw];
+  if(f){ fillClient(f.nome, f.email); }
+  else { document.getElementById('lb-new').style.display='block'; }
+}
+
+function fillClient(nome, email){
+  document.getElementById('i-nome').value=nome;
+  document.getElementById('i-email').value=email;
+  document.getElementById('lb-found').style.display='block';
+}
+
+function clearF(){
+  ['i-tel','i-nome','i-email'].forEach(id=>{ const e=document.getElementById(id); if(e) e.value=''; });
+  hideLookup();
   document.getElementById('tel-x').style.display='none';
 }
+
 function nextData(){
-  if(!document.getElementById('i-tel').value||!document.getElementById('i-nome').value){alert('Preencha celular e nome para continuar.');return;}
+  if(!document.getElementById('i-tel').value||!document.getElementById('i-nome').value){
+    alert('Preencha celular e nome para continuar.'); return;
+  }
   const sin=Math.ceil(CS.price*.3);
   document.getElementById('c-tot').textContent='R$ '+CS.price+',00';
   document.getElementById('c-sin').textContent='R$ '+sin+',00';
@@ -830,6 +739,8 @@ function nextData(){
   document.getElementById('c-now').textContent='R$ '+sin+',00';
   goTo('v5');
 }
+
+/* ── PAY & CONFIRM ── */
 function selPay(p){
   document.getElementById('pp').classList.toggle('sel',p==='pix');
   document.getElementById('pc').classList.toggle('sel',p==='card');
@@ -844,8 +755,11 @@ function confirmar(){
   document.getElementById('ok-sin').textContent='R$ '+sin+',00';
   goTo('v6');
 }
-function openLbox(src){document.getElementById('lbox-img').src=src;document.getElementById('lbox').classList.add('on');}
+
+/* ── LIGHTBOX ── */
+function openLbox(src){document.getElementById('lbox-img').src=src; document.getElementById('lbox').classList.add('on');}
 function closeLbox(){document.getElementById('lbox').classList.remove('on');}
+
 buildCal();
 </script>
 </body>
