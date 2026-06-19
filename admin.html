@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="theme-color" content="#000">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Admin — Dom da Navalha">
+<link rel="apple-touch-icon" href="logo.jpg">
+<link rel="manifest" href="manifest.json">
+<title>Admin — Dom da Navalha</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+*::-webkit-scrollbar{width:0;height:0}
+html,body{background:#000;color:#fff;font-family:'DM Sans',system-ui,sans-serif;font-size:13px;min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+:root{
+  --bg:#000;--bg2:#0f0f0f;--bg3:#1a1a1a;--bg4:#222;
+  --w:#fff;--w2:#e0e0e0;--w3:#888;--w4:#444;
+  --line:#222;--line2:#333;
+  --gold:#C9A84C;--gdim:rgba(201,168,76,.1);--gbr:rgba(201,168,76,.2);
+  --grn:#22c55e;--grn-d:rgba(34,197,94,.08);--grn-b:rgba(34,197,94,.2);
+  --red:#ef4444;--red-d:rgba(239,68,68,.08);--red-b:rgba(239,68,68,.2);
+  --amb:#f59e0b;--amb-d:rgba(245,158,11,.08);--amb-b:rgba(245,158,11,.2);
+  --blu:#3b82f6;--blu-d:rgba(59,130,246,.08);--blu-b:rgba(59,130,246,.2);
+}
+
+/* ═══ LAYOUT ═══ */
+.app{display:flex;min-height:100vh;background:var(--bg)}
+
+/* ═══ LOGIN ═══ */
+.login-wrap{display:flex;align-items:center;justify-content:center;min-height:100vh;width:100%;padding:20px;background:var(--bg)}
+.login-box{background:var(--bg2);border:1px solid var(--line2);border-radius:18px;padding:28px 24px;width:100%;max-width:320px}
+.login-logo{width:72px;height:72px;object-fit:contain;display:block;margin:0 auto 16px;border-radius:14px}
+.login-title{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:600;color:var(--w);text-align:center;margin-bottom:4px}
+.login-sub{font-size:11px;color:var(--w4);text-align:center;margin-bottom:22px}
+.l-lbl{font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--w4);margin-bottom:5px}
+.l-inp{width:100%;background:var(--bg3);border:1px solid var(--line2);border-radius:9px;padding:12px 14px;color:var(--w);font-family:'DM Sans',sans-serif;font-size:13px;outline:none;margin-bottom:10px;transition:border .2s}
+.l-inp:focus{border-color:var(--w4)}
+.l-err{font-size:11px;color:var(--red);text-align:center;min-height:16px;margin-bottom:8px}
+.l-btn{width:100%;padding:13px;border:none;border-radius:10px;background:var(--w);color:var(--bg);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;letter-spacing:.05em;text-transform:uppercase}
+.l-btn:active{opacity:.9;transform:scale(.98)}
+.l-hints{margin-top:16px;background:var(--bg3);border:1px solid var(--line);border-radius:9px;padding:10px 12px}
+.l-hint-lbl{font-size:8px;letter-spacing:.15em;text-transform:uppercase;color:var(--w4);margin-bottom:8px}
+.l-hint{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--line);cursor:pointer}
+.l-hint:last-child{border:none;padding-bottom:0}
+.l-hint:hover .l-hint-name{color:var(--w)}
+.l-hint-name{font-size:11px;font-weight:500;color:var(--w2);transition:color .15s}
+.l-hint-role{font-size:10px;color:var(--w4)}
+.l-hint-use{font-size:9px;padding:2px 8px;border-radius:4px;background:var(--bg4);border:1px solid var(--line2);color:var(--w3)}
+
+/* ═══ SIDEBAR ═══ */
+.sidebar{width:200px;background:var(--bg2);border-right:1px solid var(--line);display:flex;flex-direction:column;flex-shrink:0;min-height:100vh;position:sticky;top:0;height:100vh;overflow-y:auto}
+.sb-top{padding:16px 14px 12px;border-bottom:1px solid var(--line)}
+.sb-logo{width:40px;height:40px;object-fit:contain;border-radius:9px;margin-bottom:8px;display:block}
+.sb-biz{font-size:13px;font-weight:500;color:var(--w);line-height:1.2}
+.sb-role{font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--w4);margin-top:2px}
+.sb-nav{flex:1;padding:8px 0}
+.sb-section{font-size:8px;letter-spacing:.16em;text-transform:uppercase;color:var(--w4);padding:10px 14px 4px}
+.nav-item{display:flex;align-items:center;gap:9px;padding:10px 14px;cursor:pointer;color:var(--w3);transition:all .15s;border-left:2px solid transparent;font-size:12px;font-weight:400}
+.nav-item:hover{color:var(--w2);background:rgba(255,255,255,.03)}
+.nav-item.active{color:var(--w);background:rgba(255,255,255,.05);border-left-color:var(--w)}
+.nav-icon{font-size:15px;flex-shrink:0;width:18px;text-align:center}
+.sb-bot{border-top:1px solid var(--line);padding:12px 14px}
+.sb-plan{background:var(--bg3);border:1px solid var(--line2);border-radius:8px;padding:8px 10px;margin-bottom:8px}
+.sb-plan-name{font-size:11px;font-weight:500;color:var(--w)}
+.sb-plan-info{font-size:10px;color:var(--w4);margin-top:1px}
+.sb-out{width:100%;padding:8px;border-radius:7px;border:1px solid var(--line2);background:transparent;color:var(--w4);font-size:11px;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .15s}
+.sb-out:hover{border-color:var(--red-b);color:var(--red)}
+
+/* ═══ MAIN ═══ */
+.main{flex:1;min-width:0;display:flex;flex-direction:column;min-height:100vh}
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:12px 20px;border-bottom:1px solid var(--line);background:var(--bg2);flex-shrink:0;position:sticky;top:0;z-index:10}
+.tb-title{font-size:14px;font-weight:500;color:var(--w)}
+.tb-right{display:flex;align-items:center;gap:8px}
+.tb-av{width:28px;height:28px;border-radius:50%;background:var(--bg3);border:1px solid var(--line2);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:500;color:var(--w2)}
+.tb-badge{font-size:9px;padding:3px 8px;border-radius:4px;background:rgba(255,255,255,.06);border:1px solid var(--line2);color:var(--w3)}
+
+/* ═══ PAGES ═══ */
+.page{display:none;padding:16px 20px 40px;overflow-y:auto;flex:1}
+.page.on{display:block;animation:fu .22s ease both}
+@keyframes fu{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+/* ═══ COMPONENTS ═══ */
+.sec-lbl{font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--w3);margin-bottom:10px;margin-top:20px}
+.sec-lbl:first-child{margin-top:0}
+
+/* METRICS GRID */
+.met-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:16px}
+.met-grid-2{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:16px}
+.met{background:var(--bg2);border:1px solid var(--line);border-radius:12px;padding:14px}
+.met-lbl{font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--w4);margin-bottom:6px}
+.met-val{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:600;color:var(--w);line-height:1}
+.met-sub{font-size:10px;color:var(--w4);margin-top:4px}
+.met.grn .met-val{color:var(--grn)}
+.met.red .met-val{color:var(--red)}
+.met.amb .met-val{color:var(--amb)}
+.met.gold .met-val{color:var(--gold)}
+
+/* CARDS */
+.card{background:var(--bg2);border:1px solid var(--line);border-radius:12px;margin-bottom:12px;overflow:hidden}
+.card-head{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;border-bottom:1px solid var(--line)}
+.card-title{font-size:12px;font-weight:500;color:var(--w)}
+.card-body{padding:12px 14px}
+
+/* TABLE */
+.tbl-wrap{background:var(--bg2);border:1px solid var(--line);border-radius:12px;overflow:hidden;margin-bottom:12px}
+.tbl-head{display:flex;align-items:center;justify-content:space-between;padding:11px 14px;border-bottom:1px solid var(--line)}
+.tbl-title{font-size:12px;font-weight:500;color:var(--w)}
+table{width:100%;border-collapse:collapse;table-layout:fixed}
+th{font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:var(--w4);padding:8px 12px;text-align:left;border-bottom:1px solid var(--line);font-weight:400;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+td{padding:9px 12px;font-size:11px;color:var(--w3);border-bottom:1px solid var(--line);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+tr:last-child td{border:none}
+tr:hover td{background:rgba(255,255,255,.02);cursor:pointer}
+.td-name{color:var(--w);font-weight:500}
+
+/* PILLS */
+.pill{font-size:9px;padding:3px 8px;border-radius:20px;font-weight:500;white-space:nowrap;display:inline-block}
+.p-grn{background:var(--grn-d);color:var(--grn);border:1px solid var(--grn-b)}
+.p-red{background:var(--red-d);color:var(--red);border:1px solid var(--red-b)}
+.p-amb{background:var(--amb-d);color:var(--amb);border:1px solid var(--amb-b)}
+.p-blu{background:var(--blu-d);color:var(--blu);border:1px solid var(--blu-b)}
+.p-gray{background:rgba(255,255,255,.05);color:var(--w3);border:1px solid var(--line2)}
+
+/* BUTTONS */
+.btn{padding:8px 14px;border:none;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:11px;font-weight:500;cursor:pointer;display:inline-flex;align-items:center;gap:5px;transition:all .15s;letter-spacing:.04em}
+.btn-w{background:var(--w);color:var(--bg)}
+.btn-w:active{opacity:.9}
+.btn-ghost{background:transparent;border:1px solid var(--line2);color:var(--w3)}
+.btn-ghost:hover{border-color:var(--w3);color:var(--w)}
+.btn-red{background:var(--red-d);border:1px solid var(--red-b);color:var(--red)}
+.btn-grn{background:var(--grn-d);border:1px solid var(--grn-b);color:var(--grn)}
+
+/* FILTERS */
+.filters{display:flex;align-items:center;gap:6px;margin-bottom:12px;flex-wrap:wrap}
+.filter-sel{background:var(--bg2);border:1px solid var(--line2);border-radius:7px;padding:6px 10px;color:var(--w3);font-family:'DM Sans',sans-serif;font-size:11px;outline:none;cursor:pointer}
+.filter-inp{background:var(--bg2);border:1px solid var(--line2);border-radius:7px;padding:6px 10px;color:var(--w);font-family:'DM Sans',sans-serif;font-size:11px;outline:none;flex:1;min-width:120px}
+.filter-inp::placeholder{color:var(--w4)}
+.filter-inp:focus{border-color:var(--w4)}
+
+/* CALENDAR MINI */
+.cal-mini{background:var(--bg2);border:1px solid var(--line);border-radius:12px;padding:14px;margin-bottom:12px}
+.cal-mini-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.cal-mini-m{font-family:'Cormorant Garamond',serif;font-size:16px;font-weight:600;color:var(--w)}
+.cal-mini-nav{width:28px;height:28px;border-radius:50%;background:var(--bg3);border:1px solid var(--line2);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:13px;color:var(--w3)}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;text-align:center}
+.cal-dow{font-size:8px;letter-spacing:.06em;text-transform:uppercase;color:var(--w4);padding:2px 0 7px}
+.cday{aspect-ratio:1;display:flex;align-items:center;justify-content:center;border-radius:6px;font-size:11px;cursor:pointer;transition:all .15s;color:var(--w3);position:relative}
+.cday:hover:not(.past):not(.empty){background:var(--bg3)}
+.cday.today{color:var(--w);font-weight:700}
+.cday.sel{background:var(--w);color:var(--bg);font-weight:700;border-radius:50%}
+.cday.past{color:var(--line2);cursor:default}
+.cday.has-appt::after{content:'';position:absolute;bottom:1px;left:50%;transform:translateX(-50%);width:3px;height:3px;border-radius:50%;background:var(--grn)}
+.cday.sel.has-appt::after{background:var(--bg)}
+
+/* APPT CARDS */
+.appt{background:var(--bg3);border:1px solid var(--line2);border-radius:9px;padding:10px 12px;margin-bottom:7px;display:flex;align-items:flex-start;gap:10px}
+.appt-time{font-size:12px;font-weight:500;color:var(--w);min-width:38px;flex-shrink:0;padding-top:1px;font-family:'Cormorant Garamond',serif}
+.appt-body{flex:1;min-width:0}
+.appt-name{font-size:12px;font-weight:500;color:var(--w)}
+.appt-meta{font-size:10px;color:var(--w4);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.appt-actions{display:flex;gap:4px;flex-shrink:0;flex-wrap:wrap;justify-content:flex-end}
+.appt-btn{font-size:9px;padding:3px 7px;border-radius:5px;cursor:pointer;border:1px solid var(--line2);background:var(--bg4);color:var(--w3);transition:all .12s;white-space:nowrap;font-family:'DM Sans',sans-serif}
+.appt-btn:hover{border-color:var(--w3);color:var(--w)}
+.appt-btn.ok{border-color:var(--grn-b);background:var(--grn-d);color:var(--grn)}
+.appt-btn.no{border-color:var(--red-b);background:var(--red-d);color:var(--red)}
+
+/* DAY SUMMARY */
+.day-sum{background:rgba(255,255,255,.04);border:1px solid var(--line2);border-radius:9px;padding:10px 12px;margin-bottom:10px;display:grid;grid-template-columns:repeat(3,1fr);gap:8px;text-align:center}
+.ds-val{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:600;color:var(--w)}
+.ds-lbl{font-size:9px;color:var(--w4);margin-top:1px;letter-spacing:.06em;text-transform:uppercase}
+
+/* TOGGLE */
+.tog{width:34px;height:19px;background:var(--line2);border-radius:10px;cursor:pointer;position:relative;transition:background .2s;display:inline-block;vertical-align:middle;flex-shrink:0}
+.tog.on{background:var(--grn)}
+.tog::after{content:'';position:absolute;top:2px;left:2px;width:15px;height:15px;background:var(--w);border-radius:50%;transition:transform .2s}
+.tog.on::after{transform:translateX(15px)}
+
+/* MODAL */
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:100;display:none;align-items:center;justify-content:center;padding:20px}
+.modal-bg.on{display:flex}
+.modal{background:var(--bg2);border:1px solid var(--line2);border-radius:16px;width:100%;max-width:400px;max-height:90vh;overflow-y:auto}
+.modal-top{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border-bottom:1px solid var(--line);position:sticky;top:0;background:var(--bg2);z-index:1}
+.modal-title{font-size:13px;font-weight:500;color:var(--w)}
+.modal-x{width:26px;height:26px;border-radius:50%;background:var(--bg3);border:1px solid var(--line2);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:15px;color:var(--w3)}
+.modal-body{padding:16px}
+.m-field{margin-bottom:12px}
+.m-lbl{font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:var(--w4);margin-bottom:5px}
+.m-inp{width:100%;background:var(--bg3);border:1px solid var(--line2);border-radius:8px;padding:10px 12px;color:var(--w);font-family:'DM Sans',sans-serif;font-size:13px;outline:none;transition:border .2s}
+.m-inp:focus{border-color:var(--w4)}
+.m-sel{width:100%;background:var(--bg3);border:1px solid var(--line2);border-radius:8px;padding:10px 12px;color:var(--w);font-family:'DM Sans',sans-serif;font-size:13px;outline:none}
+.m-btn{width:100%;padding:12px;border:none;border-radius:9px;background:var(--w);color:var(--bg);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;margin-top:4px}
+.m-btn:active{opacity:.9}
+.info-box{background:var(--bg3);border:1px solid var(--line2);border-radius:8px;padding:10px 12px;font-size:11px;color:var(--w4);line-height:1.6;margin-bottom:10px}
+.warn-box{background:var(--amb-d);border:1px solid var(--amb-b);border-radius:8px;padding:10px 12px;font-size:11px;color:var(--amb);line-height:1.6;margin-bottom:10px}
+
+/* CLIENT MODAL */
+.cli-stat{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:12px}
+.cs-box{background:var(--bg3);border-radius:8px;padding:8px;text-align:center}
+.cs-val{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:600;color:var(--w)}
+.cs-lbl{font-size:9px;color:var(--w4);margin-top:1px}
+.hist-row{display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid var(--line)}
+.hist-row:last-child{border:none}
+.hist-dot{width:5px;height:5px;border-radius:50%;background:var(--w3);flex-shrink:0}
+.hist-body{flex:1;min-width:0}
+.hist-svc{font-size:11px;font-weight:500;color:var(--w)}
+.hist-meta{font-size:10px;color:var(--w4);margin-top:1px}
+
+/* SVC BARS */
+.svc-bar-row{display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid var(--line)}
+.svc-bar-row:last-child{border:none}
+.svc-bar-name{font-size:10px;color:var(--w3);width:110px;flex-shrink:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.svc-bar-wrap{flex:1;background:var(--bg3);border-radius:2px;height:5px;overflow:hidden}
+.svc-bar-fill{height:100%;background:var(--w3);border-radius:2px;opacity:.7}
+.svc-bar-val{font-size:10px;color:var(--w3);width:40px;text-align:right;flex-shrink:0}
+
+/* TIME BLOCKS */
+.time-block-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:5px;margin-bottom:10px}
+.tblock{background:var(--bg3);border:1px solid var(--line2);border-radius:7px;padding:8px 4px;text-align:center;font-size:11px;cursor:pointer;color:var(--w3);transition:all .15s}
+.tblock.blocked{background:var(--red-d);border-color:var(--red-b);color:var(--red)}
+.tblock.booked{background:rgba(255,255,255,.04);border-color:var(--line2);color:var(--w4);cursor:default;opacity:.5}
+.tblock:hover:not(.blocked):not(.booked){background:var(--bg4);border-color:var(--line2)}
+
+/* ALERTS */
+.alert-row{display:flex;align-items:flex-start;gap:10px;padding:9px 0;border-bottom:1px solid var(--line)}
+.alert-row:last-child{border:none}
+.alert-icon{width:30px;height:30px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+.alert-body{flex:1;min-width:0}
+.alert-title{font-size:11px;font-weight:500;color:var(--w);margin-bottom:2px}
+.alert-sub{font-size:10px;color:var(--w4);line-height:1.4}
+</style>
+</head>
+<body>
+<div class="app" id="app">
+
+<!-- ═══ LOGIN ═══ -->
+<div class="login-wrap" id="login-wrap">
+  <div class="login-box">
+    <img src="logo.jpg" class="login-logo" alt="Dom da Navalha"/>
+    <div class="login-title">Dom da Navalha</div>
+    <div class="login-sub">Área restrita · Gestão</div>
+    <div class="l-lbl">Usuário</div>
+    <input class="l-inp" id="l-u" type="text" placeholder="seu usuário" autocomplete="off" onkeydown="if(event.key==='Enter')doLogin()"/>
+    <div class="l-lbl">Senha</div>
+    <input class="l-inp" id="l-p" type="password" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()"/>
+    <div class="l-err" id="l-err"></div>
+    <button class="l-btn" onclick="doLogin()">Entrar</button>
+    <div class="l-hints">
+      <div class="l-hint-lbl">Acesso rápido</div>
+      <div class="l-hint" onclick="fill('johnny','4321')">
+        <div><div class="l-hint-name">Johnny Andrade</div><div class="l-hint-role">Master Barber · Fundador</div></div>
+        <span class="l-hint-use">Usar</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ MODAL: CLIENTE ═══ -->
+<div class="modal-bg" id="modal-cli">
+  <div class="modal">
+    <div class="modal-top"><div class="modal-title" id="m-cli-title">Cliente</div><div class="modal-x" onclick="closeModal('modal-cli')">×</div></div>
+    <div class="modal-body">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
+        <div style="width:40px;height:40px;border-radius:50%;background:var(--bg3);border:1px solid var(--line2);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:500;color:var(--w);flex-shrink:0" id="m-cli-av">JA</div>
+        <div><div style="font-size:14px;font-weight:500;color:var(--w)" id="m-cli-name">—</div><div style="font-size:11px;color:var(--w4);margin-top:1px" id="m-cli-tel">—</div><div style="font-size:11px;color:var(--w4)" id="m-cli-email">—</div></div>
+      </div>
+      <div class="cli-stat">
+        <div class="cs-box"><div class="cs-val" id="m-vis">0</div><div class="cs-lbl">Visitas</div></div>
+        <div class="cs-box"><div class="cs-val" style="color:var(--grn)" id="m-total">R$0</div><div class="cs-lbl">Total gasto</div></div>
+        <div class="cs-box"><div class="cs-val" style="color:var(--amb)" id="m-ticket">R$0</div><div class="cs-lbl">Ticket médio</div></div>
+        <div class="cs-box"><div class="cs-val" id="m-ultimo">—</div><div class="cs-lbl">Última visita</div></div>
+      </div>
+      <div class="sec-lbl">Serviços mais usados</div>
+      <div id="m-svcs" style="margin-bottom:12px"></div>
+      <div class="sec-lbl">Histórico</div>
+      <div id="m-hist"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ MODAL: SERVIÇO ═══ -->
+<div class="modal-bg" id="modal-svc">
+  <div class="modal">
+    <div class="modal-top"><div class="modal-title" id="m-svc-title">Editar serviço</div><div class="modal-x" onclick="closeModal('modal-svc')">×</div></div>
+    <div class="modal-body">
+      <div class="m-field"><div class="m-lbl">Nome do serviço</div><input class="m-inp" id="se-nome"/></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+        <div class="m-field"><div class="m-lbl">Valor (R$)</div><input class="m-inp" id="se-val" type="number" oninput="updateSinal()"/></div>
+        <div class="m-field"><div class="m-lbl">Duração</div><select class="m-sel" id="se-dur"><option>30 min</option><option>45 min</option><option>1h</option><option>1h 15min</option><option>1h 30min</option><option>2h</option><option>2h 30min</option><option>3h</option></select></div>
+      </div>
+      <div class="info-box">Sinal automático (30%): <strong style="color:var(--w)" id="se-sinal">R$ 0</strong></div>
+      <button class="m-btn" onclick="saveSvc()">Salvar alterações</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ MODAL: BLOQUEAR HORÁRIO ═══ -->
+<div class="modal-bg" id="modal-block">
+  <div class="modal">
+    <div class="modal-top"><div class="modal-title">Bloquear horários</div><div class="modal-x" onclick="closeModal('modal-block')">×</div></div>
+    <div class="modal-body">
+      <div class="info-box" id="block-date-lbl">Data selecionada: —</div>
+      <div class="sec-lbl">Toque para bloquear/desbloquear</div>
+      <div class="time-block-grid" id="block-grid"></div>
+      <div class="warn-box">⚠ Horários bloqueados ficam invisíveis para os clientes no app de agendamento.</div>
+      <button class="m-btn" onclick="saveBlocks()">Confirmar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ MODAL: REALOCAR ═══ -->
+<div class="modal-bg" id="modal-realoc">
+  <div class="modal">
+    <div class="modal-top"><div class="modal-title">Realocar agendamento</div><div class="modal-x" onclick="closeModal('modal-realoc')">×</div></div>
+    <div class="modal-body">
+      <div class="info-box" id="realoc-info">—</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
+        <div class="m-field"><div class="m-lbl">Nova data</div><input class="m-inp" id="realoc-date" type="date"/></div>
+        <div class="m-field"><div class="m-lbl">Novo horário</div><select class="m-sel" id="realoc-time"><option>09:00</option><option>09:30</option><option>10:00</option><option>10:30</option><option>11:00</option><option>14:00</option><option>14:30</option><option>15:00</option><option>15:30</option><option>16:00</option><option>19:00</option><option>19:30</option><option>20:00</option></select></div>
+      </div>
+      <div class="warn-box">Cliente receberá confirmação via WhatsApp com o novo horário.</div>
+      <button class="m-btn" onclick="confirmRealoc()">Confirmar realocação</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ PAINEL ═══ -->
+<div id="painel" style="display:none;width:100%;display:none">
+  <div class="app">
+
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+      <div class="sb-top">
+        <img src="logo.jpg" class="sb-logo" alt="logo"/>
+        <div class="sb-biz" id="sb-biz">Dom da Navalha</div>
+        <div class="sb-role" id="sb-role">Master Barber</div>
+      </div>
+      <div class="sb-nav">
+        <div class="sb-section">Menu</div>
+        <div class="nav-item active" id="ni-dash" onclick="goPage('dash',this)"><span class="nav-icon">📊</span>Dashboard</div>
+        <div class="nav-item" id="ni-agenda" onclick="goPage('agenda',this)"><span class="nav-icon">📅</span>Agenda</div>
+        <div class="nav-item" id="ni-clientes" onclick="goPage('clientes',this)"><span class="nav-icon">👥</span>Clientes</div>
+        <div class="nav-item" id="ni-cancel" onclick="goPage('cancel',this)"><span class="nav-icon">✕</span>Cancelamentos</div>
+        <div class="nav-item" id="ni-servicos" onclick="goPage('servicos',this)"><span class="nav-icon">✂</span>Serviços</div>
+        <div class="nav-item" id="ni-assin" onclick="goPage('assin',this)"><span class="nav-icon">💳</span>Assinatura</div>
+      </div>
+      <div class="sb-bot">
+        <div class="sb-plan">
+          <div class="sb-plan-name">Plano Pro</div>
+          <div class="sb-plan-info">Ativo até 08/07/2026</div>
+        </div>
+        <button class="sb-out" onclick="doLogout()">↩ Sair</button>
+      </div>
+    </div>
+
+    <!-- MAIN -->
+    <div class="main">
+      <div class="topbar">
+        <div class="tb-title" id="tb-title">Dashboard</div>
+        <div class="tb-right">
+          <span class="tb-badge" id="tb-badge">Johnny</span>
+          <div class="tb-av" id="tb-av">JA</div>
+        </div>
+      </div>
+
+      <!-- ═ DASHBOARD ═ -->
+      <div class="page on" id="pg-dash">
+        <div class="sec-lbl">Junho 2026</div>
+        <div class="met-grid" id="dash-mets"></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px">
+          <!-- Agendamentos de hoje -->
+          <div class="card">
+            <div class="card-head"><div class="card-title">Hoje — 19 de junho</div><span class="pill p-grn" id="hoje-count">3 agendamentos</span></div>
+            <div class="card-body" id="hoje-list"></div>
+          </div>
+          <!-- Alertas -->
+          <div class="card">
+            <div class="card-head"><div class="card-title">Pendências</div></div>
+            <div class="card-body">
+              <div class="alert-row"><div class="alert-icon" style="background:var(--amb-d)">⏰</div><div class="alert-body"><div class="alert-title">2 presenças sem confirmar</div><div class="alert-sub">Lucas Mendes · Diego Lima — hoje</div></div><button class="btn btn-ghost" style="font-size:9px;padding:3px 8px" onclick="goPage('agenda',document.getElementById('ni-agenda'))">Ver</button></div>
+              <div class="alert-row"><div class="alert-icon" style="background:var(--red-d)">💸</div><div class="alert-body"><div class="alert-title">3 clientes inativos 30+ dias</div><div class="alert-sub">Paulo · Fernando · Marcos</div></div><button class="btn btn-ghost" style="font-size:9px;padding:3px 8px">Disparar</button></div>
+              <div class="alert-row" style="border:none"><div class="alert-icon" style="background:var(--blu-d)">📅</div><div class="alert-body"><div class="alert-title">5 agendamentos amanhã</div><div class="alert-sub">Dia completo — 09h às 20h</div></div><button class="btn btn-ghost" style="font-size:9px;padding:3px 8px" onclick="goPage('agenda',document.getElementById('ni-agenda'))">Ver</button></div>
+            </div>
+          </div>
+        </div>
+        <!-- Tabela recente -->
+        <div class="tbl-wrap">
+          <div class="tbl-head"><div class="tbl-title">Agendamentos recentes</div></div>
+          <table><thead><tr><th style="width:18%">Cliente</th><th style="width:20%">Serviço</th><th style="width:9%">Valor</th><th style="width:18%">Status</th><th style="width:9%">Dia</th><th style="width:10%">Hora</th><th style="width:16%"></th></tr></thead>
+          <tbody id="dash-tbody"></tbody></table>
+        </div>
+      </div>
+
+      <!-- ═ AGENDA ═ -->
+      <div class="page" id="pg-agenda">
+        <div style="display:grid;grid-template-columns:220px 1fr;gap:14px;align-items:start">
+          <div>
+            <div class="cal-mini">
+              <div class="cal-mini-head">
+                <div class="cal-mini-nav" onclick="calNav(-1)">‹</div>
+                <div class="cal-mini-m" id="ag-month">Junho 2026</div>
+                <div class="cal-mini-nav" onclick="calNav(1)">›</div>
+              </div>
+              <div class="cal-grid" id="ag-cal"></div>
+            </div>
+            <button class="btn btn-ghost" style="width:100%;justify-content:center;margin-bottom:6px" onclick="openBlockModal()">🔒 Bloquear horários</button>
+          </div>
+          <div>
+            <div class="day-sum" id="day-sum"></div>
+            <div class="sec-lbl" id="ag-day-lbl">19 de junho</div>
+            <div id="ag-appts"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═ CLIENTES ═ -->
+      <div class="page" id="pg-clientes">
+        <div class="filters">
+          <input class="filter-inp" id="cli-q" placeholder="Buscar por nome ou telefone..." oninput="renderClientes()"/>
+          <select class="filter-sel" onchange="cliSort=this.value;renderClientes()">
+            <option value="recente">Mais recentes</option>
+            <option value="visitas">Mais visitas</option>
+            <option value="gasto">Maior gasto</option>
+          </select>
+        </div>
+        <div class="tbl-wrap">
+          <div class="tbl-head"><div class="tbl-title" id="cli-count">Clientes</div></div>
+          <table><thead><tr><th style="width:20%">Cliente</th><th style="width:16%">Telefone</th><th style="width:8%">Visitas</th><th style="width:12%">Total gasto</th><th style="width:12%">Ticket médio</th><th style="width:10%">Última visita</th><th style="width:10%">Status</th><th style="width:12%"></th></tr></thead>
+          <tbody id="cli-tbody"></tbody></table>
+        </div>
+      </div>
+
+      <!-- ═ CANCELAMENTOS ═ -->
+      <div class="page" id="pg-cancel">
+        <div class="met-grid-2" style="grid-template-columns:repeat(4,1fr)">
+          <div class="met red"><div class="met-lbl">Sem aviso</div><div class="met-val">3</div><div class="met-sub">R$ 144 retido</div></div>
+          <div class="met"><div class="met-lbl">Reembolsados</div><div class="met-val" style="color:var(--blu)">1</div><div class="met-sub">devolvido</div></div>
+          <div class="met amb"><div class="met-lbl">Reagendados</div><div class="met-val">2</div><div class="met-sub">preservado</div></div>
+          <div class="met grn"><div class="met-lbl">Total retido</div><div class="met-val">R$ 144</div><div class="met-sub">garantido</div></div>
+        </div>
+        <div class="tbl-wrap">
+          <div class="tbl-head"><div class="tbl-title">Histórico de cancelamentos</div></div>
+          <table><thead><tr><th style="width:16%">Cliente</th><th style="width:10%">Data</th><th style="width:20%">Serviço</th><th style="width:9%">Valor</th><th style="width:9%">Sinal</th><th style="width:20%">Status</th><th style="width:16%">Retido</th></tr></thead>
+          <tbody id="cancel-tbody"></tbody></table>
+        </div>
+      </div>
+
+      <!-- ═ SERVIÇOS ═ -->
+      <div class="page" id="pg-servicos">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+          <div style="font-size:11px;color:var(--w4)">Alterações refletem imediatamente no app do cliente</div>
+          <button class="btn btn-w" onclick="newSvc()">+ Novo serviço</button>
+        </div>
+        <div class="tbl-wrap">
+          <table><thead><tr><th style="width:26%">Serviço</th><th style="width:12%">Duração</th><th style="width:10%">Valor</th><th style="width:12%">Sinal (30%)</th><th style="width:8%">Ativo</th><th style="width:16%"></th></tr></thead>
+          <tbody id="svc-tbody"></tbody></table>
+        </div>
+      </div>
+
+      <!-- ═ ASSINATURA ═ -->
+      <div class="page" id="pg-assin">
+        <div style="background:var(--grn-d);border:1px solid var(--grn-b);border-radius:12px;padding:14px 16px;margin-bottom:14px;display:flex;align-items:center;gap:10px">
+          <div style="width:8px;height:8px;border-radius:50%;background:var(--grn);box-shadow:0 0 6px var(--grn);flex-shrink:0"></div>
+          <div><div style="font-size:12px;font-weight:500;color:var(--grn)">Assinatura ativa</div><div style="font-size:10px;color:var(--w4);margin-top:1px">Plano Pro · R$ 147/mês · Vencimento: 08/07/2026</div></div>
+        </div>
+        <div class="info-box">Sua assinatura mantém o link de agendamento ativo, o sistema de cobrança de sinal e as mensagens automáticas de confirmação. Sem pagamento, o link é suspenso após 3 dias e reativado assim que o pagamento for confirmado.</div>
+        <div class="tbl-wrap">
+          <div class="tbl-head"><div class="tbl-title">Histórico de pagamentos</div></div>
+          <table><thead><tr><th>Data</th><th>Plano</th><th>Valor</th><th>Forma</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr><td>08/06/2026</td><td>Pro</td><td>R$ 147</td><td>Pix</td><td><span class="pill p-grn">Pago</span></td></tr>
+            <tr><td>08/05/2026</td><td>Pro</td><td>R$ 147</td><td>Pix</td><td><span class="pill p-grn">Pago</span></td></tr>
+            <tr><td>08/04/2026</td><td>Pro</td><td>R$ 147</td><td>Cartão</td><td><span class="pill p-grn">Pago</span></td></tr>
+          </tbody>
+        </table></div>
+      </div>
+
+    </div><!-- .main -->
+  </div><!-- .app inner -->
+</div><!-- #painel -->
+
+</div><!-- #app -->
+
+<script>
+// ═══ DATA ═══
+const USERS = {
+  johnny: {pass:'4321', name:'Johnny Andrade', av:'JA', role:'Master Barber · Fundador', biz:'Dom da Navalha'}
+};
+
+const AGEND = [
+  {id:1,cli:'Carlos Silva',tel:'(11) 95382-6351',email:'carlos@email.com',svc:'Corte + selagem',val:100,dia:19,hora:'09:00',status:'Confirmado'},
+  {id:2,cli:'Rafael Souza',tel:'(11) 98888-7777',email:'rafa@email.com',svc:'Corte & barba',val:65,dia:19,hora:'14:00',status:'Aguardando presença'},
+  {id:3,cli:'Lucas Mendes',tel:'(11) 97777-6666',email:'lucas@email.com',svc:'Corte masculino',val:45,dia:19,hora:'19:00',status:'Aguardando presença'},
+  {id:4,cli:'Paulo Andrade',tel:'(11) 96666-5555',email:'paulo@email.com',svc:'Combo completo',val:160,dia:18,hora:'14:30',status:'Cancelado sem aviso'},
+  {id:5,cli:'Diego Lima',tel:'(11) 95555-4444',email:'diego@email.com',svc:'Corte barba & sel.',val:120,dia:20,hora:'10:00',status:'Confirmado'},
+  {id:6,cli:'Carlos Silva',tel:'(11) 95382-6351',email:'carlos@email.com',svc:'Corte masculino',val:45,dia:15,hora:'09:00',status:'Concluído'},
+  {id:7,cli:'Rafael Souza',tel:'(11) 98888-7777',email:'rafa@email.com',svc:'Corte & barba',val:65,dia:12,hora:'14:00',status:'Concluído'},
+  {id:8,cli:'Lucas Mendes',tel:'(11) 97777-6666',email:'lucas@email.com',svc:'Limpeza de pele',val:60,dia:10,hora:'11:00',status:'Concluído'},
+  {id:9,cli:'Fernando Costa',tel:'(11) 94444-3333',email:'fer@email.com',svc:'Corte + selagem',val:100,dia:8,hora:'14:00',status:'Cancelado sem aviso'},
+  {id:10,cli:'Diego Lima',tel:'(11) 95555-4444',email:'diego@email.com',svc:'Corte masculino',val:45,dia:5,hora:'09:30',status:'Concluído'},
+];
+
+let SVCS = [
+  {n:'Corte masculino',dur:'45 min',val:45,on:true},
+  {n:'Corte & barba',dur:'1h',val:65,on:true},
+  {n:'Corte + selagem',dur:'1h 30min',val:100,on:true},
+  {n:'Corte, barba & selagem',dur:'2h',val:120,on:true},
+  {n:'Corte premium + limpeza',dur:'1h 15min',val:100,on:true},
+  {n:'Limpeza de pele',dur:'45 min',val:60,on:true},
+  {n:'Combo completo',dur:'2h 30min',val:160,on:true},
+];
+
+const CANCEL_DATA = [
+  {cli:'Paulo Andrade',data:'18/06',svc:'Combo completo',val:160,sinal:48,status:'Cancelado sem aviso'},
+  {cli:'Fernando Costa',data:'08/06',svc:'Corte + selagem',val:100,sinal:30,status:'Cancelado sem aviso'},
+  {cli:'Marcos Reis',data:'03/06',svc:'Corte masculino',val:45,sinal:14,status:'Cancelado sem aviso'},
+  {cli:'Bruno Teixeira',data:'01/06',svc:'Corte & barba',val:65,sinal:20,status:'Reagendado'},
+  {cli:'Diego Lima',data:'28/05',svc:'Corte masculino',val:45,sinal:14,status:'Cancelado reembolsado'},
+];
+
+const MONTHS = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+const SC = {'Confirmado':'p-grn','Concluído':'p-grn','Cancelado sem aviso':'p-red','Cancelado reembolsado':'p-blu','Reagendado':'p-amb','Aguardando presença':'p-amb'};
+
+let CU = null;
+let calY = 2026, calM = 5, selDay = 19;
+let blockedSlots = {};
+let cliSort = 'recente';
+let editSvcIdx = null;
+let realocId = null;
+let presState = {};
+
+// ═══ AUTH ═══
+function fill(u,p){document.getElementById('l-u').value=u;document.getElementById('l-p').value=p;}
+
+function doLogin(){
+  const u=document.getElementById('l-u').value.trim().toLowerCase();
+  const p=document.getElementById('l-p').value;
+  const f=USERS[u];
+  if(!f||f.pass!==p){document.getElementById('l-err').textContent='Usuário ou senha incorretos.';return;}
+  CU={...f,username:u};
+  document.getElementById('login-wrap').style.display='none';
+  document.getElementById('painel').style.display='block';
+  document.getElementById('sb-biz').textContent=CU.biz;
+  document.getElementById('sb-role').textContent=CU.role;
+  document.getElementById('tb-av').textContent=CU.av;
+  document.getElementById('tb-badge').textContent=CU.name.split(' ')[0];
+  renderAll();
+}
+
+function doLogout(){
+  CU=null;
+  document.getElementById('painel').style.display='none';
+  document.getElementById('login-wrap').style.display='flex';
+  document.getElementById('l-u').value='';
+  document.getElementById('l-p').value='';
+}
+
+// ═══ NAVIGATION ═══
+function goPage(id, el){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('on'));
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  document.getElementById('pg-'+id).classList.add('on');
+  if(el) el.classList.add('active');
+  const titles={dash:'Dashboard',agenda:'Agenda',clientes:'Clientes',cancel:'Cancelamentos',servicos:'Serviços',assin:'Assinatura'};
+  document.getElementById('tb-title').textContent=titles[id]||id;
+  if(id==='agenda'){renderCal();renderDayAppts();}
+  if(id==='clientes')renderClientes();
+  if(id==='cancel')renderCancel();
+  if(id==='servicos')renderServicos();
+}
+
+// ═══ RENDER ALL ═══
+function renderAll(){
+  renderDash();
+  renderCal();
+  renderDayAppts();
+  renderServicos();
+  renderCancel();
+}
+
+// ═══ DASHBOARD ═══
+function renderDash(){
+  const hoje=AGEND.filter(a=>a.dia===19);
+  const mes=AGEND.filter(a=>['Confirmado','Concluído','Aguardando presença'].includes(a.status));
+  const fat=mes.reduce((s,a)=>s+a.val,0);
+  const qtd=mes.length;
+  const sinal=Math.ceil(fat*.3);
+  document.getElementById('dash-mets').innerHTML=`
+    <div class="met"><div class="met-lbl">Faturamento junho</div><div class="met-val" style="color:var(--w)">R$ ${fat.toLocaleString('pt-BR')}</div><div class="met-sub">${qtd} serviços</div></div>
+    <div class="met grn"><div class="met-lbl">Sinais recebidos</div><div class="met-val">R$ ${sinal}</div><div class="met-sub">30% antecipado</div></div>
+    <div class="met amb"><div class="met-lbl">Ticket médio</div><div class="met-val">R$ ${qtd?Math.round(fat/qtd):0}</div><div class="met-sub">por agendamento</div></div>
+    <div class="met red"><div class="met-lbl">Retidos (cancel.)</div><div class="met-val">R$ 144</div><div class="met-sub">protegido</div></div>`;
+  const hj=hoje.filter(a=>['Confirmado','Aguardando presença','Concluído'].includes(a.status));
+  document.getElementById('hoje-count').textContent=hj.length+' agendamento'+(hj.length!==1?'s':'');
+  document.getElementById('hoje-list').innerHTML=hj.map(a=>`
+    <div class="appt">
+      <div class="appt-time">${a.hora}</div>
+      <div class="appt-body"><div class="appt-name">${a.cli}</div><div class="appt-meta">${a.svc} · R$ ${a.val}</div></div>
+      <span class="pill ${SC[a.status]||'p-amb'}">${a.status}</span>
+    </div>`).join('');
+  const rows=AGEND.slice().reverse().slice(0,8);
+  document.getElementById('dash-tbody').innerHTML=rows.map(a=>`
+    <tr onclick="openCliModal('${a.cli}')">
+      <td class="td-name">${a.cli}</td>
+      <td>${a.svc}</td>
+      <td style="color:var(--w)">R$ ${a.val}</td>
+      <td><span class="pill ${SC[a.status]||'p-amb'}">${a.status}</span></td>
+      <td style="color:var(--w4)">${a.dia}/06</td>
+      <td style="color:var(--w4)">${a.hora}</td>
+      <td><button class="btn btn-ghost" style="font-size:9px;padding:3px 7px" onclick="event.stopPropagation();openCliModal('${a.cli}')">Ver cliente</button></td>
+    </tr>`).join('');
+}
+
+// ═══ CALENDAR ═══
+function renderCal(){
+  const mos=MONTHS;
+  document.getElementById('ag-month').textContent=mos[calM]+' '+calY;
+  const first=new Date(calY,calM,1).getDay();
+  const tot=new Date(calY,calM+1,0).getDate();
+  const t=new Date(); t.setHours(0,0,0,0);
+  const daysWithAppt=new Set(AGEND.filter(a=>!['Cancelado sem aviso','Cancelado reembolsado'].includes(a.status)).map(a=>a.dia));
+  let h=['D','S','T','Q','Q','S','S'].map(d=>`<div class="cal-dow">${d}</div>`).join('');
+  for(let i=0;i<first;i++) h+=`<div class="cday empty"></div>`;
+  for(let d=1;d<=tot;d++){
+    const dt=new Date(calY,calM,d);
+    const past=dt<t;
+    const isSel=d===selDay&&calM===5;
+    const hasA=daysWithAppt.has(d)&&calM===5;
+    h+=`<div class="cday${past?' past':''}${isSel?' sel':''}${hasA&&!isSel?' has-appt':''}" ${past?'':'onclick="pickDay('+d+')"'}>${d}</div>`;
+  }
+  document.getElementById('ag-cal').innerHTML=h;
+}
+
+function pickDay(d){
+  selDay=d;
+  renderCal();
+  document.getElementById('ag-day-lbl').textContent=selDay+' de '+MONTHS[calM];
+  renderDayAppts();
+}
+
+function calNav(dir){
+  calM+=dir;
+  if(calM>11){calM=0;calY++;}
+  if(calM<0){calM=11;calY--;}
+  renderCal();
+}
+
+function renderDayAppts(){
+  document.getElementById('ag-day-lbl').textContent=selDay+' de '+MONTHS[calM];
+  const appts=AGEND.filter(a=>a.dia===selDay&&calM===5&&calY===2026);
+  const fat=appts.filter(a=>!['Cancelado sem aviso','Cancelado reembolsado'].includes(a.status)).reduce((s,a)=>s+a.val,0);
+  const sin=Math.ceil(fat*.3);
+  document.getElementById('day-sum').innerHTML=`
+    <div><div class="ds-val">R$ ${fat}</div><div class="ds-lbl">Faturamento</div></div>
+    <div><div class="ds-val" style="color:var(--grn)">R$ ${sin}</div><div class="ds-lbl">Sinais</div></div>
+    <div><div class="ds-val" style="color:var(--w3)">R$ ${fat-sin}</div><div class="ds-lbl">A receber</div></div>`;
+  if(!appts.length){
+    document.getElementById('ag-appts').innerHTML=`<div style="font-size:12px;color:var(--w4);padding:8px 0">Nenhum agendamento para este dia.</div>`;
+    return;
+  }
+  document.getElementById('ag-appts').innerHTML=appts.map(a=>{
+    const ps=presState[a.id];
+    return `<div class="appt">
+      <div class="appt-time">${a.hora}</div>
+      <div class="appt-body"><div class="appt-name">${a.cli}</div><div class="appt-meta">${a.svc} · R$ ${a.val} · <span class="pill ${SC[a.status]||'p-amb'}" style="font-size:8px">${a.status}</span></div></div>
+      <div class="appt-actions">
+        <button class="appt-btn ${ps==='ok'?'ok':''}" onclick="setPresence(${a.id},'ok')">✓ Veio</button>
+        <button class="appt-btn ${ps==='no'?'no':''}" onclick="setPresence(${a.id},'no')">✗ Não veio</button>
+        <button class="appt-btn" onclick="openRealoc(${a.id})" style="color:var(--amb);border-color:var(--amb-b)">↔ Realocar</button>
+        <button class="appt-btn" onclick="openCliModal('${a.cli}')">👤</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function setPresence(id,state){
+  presState[id]=state;
+  const a=AGEND.find(x=>x.id===id);
+  if(a) a.status=state==='ok'?'Concluído':'Cancelado sem aviso';
+  renderDayAppts();
+  renderDash();
+}
+
+// ═══ BLOCK MODAL ═══
+function openBlockModal(){
+  const key=`${calY}-${calM}-${selDay}`;
+  if(!blockedSlots[key]) blockedSlots[key]=new Set();
+  document.getElementById('block-date-lbl').textContent=`Data: ${selDay} de ${MONTHS[calM]} de ${calY}`;
+  const slots=['09:00','09:30','10:00','10:30','11:00','11:30','14:00','14:30','15:00','15:30','16:00','16:30','19:00','19:30','20:00','20:30'];
+  const booked=new Set(AGEND.filter(a=>a.dia===selDay&&calM===5).map(a=>a.hora));
+  document.getElementById('block-grid').innerHTML=slots.map(s=>{
+    const isBlocked=blockedSlots[key].has(s);
+    const isBooked=booked.has(s);
+    return `<div class="tblock${isBlocked?' blocked':''}${isBooked?' booked':''}" onclick="${isBooked?'':'toggleBlock(\''+s+'\')"'}>${s}${isBooked?' •':''}</div>`;
+  }).join('');
+  openModal('modal-block');
+}
+
+function toggleBlock(slot){
+  const key=`${calY}-${calM}-${selDay}`;
+  if(!blockedSlots[key]) blockedSlots[key]=new Set();
+  if(blockedSlots[key].has(slot)) blockedSlots[key].delete(slot);
+  else blockedSlots[key].add(slot);
+  openBlockModal();
+}
+
+function saveBlocks(){
+  closeModal('modal-block');
+}
+
+// ═══ REALOC MODAL ═══
+function openRealoc(id){
+  realocId=id;
+  const a=AGEND.find(x=>x.id===id);
+  document.getElementById('realoc-info').textContent=`${a.cli} · ${a.svc} · ${a.dia}/06 às ${a.hora}`;
+  openModal('modal-realoc');
+}
+
+function confirmRealoc(){
+  const a=AGEND.find(x=>x.id===realocId);
+  const nt=document.getElementById('realoc-time').value;
+  if(a){a.hora=nt;a.status='Reagendado';}
+  closeModal('modal-realoc');
+  renderDayAppts();
+  renderDash();
+}
+
+// ═══ CLIENTES ═══
+function getClientes(){
+  const allNames=[...new Set(AGEND.map(a=>a.cli))];
+  return allNames.map(nome=>{
+    const visits=AGEND.filter(a=>a.cli===nome&&!['Cancelado sem aviso','Cancelado reembolsado'].includes(a.status));
+    const total=visits.reduce((s,a)=>s+a.val,0);
+    const first=AGEND.find(a=>a.cli===nome);
+    const lastVisit=visits.length?Math.max(...visits.map(a=>a.dia)):0;
+    const cancelou=AGEND.filter(a=>a.cli===nome&&a.status==='Cancelado sem aviso').length>0;
+    return{nome,tel:first?.tel||'—',email:first?.email||'—',visitas:visits.length,total,ticket:visits.length?Math.round(total/visits.length):0,ultimo:lastVisit?lastVisit+'/06':'—',status:cancelou?'Cancelou':'Ativo',visits};
+  });
+}
+
+function renderClientes(){
+  const q=(document.getElementById('cli-q')||{}).value||'';
+  let rows=getClientes().filter(c=>!q||c.nome.toLowerCase().includes(q.toLowerCase())||c.tel.includes(q));
+  if(cliSort==='visitas') rows.sort((a,b)=>b.visitas-a.visitas);
+  else if(cliSort==='gasto') rows.sort((a,b)=>b.total-a.total);
+  document.getElementById('cli-count').textContent=`${rows.length} cliente${rows.length!==1?'s':''}`;
+  document.getElementById('cli-tbody').innerHTML=rows.map(c=>`
+    <tr onclick="openCliModal('${c.nome}')">
+      <td class="td-name">${c.nome}</td>
+      <td>${c.tel}</td>
+      <td>${c.visitas}</td>
+      <td style="color:var(--w)">R$ ${c.total}</td>
+      <td>R$ ${c.ticket}</td>
+      <td style="color:var(--w4)">${c.ultimo}</td>
+      <td><span class="pill ${c.status==='Ativo'?'p-grn':'p-red'}">${c.status}</span></td>
+      <td><button class="btn btn-ghost" style="font-size:9px;padding:3px 7px" onclick="event.stopPropagation();openCliModal('${c.nome}')">Ver perfil</button></td>
+    </tr>`).join('');
+}
+
+function openCliModal(nome){
+  const cli=getClientes().find(c=>c.nome===nome);
+  if(!cli) return;
+  document.getElementById('m-cli-title').textContent=nome;
+  document.getElementById('m-cli-av').textContent=nome.split(' ').map(n=>n[0]).slice(0,2).join('');
+  document.getElementById('m-cli-name').textContent=nome;
+  document.getElementById('m-cli-tel').textContent=cli.tel;
+  document.getElementById('m-cli-email').textContent=cli.email;
+  document.getElementById('m-vis').textContent=cli.visitas;
+  document.getElementById('m-total').textContent='R$ '+cli.total;
+  document.getElementById('m-ticket').textContent='R$ '+cli.ticket;
+  document.getElementById('m-ultimo').textContent=cli.ultimo;
+  const svcCount={};
+  cli.visits.forEach(v=>{svcCount[v.svc]=(svcCount[v.svc]||0)+1;});
+  const maxQ=Math.max(...Object.values(svcCount),1);
+  document.getElementById('m-svcs').innerHTML=Object.entries(svcCount).sort((a,b)=>b[1]-a[1]).map(([s,q])=>`
+    <div class="svc-bar-row">
+      <div class="svc-bar-name">${s}</div>
+      <div class="svc-bar-wrap"><div class="svc-bar-fill" style="width:${Math.round((q/maxQ)*100)}%"></div></div>
+      <div class="svc-bar-val">${q}x</div>
+    </div>`).join('')||'<div style="font-size:11px;color:var(--w4)">Sem serviços registrados.</div>';
+  document.getElementById('m-hist').innerHTML=cli.visits.slice().reverse().slice(0,5).map(v=>`
+    <div class="hist-row">
+      <div class="hist-dot"></div>
+      <div class="hist-body"><div class="hist-svc">${v.svc}</div><div class="hist-meta">${v.dia}/06 · ${v.hora} · R$ ${v.val}</div></div>
+      <span class="pill ${SC[v.status]||'p-amb'}">${v.status}</span>
+    </div>`).join('')||'<div style="font-size:11px;color:var(--w4)">Sem histórico.</div>';
+  openModal('modal-cli');
+}
+
+// ═══ CANCELAMENTOS ═══
+function renderCancel(){
+  document.getElementById('cancel-tbody').innerHTML=CANCEL_DATA.map(c=>`
+    <tr>
+      <td class="td-name">${c.cli}</td>
+      <td style="color:var(--w4)">${c.data}</td>
+      <td>${c.svc}</td>
+      <td>R$ ${c.val}</td>
+      <td>R$ ${c.sinal}</td>
+      <td><span class="pill ${SC[c.status]||'p-amb'}">${c.status}</span></td>
+      <td style="color:${c.status==='Cancelado sem aviso'?'var(--grn)':'var(--w4)'}">${c.status==='Cancelado sem aviso'?'R$ '+c.sinal:'—'}</td>
+    </tr>`).join('');
+}
+
+// ═══ SERVIÇOS ═══
+function renderServicos(){
+  document.getElementById('svc-tbody').innerHTML=SVCS.map((s,i)=>`
+    <tr>
+      <td class="td-name">${s.n}</td>
+      <td>${s.dur}</td>
+      <td style="color:var(--w)">R$ ${s.val}</td>
+      <td style="color:var(--w3)">R$ ${Math.ceil(s.val*.3)}</td>
+      <td><div class="tog ${s.on?'on':''}" onclick="toggleSvc(${i})"></div></td>
+      <td><button class="btn btn-ghost" style="font-size:9px;padding:3px 7px" onclick="editSvc(${i})">✏ Editar</button></td>
+    </tr>`).join('');
+}
+
+function toggleSvc(i){SVCS[i].on=!SVCS[i].on;renderServicos();}
+
+function editSvc(i){
+  editSvcIdx=i;
+  const s=SVCS[i];
+  document.getElementById('m-svc-title').textContent='Editar: '+s.n;
+  document.getElementById('se-nome').value=s.n;
+  document.getElementById('se-val').value=s.val;
+  document.getElementById('se-dur').value=s.dur;
+  document.getElementById('se-sinal').textContent='R$ '+Math.ceil(s.val*.3);
+  openModal('modal-svc');
+}
+
+function newSvc(){
+  SVCS.push({n:'Novo serviço',dur:'45 min',val:60,on:true});
+  editSvc(SVCS.length-1);
+}
+
+function updateSinal(){
+  const v=parseInt(document.getElementById('se-val').value)||0;
+  document.getElementById('se-sinal').textContent='R$ '+Math.ceil(v*.3);
+}
+
+function saveSvc(){
+  if(editSvcIdx===null) return;
+  SVCS[editSvcIdx].n=document.getElementById('se-nome').value;
+  SVCS[editSvcIdx].val=parseInt(document.getElementById('se-val').value)||SVCS[editSvcIdx].val;
+  SVCS[editSvcIdx].dur=document.getElementById('se-dur').value;
+  renderServicos();
+  closeModal('modal-svc');
+}
+
+// ═══ MODALS ═══
+function openModal(id){document.getElementById(id).classList.add('on');}
+function closeModal(id){document.getElementById(id).classList.remove('on');}
+
+// PWA
+if('serviceWorker' in navigator){
+  window.addEventListener('load',()=>{navigator.serviceWorker.register('/sw.js').catch(()=>{});});
+}
+</script>
+</body>
+</html>
