@@ -34,11 +34,11 @@ const CANCEL_DATA=[
   {cli:'Diego Lima',data:'28/05',svc:'Corte masculino',val:45,sinal:14,status:'Cancelado reembolsado'},
 ];
 
-const PORTFOLIO_PHOTOS=[
-  {src:'corte1.jpg',visible:true},
-  {src:'corte2.jpg',visible:true},
-  {src:'corte3.jpg',visible:true},
-  {src:'corte4.jpg',visible:true},
+let PORTFOLIO_PHOTOS=[
+  {src:'corte1.jpg',visible:true,type:'image'},
+  {src:'corte2.jpg',visible:true,type:'image'},
+  {src:'corte3.jpg',visible:true,type:'image'},
+  {src:'corte4.jpg',visible:true,type:'image'},
 ];
 
 const MOS=['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
@@ -67,21 +67,34 @@ function doLogin(){
   document.getElementById('tb-name').textContent=CU.name.split(' ')[0];
   renderAll();
   renderPortfolio();
+  if(window.innerWidth>900)openDrawer();
 }
 
 function doLogout(){
   CU=null;
   document.getElementById('painel').style.display='none';
   document.getElementById('login-wrap').style.display='flex';
+  closeDrawer();
 }
 
-function goPage(id,el,type){
+function toggleDrawer(){
+  const sb=document.getElementById('sidebar');
+  if(sb.classList.contains('open'))closeDrawer();else openDrawer();
+}
+function openDrawer(){
+  document.getElementById('sidebar').classList.add('open');
+  document.getElementById('drawer-overlay').classList.add('on');
+}
+function closeDrawer(){
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('drawer-overlay').classList.remove('on');
+}
+
+function goPage(id,el){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('on'));
   document.getElementById('pg-'+id).classList.add('on');
   document.querySelectorAll('.ni').forEach(n=>n.classList.remove('active'));
   const si=document.getElementById('ni-'+id);if(si)si.classList.add('active');
-  document.querySelectorAll('.bn').forEach(n=>n.classList.remove('active'));
-  const bi=document.getElementById('bn-'+id);if(bi)bi.classList.add('active');
   const T={dash:'Dashboard',agenda:'Agenda',clientes:'Clientes',cancel:'Cancelamentos',servicos:'Serviços',perfil:'Meu perfil',assin:'Assinatura'};
   document.getElementById('tb-title').textContent=T[id]||id;
   if(id==='agenda'){renderCal();renderDayAppts();}
@@ -90,6 +103,7 @@ function goPage(id,el,type){
   if(id==='servicos')renderServicos();
   if(id==='perfil')renderPortfolio();
   window.scrollTo(0,0);
+  closeDrawer();
 }
 
 function renderAll(){renderDash();renderChart();renderCal();renderDayAppts();renderServicos();renderCancel();}
@@ -97,7 +111,7 @@ function renderAll(){renderDash();renderChart();renderCal();renderDayAppts();ren
 // ═══ DASHBOARD ═══
 function setP(per,el){
   dashPer=per;customDate=null;
-  document.getElementById('dash-date').value='';
+  document.getElementById('dash-date').value='2026-06-19';
   document.querySelectorAll('.ftab').forEach(t=>t.classList.remove('active'));
   if(el)el.classList.add('active');
   renderDash();renderChart();
@@ -132,13 +146,13 @@ function renderDash(){
   const aReceber=fat-sinal;
 
   let card3Label='A receber balcão',card3Val='R$ '+aReceber,card3Sub='ticket médio R$ '+ticket;
-  if(dashPer==='mes'){
-    // no mês, mostra o que já foi recebido no balcão (itens concluídos)
+  if(dashPer==='mes'||dashPer==='semana'){
+    // na semana e no mês, mostra o que já foi recebido no balcão (itens concluídos)
     const concluidos=rows.filter(a=>a.status==='Concluído');
     const recebidoBalcao=concluidos.reduce((s,a)=>s+(a.val-Math.ceil(a.val*.3)),0);
     card3Label='Já recebido no balcão';
     card3Val='R$ '+recebidoBalcao;
-    card3Sub=concluidos.length+' atendimentos finalizados';
+    card3Sub=concluidos.length+' atendimento'+(concluidos.length!==1?'s':'')+' finalizado'+(concluidos.length!==1?'s':'');
   }
 
   document.getElementById('d-mets').innerHTML=`
@@ -445,13 +459,42 @@ function previewLogoPhoto(input){
 function saveLogoPhoto(){alert('Logo atualizado! O novo logo já aparece na tela inicial do app.');}
 
 function renderPortfolio(){
-  document.getElementById('portfolio-grid').innerHTML=PORTFOLIO_PHOTOS.map((p,i)=>`
-    <div class="portfolio-item${p.visible?'':' hidden-photo'}">
-      <img src="${p.src}" alt="Corte ${i+1}"/>
+  const items=PORTFOLIO_PHOTOS.map((p,i)=>{
+    const media=p.type==='video'
+      ? `<video src="${p.src}" muted playsinline></video><div class="portfolio-vid-badge">▶ vídeo</div>`
+      : `<img src="${p.src}" alt="Corte ${i+1}"/>`;
+    return `<div class="portfolio-item${p.visible?'':' hidden-photo'}">
+      ${media}
+      <div class="portfolio-del" onclick="deletePortfolioMedia(${i})">×</div>
       <div class="portfolio-toggle" onclick="togglePortfolio(${i})">${p.visible?'✓':'✕'}</div>
-    </div>`).join('');
+    </div>`;
+  }).join('');
+  const addTile=`<div class="portfolio-add" onclick="document.getElementById('portfolio-upload').click()">
+      <div class="portfolio-add-ico">+</div>
+      <div class="portfolio-add-lbl">Foto ou<br>vídeo</div>
+    </div>`;
+  document.getElementById('portfolio-grid').innerHTML=items+addTile;
 }
 function togglePortfolio(i){PORTFOLIO_PHOTOS[i].visible=!PORTFOLIO_PHOTOS[i].visible;renderPortfolio();}
+function deletePortfolioMedia(i){
+  if(!confirm('Remover esta mídia do portfólio?'))return;
+  PORTFOLIO_PHOTOS.splice(i,1);
+  renderPortfolio();
+}
+function addPortfolioMedia(input){
+  if(!input.files||!input.files[0])return;
+  const file=input.files[0];
+  const isVideo=file.type.startsWith('video/');
+  const reader=new FileReader();
+  reader.onload=e=>{
+    PORTFOLIO_PHOTOS.push({src:e.target.result,visible:true,type:isVideo?'video':'image'});
+    renderPortfolio();
+    const strip=document.getElementById('portfolio-grid');
+    strip.scrollLeft=strip.scrollWidth;
+  };
+  reader.readAsDataURL(file);
+  input.value='';
+}
 
 // ═══ ASSINATURA — planos ═══
 function openPlanConfirm(planName,price){

@@ -25,46 +25,44 @@ html,body{background:#0A0A0A;color:#fff;font-family:'DM Sans',system-ui,sans-ser
   --blu:#5AA9F8;--blu-d:rgba(90,169,248,.09);--blu-b:rgba(90,169,248,.22);
   --pur:#B98AF5;--pur-d:rgba(185,138,245,.1);--pur-b:rgba(185,138,245,.26);
 }
-.shell{display:flex;min-height:100vh}
-.sidebar{width:188px;background:var(--bg2);border-right:1px solid var(--line);display:flex;flex-direction:column;flex-shrink:0;position:sticky;top:0;height:100vh;overflow-y:auto}
-.sb-top{padding:13px 12px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:8px}
-.sb-logo{width:32px;height:32px;border-radius:7px;object-fit:cover;flex-shrink:0;border:1px solid var(--line2)}
-.sb-biz{font-size:12px;font-weight:500;color:var(--w);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.shell{display:flex;min-height:100vh;position:relative}
+.drawer-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:90}
+.drawer-overlay.on{display:block}
+.sidebar{width:228px;background:var(--bg2);border-right:1px solid var(--line);display:flex;flex-direction:column;flex-shrink:0;position:fixed;top:0;left:0;height:100vh;overflow-y:auto;z-index:95;transition:transform .22s ease;transform:translateX(-100%)}
+.sidebar.open{transform:translateX(0)}
+.sb-top{padding:14px 14px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:9px}
+.sb-logo{width:34px;height:34px;border-radius:8px;object-fit:cover;flex-shrink:0;border:1px solid var(--line2)}
+.sb-biz{font-size:13px;font-weight:500;color:var(--w);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .sb-role{font-size:9px;color:var(--w4);margin-top:1px}
-.sb-nav{flex:1;padding:6px 0}
-.sb-sec{font-size:8px;letter-spacing:.14em;text-transform:uppercase;color:var(--w4);padding:10px 12px 4px}
-.ni{display:flex;align-items:center;gap:8px;padding:9px 12px;cursor:pointer;color:var(--w4);font-size:12px;border-left:2px solid transparent;transition:all .12s}
+.sb-close{margin-left:auto;width:26px;height:26px;border-radius:50%;background:var(--bg3);border:1px solid var(--line2);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:13px;color:var(--w3);flex-shrink:0}
+.sb-nav{flex:1;padding:8px 0}
+.sb-sec{font-size:8px;letter-spacing:.14em;text-transform:uppercase;color:var(--w4);padding:11px 14px 5px}
+.ni{display:flex;align-items:center;gap:10px;padding:11px 14px;cursor:pointer;color:var(--w4);font-size:13px;border-left:3px solid transparent;transition:all .12s}
 .ni:hover{color:var(--w2);background:rgba(255,255,255,.025)}
 .ni.active{color:var(--w);background:rgba(255,255,255,.045);border-left-color:var(--gold)}
-.ni-ico{font-size:13px;width:16px;text-align:center;flex-shrink:0}
-.sb-bot{border-top:1px solid var(--line);padding:10px 12px}
-.sb-plan{background:var(--bg3);border:1px solid var(--line2);border-radius:7px;padding:7px 9px;margin-bottom:7px}
+.ni-ico{font-size:14px;width:18px;text-align:center;flex-shrink:0}
+.sb-bot{border-top:1px solid var(--line);padding:11px 14px}
+.sb-plan{background:var(--bg3);border:1px solid var(--line2);border-radius:7px;padding:8px 10px;margin-bottom:8px}
 .sb-pn{font-size:11px;font-weight:500;color:var(--gold)}
 .sb-pi{font-size:9px;color:var(--w4);margin-top:1px}
-.sb-out{width:100%;padding:7px;border-radius:6px;border:1px solid var(--line2);background:transparent;color:var(--w4);font-size:10px;cursor:pointer;font-family:'DM Sans',sans-serif}
+.sb-out{width:100%;padding:8px;border-radius:6px;border:1px solid var(--line2);background:transparent;color:var(--w4);font-size:11px;cursor:pointer;font-family:'DM Sans',sans-serif}
 .sb-out:hover{color:var(--red);border-color:var(--red-b)}
-.main{flex:1;min-width:0;display:flex;flex-direction:column}
+.main{flex:1;min-width:0;display:flex;flex-direction:column;width:100%}
 .topbar{display:flex;align-items:center;justify-content:space-between;padding:11px 18px;border-bottom:1px solid var(--line);background:var(--bg2);flex-shrink:0;position:sticky;top:0;z-index:30}
-.tb-title{font-size:13px;font-weight:500;color:var(--w)}
-.tb-right{display:flex;align-items:center;gap:7px}
+.tb-left{display:flex;align-items:center;gap:11px;min-width:0}
+.menu-btn{width:32px;height:32px;border-radius:8px;background:var(--bg3);border:1px solid var(--line2);display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;color:var(--w2);font-size:15px;transition:all .12s}
+.menu-btn:hover{border-color:var(--gold-b);color:var(--gold)}
+.tb-title{font-size:13px;font-weight:500;color:var(--w);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tb-right{display:flex;align-items:center;gap:7px;flex-shrink:0}
 .tb-av{width:27px;height:27px;border-radius:50%;background:var(--bg4);border:1px solid var(--line2);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:600;color:var(--w2);overflow:hidden}
 .tb-av img{width:100%;height:100%;object-fit:cover}
 .tb-name{font-size:10px;color:var(--w3)}
 .tb-out{font-size:10px;padding:5px 10px;border-radius:6px;border:1px solid var(--line2);background:transparent;color:var(--w4);cursor:pointer;font-family:'DM Sans',sans-serif}
 .tb-out:hover{color:var(--red);border-color:var(--red-b)}
-.bnav{display:none;position:fixed;bottom:0;left:0;right:0;background:var(--bg2);border-top:1px solid var(--line);z-index:80;padding-bottom:env(safe-area-inset-bottom)}
-.bnav-inner{display:flex;align-items:stretch;width:100%}
-.bn{flex:1 1 0;min-width:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;padding:7px 2px 6px;cursor:pointer;color:var(--w4);transition:color .12s}
-.bn.active{color:var(--gold)}
-.bn-ico{font-size:17px;line-height:1}
-.bn-lbl{font-size:7.5px;letter-spacing:.01em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
 .page{display:none;padding:14px 18px 30px;flex:1;overflow-y:auto;overflow-x:hidden;max-width:100%}
 .page.on{display:block;animation:fu .2s ease both}
 @keyframes fu{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
 @media(max-width:768px){
-  .sidebar{display:none}
-  .bnav{display:block}
-  .main{padding-bottom:62px}
   .page{padding:10px 12px 24px}
   .g4{grid-template-columns:1fr 1fr!important}
   .g2{grid-template-columns:1fr!important}
@@ -73,7 +71,8 @@ html,body{background:#0A0A0A;color:#fff;font-family:'DM Sans',system-ui,sans-ser
   .tbl{overflow-x:auto}
   .tbl table{min-width:560px;table-layout:auto!important}
   .plans-grid{grid-template-columns:1fr!important}
-  .portfolio-grid{grid-template-columns:repeat(3,1fr)!important}
+  .sidebar{width:78vw;max-width:260px}
+  .tb-name{display:none}
 }
 .login-wrap{display:flex;align-items:center;justify-content:center;min-height:100vh;width:100%;padding:20px;background:var(--bg)}
 .login-box{background:var(--bg2);border:1px solid var(--line2);border-radius:16px;padding:26px 20px;width:100%;max-width:300px}
@@ -252,7 +251,12 @@ tr:hover td{background:rgba(255,255,255,.018);cursor:pointer}
 .plan-name{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:600;color:var(--w);text-align:center;margin-top:4px;margin-bottom:2px}
 .plan-price{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:700;color:var(--w);text-align:center;margin-bottom:2px}
 .plan-price span{font-size:11px;color:var(--w4);font-family:'DM Sans',sans-serif;font-weight:400}
-.plan-tag{font-size:9px;color:var(--w4);text-align:center;margin-bottom:13px}
+.plan-tag{font-size:9px;color:var(--w4);text-align:center;margin-bottom:9px}
+.effort-bar{width:100%;height:4px;background:var(--bg4);border-radius:3px;overflow:hidden;margin-bottom:5px}
+.effort-fill{height:100%;border-radius:3px;transition:width .3s}
+.effort-lbl{font-size:8.5px;text-align:center;font-weight:600;letter-spacing:.03em;margin-bottom:11px}
+.plan-feat.manual{color:var(--w4)}
+.plan-feat-ico-x{color:var(--w5);flex-shrink:0;margin-top:1px}
 .plan-feats{flex:1;margin-bottom:13px}
 .plan-feat{display:flex;align-items:flex-start;gap:6px;font-size:10.5px;color:var(--w3);padding:4px 0;line-height:1.4}
 .plan-feat-ico{color:var(--grn);flex-shrink:0;margin-top:1px}
@@ -267,13 +271,22 @@ tr:hover td{background:rgba(255,255,255,.018);cursor:pointer}
 .upload-zone{flex:1;min-width:160px}
 .upload-btn{display:inline-flex;align-items:center;gap:6px;background:var(--bg3);border:1px dashed var(--line2);border-radius:8px;padding:9px 13px;font-size:11px;color:var(--w3);cursor:pointer;transition:all .15s}
 .upload-btn:hover{border-color:var(--gold-b);color:var(--gold)}
-.portfolio-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:8px}
-.portfolio-item{position:relative;border-radius:9px;overflow:hidden;aspect-ratio:1;border:1px solid var(--line2)}
-.portfolio-item img{width:100%;height:100%;object-fit:cover;display:block}
+.portfolio-strip{display:flex;gap:9px;overflow-x:auto;padding-bottom:6px;margin-bottom:8px;-webkit-overflow-scrolling:touch;scroll-snap-type:x proximity}
+.portfolio-strip::-webkit-scrollbar{height:5px;display:block}
+.portfolio-strip::-webkit-scrollbar-thumb{background:var(--line2);border-radius:3px}
+.portfolio-item{position:relative;border-radius:10px;overflow:hidden;width:108px;height:108px;flex-shrink:0;border:1px solid var(--line2);scroll-snap-align:start;background:var(--bg3)}
+.portfolio-item img,.portfolio-item video{width:100%;height:100%;object-fit:cover;display:block}
 .portfolio-toggle{position:absolute;top:5px;right:5px;width:22px;height:22px;border-radius:50%;background:rgba(0,0,0,.6);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:11px;border:1px solid rgba(255,255,255,.2)}
-.portfolio-item.hidden-photo img{opacity:.25}
+.portfolio-del{position:absolute;top:5px;left:5px;width:22px;height:22px;border-radius:50%;background:rgba(0,0,0,.6);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:11px;border:1px solid rgba(255,255,255,.2);color:var(--w3)}
+.portfolio-del:hover{background:var(--red-d);border-color:var(--red-b);color:var(--red)}
+.portfolio-vid-badge{position:absolute;bottom:5px;left:5px;font-size:8px;background:rgba(0,0,0,.65);backdrop-filter:blur(4px);color:var(--w);padding:2px 6px;border-radius:4px;font-weight:600}
+.portfolio-item.hidden-photo img,.portfolio-item.hidden-photo video{opacity:.25}
 .portfolio-item.hidden-photo .portfolio-toggle{background:var(--red-d);border-color:var(--red-b);color:var(--red)}
 .portfolio-item:not(.hidden-photo) .portfolio-toggle{background:var(--grn-d);border-color:var(--grn-b);color:var(--grn)}
+.portfolio-add{width:108px;height:108px;flex-shrink:0;border-radius:10px;border:1px dashed var(--line2);background:var(--bg3);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;cursor:pointer;color:var(--w4);transition:all .15s;scroll-snap-align:start}
+.portfolio-add:hover{border-color:var(--gold-b);color:var(--gold)}
+.portfolio-add-ico{font-size:20px}
+.portfolio-add-lbl{font-size:8px;text-align:center;line-height:1.3}
 </style>
 </head>
 <body>
@@ -388,10 +401,12 @@ tr:hover td{background:rgba(255,255,255,.018);cursor:pointer}
 
 <div id="painel" style="display:none;width:100%">
   <div class="shell">
-    <div class="sidebar">
+    <div class="drawer-overlay" id="drawer-overlay" onclick="closeDrawer()"></div>
+    <div class="sidebar" id="sidebar">
       <div class="sb-top">
         <img src="logo.jpg" class="sb-logo" alt="logo"/>
         <div style="min-width:0"><div class="sb-biz" id="sb-biz">Dom da Navalha</div><div class="sb-role" id="sb-role">Master Barber</div></div>
+        <div class="sb-close" onclick="closeDrawer()">×</div>
       </div>
       <div class="sb-nav">
         <div class="sb-sec">Menu</div>
@@ -411,7 +426,10 @@ tr:hover td{background:rgba(255,255,255,.018);cursor:pointer}
 
     <div class="main">
       <div class="topbar">
-        <div class="tb-title" id="tb-title">Dashboard</div>
+        <div class="tb-left">
+          <div class="menu-btn" onclick="toggleDrawer()">☰</div>
+          <div class="tb-title" id="tb-title">Dashboard</div>
+        </div>
         <div class="tb-right">
           <span class="tb-name" id="tb-name">Johnny</span>
           <div class="tb-av" id="tb-av">JA</div>
@@ -426,7 +444,7 @@ tr:hover td{background:rgba(255,255,255,.018);cursor:pointer}
             <button class="ftab" onclick="setP('semana',this)">Semana</button>
             <button class="ftab" onclick="setP('mes',this)">Mês</button>
           </div>
-          <input class="f-date" type="date" id="dash-date" onchange="setPCustom(this.value)" title="Escolher data específica"/>
+          <input class="f-date" type="date" id="dash-date" value="2026-06-19" onchange="setPCustom(this.value)" title="Escolher data específica"/>
         </div>
         <div class="g4" id="d-mets"></div>
         <div class="g2">
@@ -574,8 +592,9 @@ tr:hover td{background:rgba(255,255,255,.018);cursor:pointer}
 
         <div class="sec">Portfólio de cortes — visível no app do cliente</div>
         <div class="card"><div class="card-b">
-          <div class="portfolio-grid" id="portfolio-grid"></div>
-          <div class="info-box" style="margin-top:4px;margin-bottom:0">Clique no círculo de cada foto para ocultar ou exibir no app do cliente. Fotos ocultas não aparecem para quem está agendando.</div>
+          <div class="portfolio-strip" id="portfolio-grid"></div>
+          <input type="file" id="portfolio-upload" accept="image/*,video/*" style="display:none" onchange="addPortfolioMedia(this)"/>
+          <div class="info-box" style="margin-top:4px;margin-bottom:0">Arraste para o lado para ver todas as mídias. Toque no círculo verde/vermelho para ocultar ou exibir no app, ou no × para excluir. Aceita fotos e vídeos curtos.</div>
         </div></div>
       </div>
 
@@ -586,17 +605,22 @@ tr:hover td{background:rgba(255,255,255,.018);cursor:pointer}
         </div>
 
         <div class="sec-row"><div class="sec" style="margin:0">Planos disponíveis</div></div>
+        <div class="info-box" style="margin-bottom:13px">Quanto maior o plano, menos trabalho manual sobra pra você. A diferença entre os planos não é só o que eles têm — é o que <strong style="color:var(--w)">você deixa de fazer na mão</strong>.</div>
+
         <div class="plans-grid">
           <div class="plan-card">
             <div class="plan-name">Básico</div>
             <div class="plan-price">R$97<span>/mês</span></div>
-            <div class="plan-tag">Para quem está começando</div>
+            <div class="plan-tag">Você ainda faz o trabalho manual</div>
+            <div class="effort-bar"><div class="effort-fill" style="width:85%;background:var(--red)"></div></div>
+            <div class="effort-lbl" style="color:var(--red)">Esforço manual alto</div>
             <div class="plan-feats">
               <div class="plan-feat"><span class="plan-feat-ico">✓</span>Link de agendamento próprio</div>
               <div class="plan-feat"><span class="plan-feat-ico">✓</span>Cobrança de sinal automática</div>
               <div class="plan-feat"><span class="plan-feat-ico">✓</span>Dashboard simples</div>
               <div class="plan-feat"><span class="plan-feat-ico">✓</span>1 profissional</div>
-              <div class="plan-feat"><span class="plan-feat-ico">✓</span>Confirmação manual via WhatsApp</div>
+              <div class="plan-feat manual"><span class="plan-feat-ico-x">✕</span>Você confirma cada cliente manualmente no WhatsApp</div>
+              <div class="plan-feat manual"><span class="plan-feat-ico-x">✕</span>Sem lembrete automático antes do horário</div>
             </div>
             <button class="plan-btn downgrade" onclick="openPlanConfirm('Básico','R$ 97/mês')">Mudar para Básico</button>
           </div>
@@ -605,13 +629,16 @@ tr:hover td{background:rgba(255,255,255,.018);cursor:pointer}
             <div class="plan-badge">Seu plano atual</div>
             <div class="plan-name">Pro</div>
             <div class="plan-price">R$147<span>/mês</span></div>
-            <div class="plan-tag">Para operação em crescimento</div>
+            <div class="plan-tag">O dia a dia roda sozinho</div>
+            <div class="effort-bar"><div class="effort-fill" style="width:35%;background:var(--gold)"></div></div>
+            <div class="effort-lbl" style="color:var(--gold)">Esforço manual baixo</div>
             <div class="plan-feats">
               <div class="plan-feat"><span class="plan-feat-ico">✓</span>Tudo do Básico</div>
+              <div class="plan-feat"><span class="plan-feat-ico">✓</span><strong style="color:var(--w)">Confirmação automática</strong> por WhatsApp</div>
+              <div class="plan-feat"><span class="plan-feat-ico">✓</span><strong style="color:var(--w)">Lembrete automático</strong> antes do horário</div>
+              <div class="plan-feat"><span class="plan-feat-ico">✓</span>Clientes mensais com <strong style="color:var(--w)">cobrança recorrente automática</strong></div>
               <div class="plan-feat"><span class="plan-feat-ico">✓</span>Painel completo — agenda, clientes, relatórios</div>
-              <div class="plan-feat"><span class="plan-feat-ico">✓</span>Clientes com plano mensal</div>
               <div class="plan-feat"><span class="plan-feat-ico">✓</span>Até 2 profissionais</div>
-              <div class="plan-feat"><span class="plan-feat-ico">✓</span>Mensagens automáticas</div>
             </div>
             <button class="plan-btn current-btn">Plano atual</button>
           </div>
@@ -619,12 +646,15 @@ tr:hover td{background:rgba(255,255,255,.018);cursor:pointer}
           <div class="plan-card">
             <div class="plan-name">Premium</div>
             <div class="plan-price">R$247<span>/mês</span></div>
-            <div class="plan-tag">Para quem quer escalar</div>
+            <div class="plan-tag">Quase nada passa pela sua mão</div>
+            <div class="effort-bar"><div class="effort-fill" style="width:10%;background:var(--grn)"></div></div>
+            <div class="effort-lbl" style="color:var(--grn)">Esforço manual mínimo</div>
             <div class="plan-feats">
               <div class="plan-feat"><span class="plan-feat-ico">✓</span>Tudo do Pro</div>
-              <div class="plan-feat"><span class="plan-feat-ico">✓</span>Profissionais ilimitados</div>
+              <div class="plan-feat"><span class="plan-feat-ico">✓</span><strong style="color:var(--w)">Recuperação automática</strong> de clientes inativos</div>
+              <div class="plan-feat"><span class="plan-feat-ico">✓</span><strong style="color:var(--w)">Reagendamento automático</strong> após cancelamento</div>
               <div class="plan-feat"><span class="plan-feat-ico">✓</span>Notificações push automáticas</div>
-              <div class="plan-feat"><span class="plan-feat-ico">✓</span>Relatórios avançados</div>
+              <div class="plan-feat"><span class="plan-feat-ico">✓</span>Profissionais ilimitados</div>
               <div class="plan-feat"><span class="plan-feat-ico">✓</span>Suporte prioritário</div>
             </div>
             <button class="plan-btn upgrade" onclick="openPlanConfirm('Premium','R$ 247/mês')">Fazer upgrade</button>
@@ -650,19 +680,9 @@ tr:hover td{background:rgba(255,255,255,.018);cursor:pointer}
 
     </div>
   </div>
+</div>
+</div>
 
-  <div class="bnav" id="bnav">
-    <div class="bnav-inner">
-      <div class="bn active" id="bn-dash" onclick="goPage('dash',this,'bn')"><div class="bn-ico">📊</div><div class="bn-lbl">Dashboard</div></div>
-      <div class="bn" id="bn-agenda" onclick="goPage('agenda',this,'bn')"><div class="bn-ico">📅</div><div class="bn-lbl">Agenda</div></div>
-      <div class="bn" id="bn-clientes" onclick="goPage('clientes',this,'bn')"><div class="bn-ico">👥</div><div class="bn-lbl">Clientes</div></div>
-      <div class="bn" id="bn-servicos" onclick="goPage('servicos',this,'bn')"><div class="bn-ico">✂</div><div class="bn-lbl">Serviços</div></div>
-      <div class="bn" id="bn-perfil" onclick="goPage('perfil',this,'bn')"><div class="bn-ico">🖼</div><div class="bn-lbl">Perfil</div></div>
-      <div class="bn" id="bn-assin" onclick="goPage('assin',this,'bn')"><div class="bn-ico">💳</div><div class="bn-lbl">Plano</div></div>
-    </div>
-  </div>
-</div>
-</div>
 
 <script src="admin.js"></script>
 </body>
