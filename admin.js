@@ -55,6 +55,8 @@ let customDate=null;
 
 function fill(u,p){document.getElementById('l-u').value=u;document.getElementById('l-p').value=p;}
 
+let isPopState=false;
+
 function doLogin(){
   const u=document.getElementById('l-u').value.trim().toLowerCase();
   const p=document.getElementById('l-p').value;
@@ -70,6 +72,7 @@ function doLogin(){
   renderAll();
   renderPortfolio();
   if(window.innerWidth>900)openDrawer();
+  history.replaceState({page:'dash'},'','#dash');
 }
 
 function doLogout(){
@@ -77,6 +80,7 @@ function doLogout(){
   document.getElementById('painel').style.display='none';
   document.getElementById('login-wrap').style.display='flex';
   closeDrawer();
+  history.replaceState({page:'login'},'','#login');
 }
 
 function toggleDrawer(){
@@ -106,7 +110,30 @@ function goPage(id,el){
   if(id==='perfil')renderPortfolio();
   window.scrollTo(0,0);
   closeDrawer();
+  if(!isPopState&&CU)history.pushState({page:id},'','#'+id);
 }
+
+window.addEventListener('popstate',e=>{
+  isPopState=true;
+  const state=e.state;
+  if(!CU){
+    // não logado: não há painel pra navegar, ignora
+    isPopState=false;
+    return;
+  }
+  if(state&&state.page&&state.page!=='login'){
+    const validPages=['dash','agenda','clientes','cancel','servicos','perfil','assin'];
+    if(validPages.includes(state.page)){
+      goPage(state.page,null);
+    }
+  } else {
+    // chegou no início do histórico do painel: mantém na página atual em vez de deslogar
+    const current=document.querySelector('.page.on');
+    const currentId=current?current.id.replace('pg-',''):'dash';
+    history.pushState({page:currentId},'','#'+currentId);
+  }
+  isPopState=false;
+});
 
 function renderAll(){renderDash();renderChart();renderCal();renderDayAppts();renderServicos();renderCancel();}
 
@@ -523,14 +550,30 @@ function addPortfolioMedia(input){
 }
 
 // ═══ ASSINATURA — planos ═══
-function openPlanConfirm(planName,price){
+let billingCycle='mensal';
+const PLAN_PRICES={
+  'Básico':{mensal:'R$ 97/mês',anual:'R$ 1.020/ano (equivale a R$ 85/mês)'},
+  'Pro':{mensal:'R$ 147/mês',anual:'R$ 1.300/ano (equivale a R$ 108/mês)'},
+  'Premium':{mensal:'R$ 247/mês',anual:'R$ 2.600/ano (equivale a R$ 217/mês)'},
+};
+
+function setBilling(cycle){
+  billingCycle=cycle;
+  document.getElementById('bt-mensal').classList.toggle('active',cycle==='mensal');
+  document.getElementById('bt-anual').classList.toggle('active',cycle==='anual');
+  document.querySelectorAll('.pp-mensal').forEach(el=>el.style.display=cycle==='mensal'?'inline':'none');
+  document.querySelectorAll('.pp-anual').forEach(el=>el.style.display=cycle==='anual'?(el.classList.contains('plan-price-sub')?'block':'inline'):'none');
+}
+
+function openPlanConfirm(planName){
   pendingPlan=planName;
+  const price=PLAN_PRICES[planName][billingCycle];
   document.getElementById('plan-confirm-t').textContent='Mudar para '+planName;
-  document.getElementById('plan-confirm-body').textContent=`Você está prestes a mudar do plano Pro (R$ 147/mês) para o plano ${planName} (${price}). A alteração entra em vigor no próximo ciclo de cobrança, em 08/07/2026.`;
+  document.getElementById('plan-confirm-body').textContent=`Você está prestes a mudar do plano Pro para o plano ${planName} (${price}, cobrança ${billingCycle}). A alteração entra em vigor no próximo ciclo de cobrança, em 08/07/2026.`;
   openM('m-plan-confirm');
 }
 function confirmPlanChange(){
-  alert('Solicitação registrada! Seu plano será alterado para '+pendingPlan+' no próximo ciclo de cobrança.');
+  alert('Solicitação registrada! Seu plano será alterado para '+pendingPlan+' ('+billingCycle+') no próximo ciclo de cobrança.');
   closeM('m-plan-confirm');
 }
 
