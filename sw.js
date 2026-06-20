@@ -1,4 +1,4 @@
-const CACHE = 'domnavalha-v10';
+const CACHE = 'domnavalha-v12';
 const ASSETS = ['/index.html', '/admin.html', '/logo.jpg', '/johnny.jpg', '/corte1.jpg', '/corte2.jpg', '/corte3.jpg', '/corte4.jpg', '/manifest.json'];
 
 self.addEventListener('install', e => {
