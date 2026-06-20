@@ -34,6 +34,8 @@ const CANCEL_DATA=[
   {cli:'Diego Lima',data:'28/05',svc:'Corte masculino',val:45,sinal:14,status:'Cancelado reembolsado'},
 ];
 
+let MANUAL_CLIENTS=[];
+
 let PORTFOLIO_PHOTOS=[
   {src:'corte1.jpg',visible:true,type:'image'},
   {src:'corte2.jpg',visible:true,type:'image'},
@@ -326,7 +328,7 @@ function confirmRealoc(){
 // ═══ CLIENTES ═══
 function getClientes(){
   const names=[...new Set(AGEND.map(a=>a.cli))];
-  return names.map(nome=>{
+  const fromBookings=names.map(nome=>{
     const all=AGEND.filter(a=>a.cli===nome);
     const valid=all.filter(a=>!['Cancelado sem aviso','Cancelado reembolsado'].includes(a.status));
     const total=valid.reduce((s,a)=>s+a.val,0);
@@ -336,8 +338,12 @@ function getClientes(){
     const cancelou=all.some(a=>a.status==='Cancelado sem aviso');
     const mensal=all.some(a=>a.mensal);
     const f=all[0];
-    return{nome,tel:f?.tel||'—',email:f?.email||'—',visitas:valid.length,total,ticket:valid.length?Math.round(total/valid.length):0,desde,ultimo,status:cancelou?'Cancelou':'Ativo',mensal,visits:valid,allVisits:all};
+    return{nome,tel:f?.tel||'—',email:f?.email||'—',visitas:valid.length,total,ticket:valid.length?Math.round(total/valid.length):0,desde,ultimo,status:cancelou?'Cancelou':'Ativo',mensal,visits:valid,allVisits:all,manual:false};
   });
+  const manual=MANUAL_CLIENTS.map(c=>({
+    nome:c.nome,tel:c.tel||'—',email:c.email||'—',visitas:0,total:0,ticket:0,desde:c.desde,ultimo:'—',status:'Ativo',mensal:c.mensal,visits:[],allVisits:[],manual:true
+  }));
+  return [...manual,...fromBookings];
 }
 
 function renderClientes(){
@@ -348,7 +354,7 @@ function renderClientes(){
   document.getElementById('cli-cnt').textContent=rows.length+' cliente'+(rows.length!==1?'s':'');
   document.getElementById('cli-tbody').innerHTML=rows.map(c=>`
     <tr onclick="openCliM('${c.nome}')">
-      <td class="tdn">${c.nome}${c.mensal?' <span class="pill p-p" style="font-size:7px">M</span>':''}</td>
+      <td class="tdn">${c.nome}${c.mensal?' <span class="pill p-p" style="font-size:7px">M</span>':''}${c.manual?' <span class="pill p-gray" style="font-size:7px">Manual</span>':''}</td>
       <td>${c.tel}</td>
       <td>${c.visitas}</td>
       <td style="color:var(--w)">R$&nbsp;${c.total}</td>
@@ -358,6 +364,26 @@ function renderClientes(){
       <td><span class="pill ${c.status==='Ativo'?'p-g':'p-r'}">${c.status}</span></td>
       <td><button class="btn btn-gh" style="font-size:9px;padding:2px 6px" onclick="event.stopPropagation();openCliM('${c.nome}')">Ver</button></td>
     </tr>`).join('');
+}
+
+function openNewCliM(){
+  document.getElementById('nc-nome').value='';
+  document.getElementById('nc-tel').value='';
+  document.getElementById('nc-email').value='';
+  document.getElementById('nc-mensal').value='nao';
+  openM('m-new-cli');
+}
+
+function saveNewClient(){
+  const nome=document.getElementById('nc-nome').value.trim();
+  const tel=document.getElementById('nc-tel').value.trim();
+  const email=document.getElementById('nc-email').value.trim();
+  const mensal=document.getElementById('nc-mensal').value==='sim';
+  if(!nome){alert('Informe o nome do cliente.');return;}
+  if(!tel){alert('Informe o telefone do cliente.');return;}
+  MANUAL_CLIENTS.push({nome,tel,email,mensal,desde:'19/06'});
+  closeM('m-new-cli');
+  renderClientes();
 }
 
 function openCliM(nome){

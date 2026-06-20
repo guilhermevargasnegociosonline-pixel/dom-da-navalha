@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<meta name="theme-color" content="#0A0A0A">
+<meta name="theme-color" content="#000">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Admin — Dom da Navalha">
 <link rel="apple-touch-icon" href="logo.jpg">
@@ -13,17 +13,17 @@
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 *::-webkit-scrollbar{width:0;height:0}
-html,body{background:#0A0A0A;color:#fff;font-family:'DM Sans',system-ui,sans-serif;font-size:13px;min-height:100vh;-webkit-font-smoothing:antialiased}
+html,body{background:#000;color:#fff;font-family:'DM Sans',system-ui,sans-serif;font-size:13px;min-height:100vh;-webkit-font-smoothing:antialiased}
 :root{
-  --bg:#0A0A0A;--bg2:#121212;--bg3:#1B1B1B;--bg4:#242424;--bg5:#2E2E2E;
-  --w:#fff;--w2:#E5E5E5;--w3:#9A9A9A;--w4:#5A5A5A;--w5:#383838;
-  --line:#1F1F1F;--line2:#2A2A2A;
-  --gold:#C9A24E;--gold-d:rgba(201,162,78,.1);--gold-b:rgba(201,162,78,.28);
-  --grn:#3DDC84;--grn-d:rgba(61,220,132,.09);--grn-b:rgba(61,220,132,.22);
-  --red:#FF5C5C;--red-d:rgba(255,92,92,.09);--red-b:rgba(255,92,92,.22);
-  --amb:#FFB648;--amb-d:rgba(255,182,72,.09);--amb-b:rgba(255,182,72,.22);
-  --blu:#5AA9F8;--blu-d:rgba(90,169,248,.09);--blu-b:rgba(90,169,248,.22);
-  --pur:#B98AF5;--pur-d:rgba(185,138,245,.1);--pur-b:rgba(185,138,245,.26);
+  --bg:#000;--bg2:#0f0f0f;--bg3:#1a1a1a;--bg4:#242424;--bg5:#2e2e2e;
+  --w:#fff;--w2:#e8e8e8;--w3:#aaa;--w4:#555;--w5:#383838;
+  --line:#2a2a2a;--line2:#333;
+  --gold:#C9A84C;--gold-d:rgba(201,168,76,.1);--gold-b:rgba(201,168,76,.22);
+  --grn:#22c55e;--grn-d:rgba(34,197,94,.08);--grn-b:rgba(34,197,94,.2);
+  --red:#ef4444;--red-d:rgba(239,68,68,.08);--red-b:rgba(239,68,68,.2);
+  --amb:#f59e0b;--amb-d:rgba(245,158,11,.08);--amb-b:rgba(245,158,11,.2);
+  --blu:#3b82f6;--blu-d:rgba(59,130,246,.08);--blu-b:rgba(59,130,246,.2);
+  --pur:#a78bfa;--pur-d:rgba(167,139,250,.1);--pur-b:rgba(167,139,250,.24);
 }
 .shell{display:flex;min-height:100vh;position:relative}
 .drawer-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:90}
@@ -68,8 +68,8 @@ html,body{background:#0A0A0A;color:#fff;font-family:'DM Sans',system-ui,sans-ser
   .g2{grid-template-columns:1fr!important}
   .ag-grid{grid-template-columns:1fr!important}
   .topbar{padding:10px 13px}
-  .tbl{overflow-x:auto}
-  .tbl table{min-width:560px;table-layout:auto!important}
+  .tbl-scroll table{min-width:600px;table-layout:auto!important}
+  .tbl-hint{display:block}
   .plans-grid{grid-template-columns:1fr!important}
   .sidebar{width:78vw;max-width:260px}
   .tb-name{display:none}
@@ -112,6 +112,10 @@ html,body{background:#0A0A0A;color:#fff;font-family:'DM Sans',system-ui,sans-ser
 .card-b{padding:11px 13px}
 .tbl{background:var(--bg2);border:1px solid var(--line);border-radius:10px;overflow:hidden;margin-bottom:9px}
 .tbl-h{display:flex;align-items:center;justify-content:space-between;padding:10px 13px;border-bottom:1px solid var(--line)}
+.tbl-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.tbl-scroll::-webkit-scrollbar{height:6px;display:block}
+.tbl-scroll::-webkit-scrollbar-thumb{background:var(--line2);border-radius:3px}
+.tbl-hint{display:none;font-size:9px;color:var(--w4);padding:6px 13px;border-top:1px solid var(--line);background:var(--bg3)}
 .tbl-t{font-size:11px;font-weight:500;color:var(--w)}
 table{width:100%;border-collapse:collapse;table-layout:fixed}
 th{font-size:8px;letter-spacing:.06em;text-transform:uppercase;color:var(--w4);padding:7px 11px;text-align:left;border-bottom:1px solid var(--line);font-weight:400;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
@@ -374,6 +378,25 @@ tr:hover td{background:rgba(255,255,255,.018);cursor:pointer}
   </div>
 </div></div>
 
+<div class="modal-bg" id="m-new-cli"><div class="modal">
+  <div class="modal-top"><div class="modal-ttl">Adicionar cliente</div><div class="modal-x" onclick="closeM('m-new-cli')">×</div></div>
+  <div class="modal-body">
+    <div class="m-lbl">Nome completo</div>
+    <input class="m-inp" id="nc-nome" placeholder="Ex: João da Silva"/>
+    <div class="m-lbl">Telefone / WhatsApp</div>
+    <input class="m-inp" id="nc-tel" placeholder="(11) 90000-0000"/>
+    <div class="m-lbl">E-mail (opcional)</div>
+    <input class="m-inp" id="nc-email" placeholder="cliente@email.com"/>
+    <div class="m-lbl">Cliente do plano mensal?</div>
+    <select class="m-sel" id="nc-mensal">
+      <option value="nao">Não — cliente avulso</option>
+      <option value="sim">Sim — tem horário fixo recorrente</option>
+    </select>
+    <div class="info-box">O cliente entra na sua base mesmo sem ainda ter feito um agendamento pelo link. Útil pra cadastrar clientes antigos ou que você atende fora do app.</div>
+    <button class="m-btn" onclick="saveNewClient()">Salvar cliente</button>
+  </div>
+</div></div>
+
 <div class="modal-bg" id="m-cancel-sub"><div class="modal">
   <div class="modal-top"><div class="modal-ttl">Cancelar assinatura</div><div class="modal-x" onclick="closeM('m-cancel-sub')">×</div></div>
   <div class="modal-body">
@@ -410,13 +433,13 @@ tr:hover td{background:rgba(255,255,255,.018);cursor:pointer}
       </div>
       <div class="sb-nav">
         <div class="sb-sec">Menu</div>
-        <div class="ni active" id="ni-dash" onclick="goPage('dash',this)"><span class="ni-ico">📊</span>Dashboard</div>
-        <div class="ni" id="ni-agenda" onclick="goPage('agenda',this)"><span class="ni-ico">📅</span>Agenda</div>
-        <div class="ni" id="ni-clientes" onclick="goPage('clientes',this)"><span class="ni-ico">👥</span>Clientes</div>
-        <div class="ni" id="ni-cancel" onclick="goPage('cancel',this)"><span class="ni-ico">✕</span>Cancelamentos</div>
-        <div class="ni" id="ni-servicos" onclick="goPage('servicos',this)"><span class="ni-ico">✂</span>Serviços</div>
-        <div class="ni" id="ni-perfil" onclick="goPage('perfil',this)"><span class="ni-ico">🖼</span>Meu perfil</div>
-        <div class="ni" id="ni-assin" onclick="goPage('assin',this)"><span class="ni-ico">💳</span>Assinatura</div>
+        <div class="ni active" id="ni-dash" onclick="goPage('dash',this)">Dashboard</div>
+        <div class="ni" id="ni-agenda" onclick="goPage('agenda',this)">Agenda</div>
+        <div class="ni" id="ni-clientes" onclick="goPage('clientes',this)">Clientes</div>
+        <div class="ni" id="ni-cancel" onclick="goPage('cancel',this)">Cancelamentos</div>
+        <div class="ni" id="ni-servicos" onclick="goPage('servicos',this)">Serviços</div>
+        <div class="ni" id="ni-perfil" onclick="goPage('perfil',this)">Meu perfil</div>
+        <div class="ni" id="ni-assin" onclick="goPage('assin',this)">Assinatura</div>
       </div>
       <div class="sb-bot">
         <div class="sb-plan"><div class="sb-pn" id="sb-plan-name">Plano Pro</div><div class="sb-pi">Ativo até 08/07/2026</div></div>
@@ -491,8 +514,9 @@ tr:hover td{background:rgba(255,255,255,.018);cursor:pointer}
         </div>
         <div class="sec">Agendamentos recentes</div>
         <div class="tbl">
-          <table><thead><tr><th style="width:17%">Cliente</th><th style="width:19%">Serviço</th><th style="width:9%">Valor</th><th style="width:16%">Status</th><th style="width:8%">Dia</th><th style="width:8%">Hora</th><th style="width:23%"></th></tr></thead>
-          <tbody id="d-tbody"></tbody></table>
+          <div class="tbl-scroll"><table><thead><tr><th style="width:17%">Cliente</th><th style="width:19%">Serviço</th><th style="width:9%">Valor</th><th style="width:16%">Status</th><th style="width:8%">Dia</th><th style="width:8%">Hora</th><th style="width:23%"></th></tr></thead>
+          <tbody id="d-tbody"></tbody></table></div>
+          <div class="tbl-hint">⇆ arraste para o lado para ver mais</div>
         </div>
       </div>
 
@@ -529,11 +553,13 @@ tr:hover td{background:rgba(255,255,255,.018);cursor:pointer}
             <option value="visitas">Mais visitas</option>
             <option value="gasto">Maior gasto</option>
           </select>
+          <button class="btn btn-w" onclick="openNewCliM()">+ Novo cliente</button>
         </div>
         <div class="tbl">
           <div class="tbl-h"><div class="tbl-t" id="cli-cnt">Clientes</div></div>
-          <table><thead><tr><th style="width:18%">Cliente</th><th style="width:14%">Telefone</th><th style="width:7%">Visitas</th><th style="width:11%">Total</th><th style="width:10%">Ticket</th><th style="width:9%">Desde</th><th style="width:9%">Último</th><th style="width:10%">Status</th><th style="width:12%"></th></tr></thead>
-          <tbody id="cli-tbody"></tbody></table>
+          <div class="tbl-scroll"><table><thead><tr><th style="width:18%">Cliente</th><th style="width:14%">Telefone</th><th style="width:7%">Visitas</th><th style="width:11%">Total</th><th style="width:10%">Ticket</th><th style="width:9%">Desde</th><th style="width:9%">Último</th><th style="width:10%">Status</th><th style="width:12%"></th></tr></thead>
+          <tbody id="cli-tbody"></tbody></table></div>
+          <div class="tbl-hint">⇆ arraste para o lado para ver mais</div>
         </div>
       </div>
 
@@ -546,8 +572,9 @@ tr:hover td{background:rgba(255,255,255,.018);cursor:pointer}
         </div>
         <div class="tbl">
           <div class="tbl-h"><div class="tbl-t">Histórico de cancelamentos</div></div>
-          <table><thead><tr><th style="width:14%">Cliente</th><th style="width:9%">Data</th><th style="width:18%">Serviço</th><th style="width:8%">Valor</th><th style="width:8%">Sinal</th><th style="width:16%">Status</th><th style="width:9%">Retido</th><th style="width:18%"></th></tr></thead>
-          <tbody id="can-tbody"></tbody></table>
+          <div class="tbl-scroll"><table><thead><tr><th style="width:14%">Cliente</th><th style="width:9%">Data</th><th style="width:18%">Serviço</th><th style="width:8%">Valor</th><th style="width:8%">Sinal</th><th style="width:16%">Status</th><th style="width:9%">Retido</th><th style="width:18%"></th></tr></thead>
+          <tbody id="can-tbody"></tbody></table></div>
+          <div class="tbl-hint">⇆ arraste para o lado para ver mais</div>
         </div>
       </div>
 
@@ -557,8 +584,9 @@ tr:hover td{background:rgba(255,255,255,.018);cursor:pointer}
           <button class="btn btn-w" onclick="newSvc()">+ Novo</button>
         </div>
         <div class="tbl">
-          <table><thead><tr><th style="width:26%">Serviço</th><th style="width:12%">Duração</th><th style="width:10%">Valor</th><th style="width:11%">Sinal 30%</th><th style="width:8%">Ativo</th><th style="width:14%">No app</th><th style="width:19%"></th></tr></thead>
-          <tbody id="svc-tbody"></tbody></table>
+          <div class="tbl-scroll"><table><thead><tr><th style="width:26%">Serviço</th><th style="width:12%">Duração</th><th style="width:10%">Valor</th><th style="width:11%">Sinal 30%</th><th style="width:8%">Ativo</th><th style="width:14%">No app</th><th style="width:19%"></th></tr></thead>
+          <tbody id="svc-tbody"></tbody></table></div>
+          <div class="tbl-hint">⇆ arraste para o lado para ver mais</div>
         </div>
       </div>
 
@@ -644,20 +672,32 @@ tr:hover td{background:rgba(255,255,255,.018);cursor:pointer}
           </div>
 
           <div class="plan-card">
-            <div class="plan-name">Premium</div>
+            <div class="plan-badge" style="background:var(--w);color:#000">Mais avançado</div>
+            <div class="plan-name" style="margin-top:4px">Premium</div>
             <div class="plan-price">R$247<span>/mês</span></div>
             <div class="plan-tag">Quase nada passa pela sua mão</div>
             <div class="effort-bar"><div class="effort-fill" style="width:10%;background:var(--grn)"></div></div>
             <div class="effort-lbl" style="color:var(--grn)">Esforço manual mínimo</div>
             <div class="plan-feats">
               <div class="plan-feat"><span class="plan-feat-ico">✓</span>Tudo do Pro</div>
+              <div class="plan-feat"><span class="plan-feat-ico">✓</span><strong style="color:var(--gold)">Assistente IA no WhatsApp</strong> — responde dúvidas do cliente por você</div>
               <div class="plan-feat"><span class="plan-feat-ico">✓</span><strong style="color:var(--w)">Recuperação automática</strong> de clientes inativos</div>
               <div class="plan-feat"><span class="plan-feat-ico">✓</span><strong style="color:var(--w)">Reagendamento automático</strong> após cancelamento</div>
               <div class="plan-feat"><span class="plan-feat-ico">✓</span>Notificações push automáticas</div>
               <div class="plan-feat"><span class="plan-feat-ico">✓</span>Profissionais ilimitados</div>
-              <div class="plan-feat"><span class="plan-feat-ico">✓</span>Suporte prioritário</div>
             </div>
             <button class="plan-btn upgrade" onclick="openPlanConfirm('Premium','R$ 247/mês')">Fazer upgrade</button>
+          </div>
+        </div>
+
+        <div class="card" style="border-color:var(--gold-b)">
+          <div class="card-h"><div class="card-t" style="color:var(--gold)">🤖 Assistente IA — exclusivo Premium</div></div>
+          <div class="card-b">
+            <div style="font-size:11px;color:var(--w3);line-height:1.7">
+              Quando o cliente clica em "Falar no WhatsApp", quem responde primeiro é a IA — não você. Ela explica preços, horários e endereço, tira dúvidas comuns e só te chama quando realmente precisa da sua palavra.
+              <br><br>
+              Pelo painel, você também pode perguntar coisas como <em style="color:var(--w2)">"quanto faturei essa semana"</em> ou <em style="color:var(--w2)">"quais clientes não voltam há 30 dias"</em> e receber a resposta na hora, sem abrir relatório nenhum.
+            </div>
           </div>
         </div>
 
